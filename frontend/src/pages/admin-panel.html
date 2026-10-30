@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Профиль педагога</title>
+    <link rel="stylesheet" href="../assets/css/admin-panel.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../assets/images/Logo_main_RGB.png">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                <span class="school-name">Школа №777</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> <span>Главная</span></a>
+                <a href="admin-panel.html" class="nav-link active"><i class="fas fa-cog"></i> <span>Админ</span></a>
+            </nav>
+            <div class="user-menu">
+                <span id="currentUser"></span>
+                <button onclick="logout()" class="btn-logout" title="Выйти">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Администрирование</h1>
+                    <p>Управление пользователями, журнал загрузок и настройки системы</p>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <!-- Секция управления аккаунтом -->
+                <div class="section-grid">
+                    <!-- Смена пароля -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-lock" style="color: var(--warning);"></i> Сменить свой пароль</h2>
+                        </div>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label>Текущий пароль</label>
+                                <input type="password" id="oldPasswordInput" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Новый пароль (мин. 6 символов)</label>
+                                <input type="password" id="newPasswordInput" required minlength="6">
+                            </div>
+                            <div class="form-group">
+                                <label>Подтвердите новый пароль</label>
+                                <input type="password" id="confirmPasswordInput" required minlength="6"
+                                    placeholder="new_password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-key"></i> Изменить пароль
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Смена логина -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-user-edit" style="color: var(--primary);"></i> Сменить логин</h2>
+                        </div>
+                        <form id="changeUsernameForm">
+                            <div class="form-group">
+                                <label>Текущий пароль (для подтверждения)</label>
+                                <input type="password" id="currentPwdForLogin" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Новый логин (мин. 3 символа)</label>
+                                <input type="text" id="newLoginInput" required minlength="3" pattern="[a-zA-Z0-9_]+"
+                                    placeholder="new_login">
+                                <small style="color: var(--gray); font-size: 12px;">Только латинские буквы, цифры и
+                                    подчеркивание</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Подтвердите новый логин</label>
+                                <input type="text" id="confirmLoginInput" required minlength="3"
+                                    placeholder="new_login">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Сохранить логин
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Журнал загрузок -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history" style="color: var(--primary);"></i> Журнал загрузок файлов</h3>
+                        <button class="btn btn-secondary" onclick="loadUploadHistory()">
+                            <i class="fas fa-sync-alt"></i> Обновить
+                        </button>
+                    </div>
+
+                    <!-- Поиск -->
+                    <div class="mb-3" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="uploadSearchInput" placeholder="Поиск по имени файла..."
+                                onkeypress="if(event.key==='Enter') loadUploadHistory()">
+                        </div>
+                        <button class="btn btn-secondary"
+                            onclick="document.getElementById('uploadSearchInput').value=''; loadUploadHistory()">
+                            <i class="fas fa-times"></i> Сбросить
+                        </button>
+                    </div>
+
+                    <!-- Таблица -->
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">ID</th>
+                                    <th>Имя файла</th>
+                                    <th style="width: 100px;">Тип</th>
+                                    <th style="width: 80px;" class="text-center">Записей</th>
+                                    <th style="width: 150px;">Загрузил</th>
+                                    <th style="width: 100px;" class="text-center">Статус</th>
+                                    <th style="width: 140px;">Дата</th>
+                                    <th style="width: 80px;" class="text-center">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uploadHistoryTable">
+                                <tr>
+                                    <td colspan="8" class="text-center"
+                                        style="padding: 40px; color: var(--gray-light);">
+                                        <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Загрузка
+                                        данных...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Пагинация -->
+                    <div class="pagination-container" id="uploadPagination" style="display: none;">
+                        <div class="pagination-info" id="uploadPaginationInfo"></div>
+                        <div class="pagination-controls" id="uploadPaginationControls"></div>
+                    </div>
+                </div>
+
+                <!-- Управление методистами -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users" style="color: var(--primary);"></i> Управление методистами</h2>
+                        <button class="btn btn-primary" onclick="openModal('createUserModal')">
+                            <i class="fas fa-plus"></i> Добавить методиста
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Логин</th>
+                                    <th>ФИО</th>
+                                    <th>Роль</th>
+                                    <th>Дата создания</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модал создания пользователя -->
+    <div id="createUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Добавить методиста</h3>
+                <button class="btn-close" onclick="closeModal('createUserModal')">&times;</button>
+            </div>
+            <form id="createUserForm" class="modal-body">
+                <div class="form-group">
+                    <label>Логин (латиницей)</label>
+                    <input type="text" id="newUserLogin" required pattern="[a-zA-Z0-9_]+">
+                </div>
+                <div class="form-group">
+                    <label>ФИО полностью</label>
+                    <input type="text" id="newUserFullName" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль (мин. 6 символов)</label>
+                    <input type="text" id="newUserPassword" required minlength="6">
+                </div>
+                <div id="createdUserInfo"></div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createUserModal')">Отмена</button>
+                <button type="submit" form="createUserForm" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модал сброса пароля -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Сброс пароля</h3>
+                <button class="btn-close" onclick="closeModal('resetPasswordModal')">&times;</button>
+            </div>
+            <form id="resetPasswordForm" class="modal-body">
+                <input type="hidden" id="resetUserId">
+                <p>Укажите новый пароль для пользователя <strong id="resetUsernameDisplay"
+                        style="color: var(--primary);"></strong>:</p>
+                <div class="form-group">
+                    <label>Новый пароль</label>
+                    <input type="text" id="resetNewPasswordInput" required minlength="6">
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    onclick="closeModal('resetPasswordModal')">Отмена</button>
+                <button type="submit" form="resetPasswordForm" class="btn btn-warning">Сбросить пароль</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модал подтверждения удаления файла -->
+    <div id="confirmDeleteModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Подтверждение удаления
+                </h3>
+                <button class="btn-close" onclick="closeConfirmDelete()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmDeleteText">Вы уверены, что хотите удалить этот файл?</p>
+                <div
+                    style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 12px; margin-top: 15px; font-size: 13px; color: #991b1b;">
+                    <i class="fas fa-exclamation-circle"></i> <strong>Внимание:</strong> Это действие также удалит все
+                    связанные данные из базы данных. Отменить удаление будет невозможно.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmDelete()">Отмена</button>
+                <button type="button" class="btn btn-danger" onclick="executeDeleteUpload()">
+                    <i class="fas fa-trash"></i> Удалить файл
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        // Auth check
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token) window.location.href = 'login.html';
+        if (user.role !== 'admin') {
+            alert('Доступ только для администраторов');
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('currentUser').textContent = user.fullName + ' (admin)';
+
+        // API helper
+        async function api(url, options = {}) {
+            const res = await fetch(url, {
+                ...options,
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: 'Ошибка сервера' }));
+                throw new Error(err.error);
+            }
+            return res.json();
+        }
+
+        // Toast
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-times-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} toast-icon"></i>
+                <div class="toast-content">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'createUserModal') document.getElementById('createdUserInfo').innerHTML = '';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Смена пароля
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const oldPass = document.getElementById('oldPasswordInput').value;
+            const newPass = document.getElementById('newPasswordInput').value;
+            const confirm = document.getElementById('confirmPasswordInput').value;
+
+            if (newPass !== confirm) {
+                return showToast('Новые пароли не совпадают', 'error');
+            }
+
+            try {
+                await api('/api/auth/change-password', {
+                    method: 'PUT',
+                    body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })
+                });
+                showToast('Пароль успешно изменен!', 'success');
+                e.target.reset();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+
+        // Смена логина
+        document.getElementById('changeUsernameForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('currentPwdForLogin').value;
+            const newUsername = document.getElementById('newLoginInput').value;
+            const confirmUsername = document.getElementById('confirmLoginInput').value;
+
+            if (newUsername !== confirmUsername) {
+                return showToast('Новые логины не совпадают', 'error');
+            }
+
+            if (!/^[a-zA-Z0-9_]+$/.test(newUsername)) {
+                return showToast('Логин может содержать только латинские буквы, цифры и подчеркивание', 'error');
+            }
+
+            try {
+                const res = await api('/api/auth/change-username', {
+                    method: 'PUT',
+                    body: JSON.stringify({ currentPassword, newUsername })
+                });
+
+                localStorage.setItem('token', res.token);
+                localStorage.setItem('user', JSON.stringify(res.user));
+
+                showToast('Логин успешно изменен! Перезагрузка...', 'success');
+                e.target.reset();
+
+                setTimeout(() => location.reload(), 1500);
+
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const users = await api('/api/admin/users');
+                const tbody = document.querySelector('#usersTable tbody');
+
+                if (users.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <div>Пользователи не найдены</div>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td>${u.id}</td>
+                        <td><strong>${u.username}</strong></td>
+                        <td>${u.full_name}</td>
+                        <td><span class="badge badge-${u.role}">${u.role === 'admin' ? 'Админ' : 'Методист'}</span></td>
+                        <td>${new Date(u.created_at).toLocaleDateString('ru-RU')}</td>
+                        <td>
+                            ${u.role !== 'admin' ? `
+                                <button class="btn btn-sm btn-warning" onclick="openResetPassword(${u.id}, '${u.username}')" title="Сбросить пароль">
+                                    <i class="fas fa-key"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})" title="Удалить" style="margin-left: 5px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : '<span style="color: var(--gray-light); font-style: italic;">Системный</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                showToast(err.message, 'error');
+                if (err.message.includes('Токен')) logout();
+            }
+        }
+
+        // Create user
+        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('newUserLogin').value;
+            const fullName = document.getElementById('newUserFullName').value;
+            const password = document.getElementById('newUserPassword').value;
+
+            try {
+                await api('/api/admin/users', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password, fullName })
+                });
+
+                document.getElementById('createdUserInfo').innerHTML = `
+                    <div class="password-display">
+                        <div style="margin-bottom: 8px;"><i class="fas fa-check-circle" style="color: var(--secondary);"></i> <strong>Пользователь создан!</strong></div>
+                        <div>Логин: <strong>${username}</strong></div>
+                        <div>Пароль: <strong>${password}</strong></div>
+                        <div style="margin-top: 8px; font-size: 12px; opacity: 0.8;">
+                            <i class="fas fa-exclamation-triangle"></i> Сохраните эти данные!
+                        </div>
+                    </div>
+                `;
+
+                loadUsers();
+                setTimeout(() => {
+                    e.target.reset();
+                    closeModal('createUserModal');
+                }, 3000);
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+
+        // Reset password
+        function openResetPassword(id, username) {
+            document.getElementById('resetUserId').value = id;
+            document.getElementById('resetUsernameDisplay').textContent = username;
+            document.getElementById('resetNewPasswordInput').value = '';
+            openModal('resetPasswordModal');
+        }
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('resetUserId').value;
+            const password = document.getElementById('resetNewPasswordInput').value;
+
+            try {
+                await api(`/api/admin/users/${id}/reset-password`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ newPassword: password })
+                });
+                showToast(`Пароль сброшен. Новый пароль: ${password}`, 'success');
+                closeModal('resetPasswordModal');
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        });
+
+        // Delete user
+        async function deleteUser(id) {
+            if (!confirm('Удалить методиста? Это действие нельзя отменить.')) return;
+
+            try {
+                await api(`/api/admin/users/${id}`, { method: 'DELETE' });
+                showToast('Пользователь удален', 'success');
+                loadUsers();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        // ==========================================
+        // ЖУРНАЛ ЗАГРУЗОК С УДАЛЕНИЕМ
+        // ==========================================
+
+        let uploadHistoryState = { page: 1, limit: 20, totalPages: 1 };
+        let deleteUploadId = null;
+        let deleteUploadFilename = null;
+
+        async function loadUploadHistory(page = 1) {
+            const tbody = document.getElementById('uploadHistoryTable');
+            const search = document.getElementById('uploadSearchInput')?.value || '';
+
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center" style="padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Загрузка...</td></tr>';
+
+            try {
+                const response = await api(`/api/upload/history?page=${page}&limit=${uploadHistoryState.limit}&search=${encodeURIComponent(search)}`);
+                const { data, pagination } = response;
+
+                uploadHistoryState.page = pagination.page;
+                uploadHistoryState.totalPages = pagination.totalPages;
+
+                if (data.length === 0) {
+                    tbody.innerHTML = search
+                        ? `<tr><td colspan="8" class="empty-state"><i class="fas fa-search"></i><div>По запросу "${search}" ничего не найдено</div></td></tr>`
+                        : `<tr><td colspan="8" class="empty-state"><i class="fas fa-inbox"></i><div>История загрузок пуста</div></td></tr>`;
+                    document.getElementById('uploadPagination').style.display = 'none';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(item => `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.filename.replace(/"/g, '&quot;')}">
+                            <i class="fas fa-file-excel" style="color: var(--secondary); margin-right: 8px;"></i>${item.filename}
+                        </td>
+                        <td><span class="file-badge ${item.fileType}">${getFileTypeLabel(item.fileType)}</span></td>
+                        <td class="text-center" style="font-weight: 600; color: ${item.recordsCount > 0 ? 'var(--secondary)' : 'var(--gray-light)'};">${item.recordsCount}</td>
+                        <td><i class="fas fa-user" style="color: var(--gray-lighter); margin-right: 5px;"></i>${item.uploadedBy}</td>
+                        <td class="text-center">${getStatusBadge(item.status)}</td>
+                        <td style="font-size: 13px; color: var(--gray); white-space: nowrap;"><i class="far fa-clock" style="color: var(--gray-lighter); margin-right: 5px;"></i>${item.uploadedAt}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-danger" onclick="confirmDeleteUpload(${item.id}, '${item.filename.replace(/'/g, "\\'")}')" title="Удалить файл и все данные">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                updateUploadPagination(pagination);
+                document.getElementById('uploadPagination').style.display = 'flex';
+
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center" style="padding: 40px; color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Ошибка: ${err.message}</td></tr>`;
+                document.getElementById('uploadPagination').style.display = 'none';
+            }
+        }
+
+        function confirmDeleteUpload(id, filename) {
+            deleteUploadId = id;
+            deleteUploadFilename = filename;
+            document.getElementById('confirmDeleteText').innerHTML = `Вы уверены, что хотите удалить файл <strong>"${filename}"</strong>?`;
+            openModal('confirmDeleteModal');
+        }
+
+        async function executeDeleteUpload() {
+            if (!deleteUploadId) {
+                closeConfirmDelete();
+                return;
+            }
+
+            try {
+                await api(`/api/upload/history/${deleteUploadId}`, { method: 'DELETE' });
+                showToast('Файл успешно удалён вместе со всеми данными', 'success');
+                closeConfirmDelete();
+                loadUploadHistory(uploadHistoryState.page);
+            } catch (err) {
+                showToast('Ошибка удаления: ' + err.message, 'error');
+                closeConfirmDelete();
+            }
+        }
+
+        function closeConfirmDelete() {
+            closeModal('confirmDeleteModal');
+            deleteUploadId = null;
+            deleteUploadFilename = null;
+        }
+
+        function updateUploadPagination(pagination) {
+            const { page, totalPages, total, limit } = pagination;
+            const start = (page - 1) * limit + 1;
+            const end = Math.min(page * limit, total);
+
+            document.getElementById('uploadPaginationInfo').innerHTML = `Показано <strong>${start}-${end}</strong> из <strong>${total}</strong> записей`;
+
+            let buttons = '';
+            buttons += `<button class="btn btn-sm ${page === 1 ? 'btn-disabled' : 'btn-secondary'}" onclick="${page > 1 ? `loadUploadHistory(${page - 1})` : ''}"><i class="fas fa-chevron-left"></i></button>`;
+
+            let startPage = Math.max(1, page - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+            if (startPage > 1) {
+                buttons += `<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(1)">1</button>`;
+                if (startPage > 2) buttons += `<span style="padding: 6px; color: var(--gray-light);">...</span>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                buttons += `<button class="btn btn-sm ${i === page ? 'btn-primary' : 'btn-secondary'}" onclick="loadUploadHistory(${i})">${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) buttons += `<span style="padding: 6px; color: var(--gray-light);">...</span>`;
+                buttons += `<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(${totalPages})">${totalPages}</button>`;
+            }
+
+            buttons += `<button class="btn btn-sm ${page === totalPages ? 'btn-disabled' : 'btn-secondary'}" onclick="${page < totalPages ? `loadUploadHistory(${page + 1})` : ''}"><i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('uploadPaginationControls').innerHTML = buttons;
+        }
+
+        function getStatusBadge(status) {
+    const icons = { 
+        'completed': 'check-circle', 
+        'processing': 'spinner fa-spin', 
+        'error': 'exclamation-circle', 
+        'pending': 'clock',
+        'failed': 'times-circle'
+    };
+    const labels = {
+        'completed': 'Завершено',
+        'processing': 'Обработка',
+        'error': 'Ошибка',
+        'pending': 'В очереди',
+        'failed': 'Ошибка'
+    };
+    return `<span class="status-badge ${status}"><i class="fas fa-${icons[status] || 'question-circle'}"></i> ${labels[status] || status}</span>`;
+}
+
+// Добавь маппинг типов файлов для отображения
+function getFileTypeLabel(type) {
+    const labels = {
+        'mcko_teacher': 'МЦКО учитель',
+        'mcko_class': 'МЦКО класс',
+        'vsoh': 'ВсОШ',
+        'olympiad': 'МОШ',
+        'mosh': 'МОШ',
+        'exam_ege': 'ЕГЭ',
+        'ege': 'ЕГЭ',
+        'exam_oge': 'ОГЭ',
+        'oge': 'ОГЭ',
+        'courses': 'Курсы',
+        'other': 'Иное'
+    };
+    return labels[type] || type || 'Неизвестно';
+}
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
+
+        // Init
+        loadUsers();
+        loadUploadHistory();
+    </script>
+</body>
+
+</html>

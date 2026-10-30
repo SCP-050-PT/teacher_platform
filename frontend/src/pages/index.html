@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль педагога - Платформа для учителей</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="../assets/images/Logo_main_RGB.png">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo" style="display: flex; align-items: center; gap: 12px;">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777"
+                    style="height: 40px; width: auto; object-fit: contain;">
+                <span class="school-name" style="font-size: 18px; font-weight: 600; color: white;">Школа №777 </span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Главная</a>
+                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
+                    <i class="fas fa-cog"></i> Админ
+                </a>
+            </nav>
+            <div class="user-menu">
+                <span id="userName"></span>
+                <button onclick="logout()" class="btn-logout" title="Выйти">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Профиль педагога</h1>
+                    <p>Платформа для формирования и анализа индивидуального профиля учителя</p>
+                </div>
+            </section>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <!-- Statistics Card -->
+                <div class="card stats-card">
+                    <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item purple">
+                            <div class="stat-number" id="totalTeachers">0</div>
+                            <div class="stat-label">Учителей</div>
+                        </div>
+                        <div class="stat-item purple">
+                            <div class="stat-number" id="totalCourses">0</div>
+                            <div class="stat-label">Курсов</div>
+                        </div>
+                        <div class="stat-item purple">
+                            <div class="stat-number" id="totalDiagnostics">0</div>
+                            <div class="stat-label">Диагностик</div>
+                        </div>
+                        <div class="stat-item purple">
+                            <div class="stat-number" id="totalOlympiads">0</div>
+                            <div class="stat-label">Олимпиад</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Загрузка данных</h3>
+
+                    <!-- Выбор учебного года -->
+                    <div class="form-group"
+                        style="margin-bottom: 15px; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                        <label for="academicYear" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                            <i class="fas fa-calendar-alt"></i> Учебный год:
+                        </label>
+                        <select id="academicYear"
+                            style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+                            <option value="2023/2024">2023/2024</option>
+                            <option value="2024/2025">2024/2025</option>
+                            <option value="2025/2026" selected>2025/2026</option>
+                            <option value="2026/2027">2026/2027</option>
+                        </select>
+                    </div>
+
+                    <!-- Тип файла -->
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="fileType" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                            <i class="fas fa-file-excel"></i> Тип файла:
+                        </label>
+                        <select id="fileType"
+                            style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+                            <option value="auto" selected>Автоопределение</option>
+                            <option value="mcko_class">МЦКО (по классам)</option>
+                            <option value="mcko_teacher">МЦКО (личная диагностика)</option>
+                            <option value="vsoh">Олимпиады ВсОШ</option>
+                            <option value="olympiad">Олимпиады МОШ</option>
+                            <option value="exam">ГИА (ОГЭ/ЕГЭ)</option>
+                            <option value="courses">Курсы повышения квалификации</option>
+                            <option value="other">Иное (мероприятия)</option>
+                        </select>
+                    </div>
+
+                    <!-- Drag & Drop зона -->
+                    <div class="upload-area" id="dropZone"
+                        style="border: 2px dashed #ccc; padding: 30px; text-align: center; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                        <i class="fas fa-cloud-upload-alt upload-icon"
+                            style="font-size: 48px; color: #667eea; margin-bottom: 10px;"></i>
+                        <p style="margin: 0; color: #666;">Перетащите файл сюда или нажмите для выбора</p>
+                        <span class="upload-hint" style="font-size: 12px; color: #999;">Поддерживаются: .xlsx, .xls
+                            (макс. 10MB)</span>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+                    </div>
+
+                    <!-- КНОПКА ЗАГРУЗКИ -->
+                    <button id="uploadBtn" class="btn btn-primary"
+                        style="width: 100%; margin-top: 15px; padding: 12px; font-size: 16px;" disabled>
+                        <i class="fas fa-upload"></i> Загрузить файл
+                    </button>
+
+                    <!-- Статус загрузки -->
+                    <div id="uploadStatus" style="margin-top: 15px; font-size: 14px;"></div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="card" style="margin-top: 30px;">
+                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+
+                    <!-- График 1: ОГЭ по предметам -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">ОГЭ по предметам</h4>
+                        <canvas id="ogeChart"></canvas>
+                    </div>
+
+                    <!-- График 2: ЕГЭ по предметам -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">ЕГЭ по предметам</h4>
+                        <canvas id="egeChart"></canvas>
+                    </div>
+
+                    <!-- График 3: ВсОШ по предметам -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">ВсОШ по предметам</h4>
+                        <canvas id="vsohChart"></canvas>
+                    </div>
+
+                    <!-- График 4: МОШ по предметам -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">МОШ по предметам</h4>
+                        <canvas id="moshChart"></canvas>
+                    </div>
+
+                    <!-- График 5: МЦКО по классам -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">МЦКО по классам</h4>
+                        <canvas id="mckoClassChart"></canvas>
+                    </div>
+
+                    <!-- График 6: МЦКО учителя -->
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #667eea;">МЦКО учителя</h4>
+                        <canvas id="mckoTeacherChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teachers Section -->
+            <div class="card teachers-section">
+                <div class="page-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3><i class="fas fa-users"></i> Список учителей</h3>
+                    <button class="btn btn-primary admin-only" onclick="openAddTeacherModal()" style="display: none;">
+                        <i class="fas fa-plus"></i> Добавить учителя
+                    </button>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="search-box" style="position: relative;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Поиск по ФИО или предмету...">
+                        <button class="btn-clear-search" onclick="clearFilters()" style="
+            position: absolute; 
+            right: 10px; 
+            top: 50%; 
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            display: none;
+        " id="clearSearchBtn">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+
+                    <select id="subjectFilter" class="filter-select">
+                        <option value="">Все предметы</option>
+                        <option value="Математика">Математика</option>
+                        <option value="Физика">Физика</option>
+                        <option value="Информатика">Информатика</option>
+                        <option value="Русский язык">Русский язык</option>
+                        <option value="География">География</option>
+                        <option value="Биология">Биология</option>
+                        <option value="Химия">Химия</option>
+                        <option value="История">История</option>
+                        <option value="Обществознание">Обществознание</option>
+                        <option value="Английский язык">Английский язык</option>
+                    </select>
+
+                    <button class="btn btn-secondary" onclick="clearFilters()">
+                        <i class="fas fa-undo"></i> Сбросить
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="teachers-table">
+                        <thead>
+                            <tr>
+                                <th width="40">ID</th>
+                                <th width="40">Аватар</th>
+                                <th>Учитель</th>
+                                <th>Предметы</th>
+                                <th width="80">Курсы</th>
+                                <th width="100">Диагностики</th>
+                                <th width="100">Олимпиады</th>
+                                <th width="130">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachersTableBody"></tbody>
+                    </table>
+                    <!-- Пагинация -->
+                    <div id="teachersPagination"
+                        style="display: none; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                        <div id="teachersPaginationInfo" style="color: #666; font-size: 14px;"></div>
+                        <div id="teachersPaginationControls" style="display: flex; gap: 5px; flex-wrap: wrap;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content" style="padding: 20px;">
+                <div class="modal-header"
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div class="profile-header" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <div class="profile-avatar">
+                            <span id="modalAvatar">АФ</span>
+                        </div>
+                        <div class="profile-info" style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                <h2 id="modalName" style="margin: 0;"></h2>
+                                <button class="btn btn-sm btn-warning admin-only" onclick="openEditTeacherModal()"
+                                    id="btnEditTeacherName" style="display: none;">
+                                    <i class="fas fa-edit"></i> Редактировать
+                                </button>
+                            </div>
+                            <span class="subject-badge" id="modalSubject"></span>
+                        </div>
+                    </div>
+                    <button class="btn-close" onclick="closeModal()"
+                        style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="statCourses">0</div>
+                            <div class="stat-label">Курсов повышения квалификации</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statDiagnostics">0</div>
+                            <div class="stat-label">Диагностик МЦКО</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statOlympiads">0</div>
+                            <div class="stat-label">Результатов олимпиад</div>
+                        </div>
+                    </div>
+
+                    <!-- Основные табы -->
+                    <div class="tabs" id="mainTabs">
+                        <button class="tab-btn active" onclick="switchTab('courses')">
+                            <i class="fas fa-graduation-cap"></i> Курсы
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('diagnostics')">
+                            <i class="fas fa-stethoscope"></i> Диагностики
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('exams')">
+                            <i class="fas fa-chart-line"></i> Экзамены
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('olympiads')">
+                            <i class="fas fa-trophy"></i> Олимпиады
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('other')">
+                            <i class="fas fa-folder"></i> Иное
+                        </button>
+                    </div>
+
+                    <!-- Подтабы для Диагностик -->
+                    <div class="sub-tabs" id="diagnosticsSubTabs"
+                        style="display: none; margin-top: 10px; padding-left: 20px;">
+                        <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">
+                            <i class="fas fa-chalkboard"></i> МЦКО по классам
+                        </button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('mcko_teacher')">
+                            <i class="fas fa-user-graduate"></i> МЦКО учителя
+                        </button>
+                    </div>
+
+                    <!-- Подтабы для Олимпиад -->
+                    <div class="sub-tabs" id="olympiadsSubTabs"
+                        style="display: none; margin-top: 10px; padding-left: 20px;">
+                        <button class="sub-tab-btn active" onclick="switchSubTab('vsoh')">
+                            <i class="fas fa-medal"></i> ВсОШ (4 этапа)
+                        </button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('mosh')">
+                            <i class="fas fa-award"></i> МОШ
+                        </button>
+                    </div>
+
+                    <!-- Подтабы для Экзаменов -->
+                    <div class="sub-tabs" id="examsSubTabs"
+                        style="display: none; margin-top: 10px; padding-left: 20px;">
+                        <button class="sub-tab-btn active" onclick="switchSubTab('oge')">
+                            <i class="fas fa-graduation-cap"></i> ОГЭ
+                        </button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('ege')">
+                            <i class="fas fa-university"></i> ЕГЭ
+                        </button>
+                    </div>
+
+                    <div class="tab-content" id="tabContent"></div>
+                </div>
+                <div class="modal-footer"
+                    style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    <button class="btn btn-pdf" onclick="downloadTeacherPDF()" id="btnPdf">
+                        <i class="fas fa-file-pdf"></i> Скачать PDF
+                    </button>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="padding: 20px;">
+                <div class="modal-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Редактировать учителя</h3>
+                    <button class="btn-close" onclick="closeEditModal()"
+                        style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editId">
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label>ФИО</label>
+                            <input type="text" id="editName" class="form-control"
+                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Предметы (через запятую)</label>
+                            <input type="text" id="editSubjects" class="form-control"
+                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                                placeholder="Математика, Физика">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"
+                    style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-danger" onclick="deleteTeacher()"
+                        style="margin-right: auto;">Удалить</button>
+                    <button class="btn btn-secondary" onclick="closeEditModal()">Отмена</button>
+                    <button class="btn btn-primary" onclick="saveTeacher()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модал редактирования учителя в профиле -->
+    <div class="modal" id="editTeacherModal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="padding: 20px;">
+                <div class="modal-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3><i class="fas fa-user-edit"></i> Редактировать учителя</h3>
+                    <button class="btn-close" onclick="closeEditTeacherModal()"
+                        style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTeacherForm">
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">ФИО</label>
+                            <input type="text" id="editTeacherNameInput" class="form-control"
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px;"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Предметы (через
+                                запятую)</label>
+                            <input type="text" id="editTeacherSubjectsInput" class="form-control"
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 6px;"
+                                placeholder="Математика, Физика, Информатика">
+                            <small style="color: #666; font-size: 12px;">Разделите предметы запятыми</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"
+                    style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeEditTeacherModal()">Отмена</button>
+                    <button class="btn btn-primary" onclick="saveTeacherEdit()">
+                        <i class="fas fa-save"></i> Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-dialog" style="max-width: 700px; width: 90%;">
+            <div class="modal-content preview-modal">
+                <div class="modal-header">
+                    <h3>📊 Предварительный анализ файла</h3>
+                    <button class="btn-close" onclick="closePreview()">&times;</button>
+                </div>
+
+                <div class="preview-stats"
+                    style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; background: #f8f9fa;">
+                    <div class="stat-card"
+                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #3b82f6;">
+                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewTotal">0</div>
+                        <div style="font-size: 12px; color: #64748b;">Всего записей</div>
+                    </div>
+                    <div class="stat-card"
+                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #22c55e;">
+                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewNew">0</div>
+                        <div style="font-size: 12px; color: #64748b;">Новых учителей</div>
+                    </div>
+                    <div class="stat-card"
+                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #f59e0b;">
+                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewDup">0</div>
+                        <div style="font-size: 12px; color: #64748b;">Дубликатов</div>
+                    </div>
+                </div>
+
+                <div style="padding: 20px; max-height: 400px; overflow-y: auto;">
+                    <h4 style="margin-bottom: 15px;">Детали:</h4>
+                    <ul id="previewList"
+                        style="list-style: none; padding: 0; margin: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button onclick="confirmImport()" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Подтвердить импорт
+                    </button>
+                    <button onclick="closePreview()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Модалка подтверждения удаления записи -->
+    <div id="confirmDeleteModal" class="modal" style="display: none;">
+        <div class="modal-dialog" style="max-width: 450px;">
+            <div class="modal-content" style="padding: 20px;">
+                <div class="modal-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #dc2626;"><i class="fas fa-exclamation-triangle"></i> Подтверждение
+                    </h3>
+                    <button class="btn-close" onclick="closeConfirmDelete()"
+                        style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmDeleteText" style="font-size: 16px; line-height: 1.5;"></p>
+                    <div
+                        style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 12px; margin-top: 15px; border-radius: 4px;">
+                        <p style="margin: 0; color: #991b1b; font-size: 14px;">
+                            <i class="fas fa-exclamation-circle"></i> Это действие нельзя отменить. Данные будут удалены
+                            безвозвратно.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer"
+                    style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeConfirmDelete()">Отмена</button>
+                    <button class="btn btn-danger" onclick="executeDelete()">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+        // ==========================================
+        let currentTeacherId = null;
+        let currentTeacherData = null;
+        let selectedFile = null;
+        let currentPreviewId = null;
+        let currentMainTab = 'courses';
+        let currentSubTab = null;
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ==========================================
+        // ИНИЦИАЛИЗАЦИЯ И ПРОВЕРКА
+        // ==========================================
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('userName').textContent = user.fullName || user.username || 'Пользователь';
+
+        // Показываем элементы для админа
+        if (user.role === 'admin') {
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.style.display = el.tagName === 'A' ? 'inline-flex' : 'inline-block';
+            });
+        } else if (user.role === 'methodist') {
+            const statsCard = document.querySelector('.stats-card');
+            if (statsCard) {
+                statsCard.classList.add('methodist-fullwidth');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        // ==========================================
+        // API HELPER
+        // ==========================================
+        async function api(url, options = {}) {
+            const res = await fetch(url, {
+                ...options,
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: 'Ошибка сервера' }));
+                throw new Error(err.error);
+            }
+            return res.json();
+        }
+
+        // ==========================================
+        // РЕДАКТИРОВАНИЕ ПРОФИЛЯ УЧИТЕЛЯ
+        // ==========================================
+
+        function openEditTeacherModal() {
+            if (!currentTeacherData) return;
+
+            document.getElementById('editTeacherNameInput').value = currentTeacherData.full_name || '';
+            document.getElementById('editTeacherSubjectsInput').value = Array.isArray(currentTeacherData.subjects)
+                ? currentTeacherData.subjects.join(', ')
+                : (currentTeacherData.subjects || '');
+
+            document.getElementById('editTeacherModal').classList.add('active');
+        }
+
+        function closeEditTeacherModal() {
+            document.getElementById('editTeacherModal').classList.remove('active');
+        }
+
+        async function saveTeacherEdit() {
+            if (!currentTeacherId) return;
+
+            const name = document.getElementById('editTeacherNameInput').value.trim();
+            const subjectsStr = document.getElementById('editTeacherSubjectsInput').value;
+            const subjects = subjectsStr.split(',').map(s => s.trim()).filter(s => s);
+
+            if (!name) {
+                showToast('ФИО не может быть пустым', 'error');
+                return;
+            }
+
+            try {
+                await api(`/api/teachers/${currentTeacherId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ full_name: name, subjects })
+                });
+
+                // Обновляем текущие данные
+                currentTeacherData.full_name = name;
+                currentTeacherData.subjects = subjects;
+
+                // Обновляем отображение
+                document.getElementById('modalName').textContent = name;
+                document.getElementById('modalSubject').textContent = subjects.join(', ') || 'Не указаны';
+                document.getElementById('modalAvatar').textContent = name.substring(0, 2).toUpperCase();
+
+                closeEditTeacherModal();
+                showToast('Данные учителя успешно обновлены!', 'success');
+
+                // Обновляем список учителей
+                loadTeachers();
+
+            } catch (err) {
+                showToast('Ошибка сохранения: ' + err.message, 'error');
+            }
+        }
+
+        // Закрытие по клику вне модалки
+        document.getElementById('editTeacherModal').addEventListener('click', function (e) {
+            if (e.target === this) closeEditTeacherModal();
+        });
+
+        // ==========================================
+        // ФУНКЦИИ УДАЛЕНИЯ ЗАПИСЕЙ
+        // ==========================================
+
+        let deleteItemId = null;
+        let deleteItemType = null;
+        let deleteItemName = null;
+
+        function showDeleteConfirm(id, type, name) {
+            deleteItemId = id;
+            deleteItemType = type;
+            deleteItemName = name;
+
+            document.getElementById('confirmDeleteText').innerHTML =
+                `Вы уверены, что хотите удалить <strong>${type}</strong> "<strong>${name}</strong>"?`;
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        }
+
+        function closeConfirmDelete() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            deleteItemId = null;
+            deleteItemType = null;
+            deleteItemName = null;
+        }
+
+        async function executeDelete() {
+            if (!deleteItemId || !currentTeacherId) {
+                closeConfirmDelete();
+                return;
+            }
+
+            let endpoint = '';
+
+            switch (deleteItemType) {
+                case 'Курс':
+                    endpoint = `/api/teachers/${currentTeacherId}/courses/${deleteItemId}`;
+                    break;
+                case 'Диагностика МЦКО':
+                    endpoint = `/api/teachers/${currentTeacherId}/diagnostics/${deleteItemId}`;
+                    break;
+                case 'Диагностика учителя':
+                    endpoint = `/api/teachers/${currentTeacherId}/mcko-diagnostics/${deleteItemId}`;
+                    break;
+                case 'Олимпиада':
+                    endpoint = `/api/teachers/${currentTeacherId}/olympiads/${deleteItemId}`;
+                    break;
+                case 'Результат ОГЭ':
+                    endpoint = `/api/teachers/${currentTeacherId}/exam-results-oge/${deleteItemId}`;
+                    break;
+                case 'Результат ЕГЭ':
+                    endpoint = `/api/teachers/${currentTeacherId}/exam-results-ege/${deleteItemId}`;
+                    break;
+                case 'Документ':
+                    endpoint = `/api/teachers/${currentTeacherId}/other-docs/${deleteItemId}`;
+                    break;
+                default:
+                    showToast('Неизвестный тип записи', 'error');
+                    closeConfirmDelete();
+                    return;
+            }
+
+            try {
+                await api(endpoint, { method: 'DELETE' });
+                showToast(`${deleteItemType} успешно удалена`, 'success');
+
+                // Обновляем данные учителя
+                const updatedTeacher = await api(`/api/teachers/${currentTeacherId}`);
+                currentTeacherData = updatedTeacher;
+
+                // Обновляем текущую вкладку
+                refreshCurrentTab();
+
+            } catch (err) {
+                showToast('Ошибка удаления: ' + err.message, 'error');
+            } finally {
+                closeConfirmDelete();
+            }
+        }
+
+        // Обёртки для подтверждения удаления
+        function deleteCourse(id, name) {
+            showDeleteConfirm(id, 'Курс', name);
+        }
+
+        function deleteDiagnostic(id, name) {
+            showDeleteConfirm(id, 'Диагностика МЦКО', name);
+        }
+
+        function deleteMckoTeacherDiag(id, name) {
+            showDeleteConfirm(id, 'Диагностика учителя', name);
+        }
+
+        function deleteOlympiad(id, name) {
+            showDeleteConfirm(id, 'Олимпиада', name);
+        }
+
+        function deleteExamOge(id, name) {
+            showDeleteConfirm(id, 'Результат ОГЭ', name);
+        }
+
+        function deleteExamEge(id, name) {
+            showDeleteConfirm(id, 'Результат ЕГЭ', name);
+        }
+
+        function deleteOtherDoc(id, name) {
+            showDeleteConfirm(id, 'Документ', name);
+        }
+
+        function refreshCurrentTab() {
+            // Обновляем отображение в зависимости от текущей вкладки
+            if (currentMainTab === 'courses') {
+                showTabContent('courses', currentTeacherData.courses || [],
+                    ['course_name', 'organization', 'completion_date'],
+                    ['Курс', 'Организация', 'Дата окончания']);
+            } else if (currentMainTab === 'diagnostics') {
+                if (currentSubTab === 'mcko_teacher') {
+                    showMckoTeacherData();
+                } else {
+                    showMckoClassData();
+                }
+            } else if (currentMainTab === 'exams') {
+                if (currentSubTab === 'ege') {
+                    showEgeData();
+                } else {
+                    showOgeData();
+                }
+            } else if (currentMainTab === 'olympiads') {
+                if (currentSubTab === 'mosh') {
+                    showMoshData();
+                } else {
+                    showVsohData();
+                }
+            } else if (currentMainTab === 'other') {
+                showTabContent('other', currentTeacherData.other_documents || [],
+                    ['event_name', 'status', 'participants_count'],
+                    ['Мероприятие', 'Статус', 'Участники']);
+            }
+
+            // Обновляем статистику
+            const mckoClassCount = currentTeacherData.diagnostics?.length || 0;
+            const mckoTeacherCount = currentTeacherData.mcko_teacher_diagnostics?.length || 0;
+            document.getElementById('statCourses').textContent = currentTeacherData.courses?.length || 0;
+            document.getElementById('statDiagnostics').textContent = mckoClassCount + mckoTeacherCount;
+            document.getElementById('statOlympiads').textContent = currentTeacherData.olympiads?.length || 0;
+        }
+
+        // ==========================================
+        // ПРЕВЬЮ ИМПОРТА
+        // ==========================================
+        async function handleFileUpload() {
+            console.log('handleFileUpload вызван, selectedFile:', selectedFile);
+
+            if (!selectedFile) {
+                showToast('Выберите файл', 'error');
+                return;
+            }
+
+            const fileType = document.getElementById('fileType').value;
+            const academicYear = document.getElementById('academicYear').value;
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('fileType', fileType);
+            formData.append('academicYear', academicYear);
+
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Анализ...';
+
+            try {
+                console.log('Отправка запроса на /api/upload/preview-import...');
+                const response = await fetch('/api/upload/preview-import', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+
+                const data = await response.json();
+                console.log('Ответ получен:', data);
+
+                if (response.ok) {
+                    showPreviewModal(data);
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showToast('Ошибка: ' + error.message, 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Загрузить файл';
+            }
+        }
+
+        function showPreviewModal(data) {
+            console.log('showPreviewModal вызван с данными:', data);
+
+            currentPreviewId = data.previewId;
+
+            document.getElementById('previewTotal').textContent = data.totalRecords || 0;
+            document.getElementById('previewNew').textContent = (data.newTeachers || []).length;
+            document.getElementById('previewDup').textContent = (data.duplicates || []).length;
+
+            const list = document.getElementById('previewList');
+            list.innerHTML = '';
+
+            const records = data.records || [];
+
+            if (records.length > 0) {
+                records.forEach(record => {
+                    const li = document.createElement('li');
+                    li.className = record.isNew ? 'new-item' : (record.isDuplicate ? 'dup-item' : '');
+                    li.style.cssText = 'padding: 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;';
+                    if (record.isNew) li.style.background = '#f0fdf4';
+                    if (record.isDuplicate) li.style.background = '#fffbeb';
+
+                    li.innerHTML = `
+                <span style="font-weight: 500;">${record.fio || 'Неизвестно'}</span>
+                <span style="color: #64748b; font-size: 0.9em;">${record.subject || '-'}</span>
+                ${record.isNew ? '<span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">Новый</span>' : ''}
+                ${record.isDuplicate ? '<span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">Дубликат</span>' : ''}
+            `;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = '<li style="text-align:center; color:#999; padding: 20px;">Нет данных для отображения</li>';
+            }
+
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('active');
+            console.log('Модалка открыта');
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('active');
+            currentPreviewId = null;
+        }
+
+        async function confirmImport() {
+            if (!currentPreviewId) return;
+
+            const btn = document.querySelector('#previewModal .btn-primary');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Импорт...';
+
+            try {
+                const response = await fetch('/api/upload/confirm-import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ previewId: currentPreviewId })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast(data.message, 'success', 6000);
+                    closePreview();
+
+                    selectedFile = null;
+                    document.getElementById('fileInput').value = '';
+                    document.getElementById('dropZone').querySelector('p').textContent = 'Перетащите файл сюда или нажмите для выбора';
+                    document.getElementById('dropZone').style.borderColor = '#ccc';
+                    document.getElementById('uploadBtn').disabled = true;
+
+                    loadStats();
+                    loadTeachers();
+                    loadAnalytics();
+                } else {
+                    showToast(data.error, 'error');
+                }
+            } catch (error) {
+                showToast('Ошибка импорта: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Подтвердить импорт';
+            }
+        }
+
+        // ==========================================
+        // ЗАГРУЗКА ФАЙЛОВ
+        // ==========================================
+        if (user.role === 'admin') {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadStatus = document.getElementById('uploadStatus');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = '#667eea';
+                dropZone.style.background = '#f0f4ff';
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.borderColor = '#ccc';
+                dropZone.style.background = 'transparent';
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = '#ccc';
+                dropZone.style.background = 'transparent';
+                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) handleFile(e.target.files[0]);
+            });
+
+            uploadBtn.addEventListener('click', () => {
+                console.log('Кнопка загрузки нажата');
+                handleFileUpload();
+            });
+
+            function handleFile(file) {
+                console.log('handleFile вызван с файлом:', file.name);
+
+                if (file.size > 10 * 1024 * 1024) {
+                    showStatus('Файл слишком большой (макс. 10MB)', 'error');
+                    selectedFile = null;
+                    uploadBtn.disabled = true;
+                    return;
+                }
+
+                if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                    showStatus('Поддерживаются только Excel файлы (.xlsx, .xls)', 'error');
+                    selectedFile = null;
+                    uploadBtn.disabled = true;
+                    return;
+                }
+
+                selectedFile = file;
+                console.log('selectedFile установлен:', selectedFile.name);
+
+                dropZone.querySelector('p').textContent = `Выбран: ${file.name}`;
+                dropZone.style.borderColor = '#48bb78';
+                uploadBtn.disabled = false;
+                showStatus('Нажмите "Загрузить файл" для импорта', 'info');
+            }
+
+            function showStatus(message, type = '') {
+                uploadStatus.textContent = message;
+                uploadStatus.className = '';
+                if (type === 'error') {
+                    uploadStatus.style.cssText = 'color: #e53e3e; background: #fed7d7; padding: 10px; border-radius: 6px;';
+                } else if (type === 'success') {
+                    uploadStatus.style.cssText = 'color: #22543d; background: #c6f6d5; padding: 10px; border-radius: 6px;';
+                } else if (type === 'info') {
+                    uploadStatus.style.cssText = 'color: #2b6cb0; background: #bee3f8; padding: 10px; border-radius: 6px;';
+                } else {
+                    uploadStatus.style.cssText = 'color: #666; background: transparent; padding: 0;';
+                }
+            }
+        }
+
+        document.getElementById('previewModal').addEventListener('click', function (e) {
+            if (e.target === this) closePreview();
+        });
+
+        // ==========================================
+        // ОСТАЛЬНЫЕ ФУНКЦИИ
+        // ==========================================
+        window.addEventListener('beforeunload', () => {
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+        });
+
+        async function loadStats() {
+            try {
+                const stats = await api('/api/stats/dashboard');
+                document.getElementById('totalTeachers').textContent = stats.total_teachers || 0;
+                document.getElementById('totalCourses').textContent = stats.total_courses || 0;
+                document.getElementById('totalDiagnostics').textContent = stats.total_diagnostics || 0;
+                document.getElementById('totalOlympiads').textContent = stats.total_olympiads || 0;
+            } catch (err) {
+                console.error('Ошибка загрузки статистики:', err);
+            }
+        }
+
+        let searchTimeout;
+        const searchInput = document.getElementById('searchInput');
+        const subjectFilter = document.getElementById('subjectFilter');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+        searchInput.addEventListener('input', (e) => {
+            clearSearchBtn.style.display = e.target.value ? 'block' : 'none';
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                loadTeachers(1);
+            }, 300);
+        });
+
+        subjectFilter.addEventListener('change', () => {
+            loadTeachers();
+        });
+
+        function clearFilters() {
+            searchInput.value = '';
+            subjectFilter.value = '';
+            clearSearchBtn.style.display = 'none';
+            loadTeachers(1);
+        }
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+            return text.replace(regex, '<mark style="background: #fef3c7; padding: 2px 4px; border-radius: 3px;">$1</mark>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        let teachersState = {
+            page: 1,
+            limit: 20,
+            totalPages: 1,
+            total: 0
+        };
+
+        function renderTeachers(teachers, searchQuery = '') {
+            const tbody = document.getElementById('teachersTableBody');
+            if (!tbody) return;
+
+            if (!teachers || teachers.length === 0) {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align:center; padding: 40px; color: #666;">
+                    <i class="fas fa-search" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                    <div>Учителя не найдены</div>
+                    <div style="font-size: 14px; color: #999; margin-top: 5px;">
+                        Попробуйте изменить параметры поиска
+                    </div>
+                </td>
+            </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = teachers.map(t => {
+                const initials = (t.full_name || '').substring(0, 2).toUpperCase();
+                const highlightedName = searchQuery ? highlightText(escapeHtml(t.full_name) || '', searchQuery) : (escapeHtml(t.full_name) || '');
+                const subjectsStr = Array.isArray(t.subjects) ? t.subjects.join(', ') : (t.subjects || '');
+
+                return `
+            <tr>
+                <td>${t.id}</td>
+                <td><div class="avatar">${initials}</div></td>
+                <td>
+                    <a href="#" onclick="openProfile(${t.id}); return false;" 
+                       style="font-weight: 500; text-decoration: none; color: #667eea;">
+                        ${highlightedName}
+                    </a>
+                </td>
+                <td>${escapeHtml(subjectsStr)}</td>
+                <td style="text-align: center; font-weight: 600; color: #667eea;">${t.courses_count || 0}</td>
+                <td style="text-align: center;">${t.diagnostics_count || 0}</td>
+                <td style="text-align: center; font-weight: 600; color: #f59e0b;">${t.olympiads_count || 0}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="openProfile(${t.id})" title="Просмотр">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    ${user.role === 'admin' ?
+                        `<button class="btn btn-sm btn-warning" onclick="openEditTeacher(${t.id})" title="Редактировать" style="margin-left: 5px;">
+                            <i class="fas fa-edit"></i>
+                        </button>` : ''}
+                </td>
+            </tr>
+        `;
+            }).join('');
+        }
+
+        // ==========================================
+        // ПАГИНАЦИЯ
+        // ==========================================
+        function updateTeachersPagination(pagination) {
+            const container = document.getElementById('teachersPagination');
+            const info = document.getElementById('teachersPaginationInfo');
+            const controls = document.getElementById('teachersPaginationControls');
+
+            if (!pagination || pagination.totalPages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'flex';
+            info.textContent = `Страница ${pagination.page} из ${pagination.totalPages} (всего ${pagination.total} учителей)`;
+
+            let html = '';
+
+            // Кнопка "Назад"
+            if (pagination.page > 1) {
+                html += `<button onclick="loadTeachers(${pagination.page - 1})" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+            }
+
+            // Номера страниц
+            const maxButtons = 5;
+            let startPage = Math.max(1, pagination.page - Math.floor(maxButtons / 2));
+            let endPage = Math.min(pagination.totalPages, startPage + maxButtons - 1);
+
+            if (endPage - startPage < maxButtons - 1) {
+                startPage = Math.max(1, endPage - maxButtons + 1);
+            }
+
+            if (startPage > 1) {
+                html += `<button onclick="loadTeachers(1)" class="btn btn-sm btn-secondary">1</button>`;
+                if (startPage > 2) html += `<span style="padding: 5px;">...</span>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const active = i === pagination.page ? 'btn-primary' : 'btn-secondary';
+                html += `<button onclick="loadTeachers(${i})" class="btn btn-sm ${active}">${i}</button>`;
+            }
+
+            if (endPage < pagination.totalPages) {
+                if (endPage < pagination.totalPages - 1) html += `<span style="padding: 5px;">...</span>`;
+                html += `<button onclick="loadTeachers(${pagination.totalPages})" class="btn btn-sm btn-secondary">${pagination.totalPages}</button>`;
+            }
+
+            // Кнопка "Вперед"
+            if (pagination.page < pagination.totalPages) {
+                html += `<button onclick="loadTeachers(${pagination.page + 1})" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+            }
+
+            controls.innerHTML = html;
+        }
+
+        async function openProfile(id) {
+            currentTeacherId = id;
+            try {
+                const teacher = await api(`/api/teachers/${id}`);
+                currentTeacherData = teacher;
+
+                // Отображаем данные
+                document.getElementById('modalName').textContent = teacher.full_name || '';
+                document.getElementById('modalSubject').textContent = Array.isArray(teacher.subjects) ? teacher.subjects.join(', ') : (teacher.subjects || 'Не указаны');
+                document.getElementById('modalAvatar').textContent = (teacher.full_name || '').substring(0, 2).toUpperCase();
+
+                // Показываем кнопку редактирования только для админа
+                const btnEdit = document.getElementById('btnEditTeacherName');
+                if (btnEdit) {
+                    btnEdit.style.display = user.role === 'admin' ? 'inline-block' : 'none';
+                }
+
+                // Обновляем статистику
+                const mckoClassCount = teacher.diagnostics?.length || 0;
+                const mckoTeacherCount = teacher.mcko_teacher_diagnostics?.length || 0;
+                document.getElementById('statCourses').textContent = teacher.courses?.length || 0;
+                document.getElementById('statDiagnostics').textContent = mckoClassCount + mckoTeacherCount;
+                document.getElementById('statOlympiads').textContent = teacher.olympiads?.length || 0;
+
+                // Сбрасываем табы
+                currentMainTab = 'courses';
+                currentSubTab = null;
+                hideAllSubTabs();
+
+                // Показываем первую вкладку
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                showTabContent('courses', teacher.courses || [], ['course_name', 'organization', 'completion_date'], ['Курс', 'Организация', 'Дата']);
+
+                document.getElementById('profileModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } catch (err) {
+                alert('Ошибка: ' + err.message);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').classList.remove('active');
+            document.body.style.overflow = '';
+            currentTeacherId = null;
+            hideAllSubTabs();
+        }
+
+        function hideAllSubTabs() {
+            document.getElementById('diagnosticsSubTabs').style.display = 'none';
+            document.getElementById('olympiadsSubTabs').style.display = 'none';
+            document.getElementById('examsSubTabs').style.display = 'none';
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+        }
+
+        function switchTab(tabName) {
+            if (!currentTeacherData) return;
+            document.getElementById('tabContent').innerHTML = '';
+            currentMainTab = tabName;
+            currentSubTab = null;
+
+            // Обновляем активную кнопку
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Показываем/скрываем подтабы
+            hideAllSubTabs();
+
+            switch (tabName) {
+                case 'courses':
+                    showTabContent('courses', currentTeacherData.courses || [],
+                        ['course_name', 'organization', 'completion_date'],
+                        ['Курс', 'Организация', 'Дата окончания']);
+                    break;
+
+                case 'diagnostics':
+                    document.getElementById('diagnosticsSubTabs').style.display = 'block';
+                    const firstDiagBtn = document.querySelector('#diagnosticsSubTabs .sub-tab-btn:first-child');
+                    if (firstDiagBtn) firstDiagBtn.classList.add('active');
+                    showMckoClassData();
+                    break;
+
+                case 'exams':
+                    document.getElementById('examsSubTabs').style.display = 'block';
+                    const firstExamBtn = document.querySelector('#examsSubTabs .sub-tab-btn:first-child');
+                    if (firstExamBtn) firstExamBtn.classList.add('active');
+                    showOgeData();
+                    break;
+
+                case 'olympiads':
+                    document.getElementById('olympiadsSubTabs').style.display = 'block';
+                    const firstOlimpBtn = document.querySelector('#olympiadsSubTabs .sub-tab-btn:first-child');
+                    if (firstOlimpBtn) firstOlimpBtn.classList.add('active');
+                    showVsohData();
+                    break;
+
+                case 'other':
+                    showTabContent('other', currentTeacherData.other_documents || [],
+                        ['event_name', 'status', 'participants_count'],
+                        ['Мероприятие', 'Статус', 'Участники']);
+                    break;
+            }
+        }
+
+        function switchSubTab(subTabName) {
+            currentSubTab = subTabName;
+
+            // Определяем контейнер подтабов
+            let container;
+            if (currentMainTab === 'diagnostics') container = 'diagnosticsSubTabs';
+            else if (currentMainTab === 'olympiads') container = 'olympiadsSubTabs';
+            else if (currentMainTab === 'exams') container = 'examsSubTabs';
+
+            document.querySelectorAll(`#${container} .sub-tab-btn`).forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (subTabName === 'mcko_class') {
+                showMckoClassData();
+            } else if (subTabName === 'mcko_teacher') {
+                showMckoTeacherData();
+            } else if (subTabName === 'vsoh') {
+                showVsohData();
+            } else if (subTabName === 'mosh') {
+                showMoshData();
+            } else if (subTabName === 'oge') {
+                showOgeData();
+            } else if (subTabName === 'ege') {
+                showEgeData();
+            }
+        }
+
+        function showMckoClassData() {
+            const data = currentTeacherData.diagnostics || [];
+            const showActions = user.role === 'admin';
+
+            if (data.length === 0) {
+                document.getElementById('tabContent').innerHTML =
+                    '<p style="text-align:center; color:#666;">Нет данных о диагностиках по классам</p>';
+                return;
+            }
+
+            const html = `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Класс</th>
+                    <th>Качество %</th>
+                    <th>Ниже баз.</th>
+                    <th>Базовый</th>
+                    <th>Повышенный</th>
+                    <th>Высокий</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr>
+                        <td><strong>${row.subject || '-'}</strong></td>
+                        <td>${row.class_name || '-'}</td>
+                        <td style="text-align: center; font-weight: 600; color: #667eea;">${row.quality_percent || 0}%</td>
+                        <td style="text-align: center;">${row.below_basic_count || 0}</td>
+                        <td style="text-align: center;">${row.basic_count || 0}</td>
+                        <td style="text-align: center;">${row.advanced_count || 0}</td>
+                        <td style="text-align: center;">${row.high_count || 0}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteDiagnostic(${row.id}, '${row.subject || ''} ${row.class_name || ''}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showMckoTeacherData() {
+            const data = currentTeacherData.mcko_teacher_diagnostics || [];
+
+            if (data.length === 0) {
+                document.getElementById('tabContent').innerHTML = '<p style="text-align:center; color:#666;">Нет данных о личных диагностиках</p>';
+                return;
+            }
+
+            const showActions = user.role === 'admin';
+
+            let html = `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Тип экзамена</th>
+                    <th>Предмет</th>
+                    <th>Уровень</th>
+                    <th>Дата диагностики</th>
+                    <th>Дата окончания</th>
+                    <th>Публикация</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr data-id="${row.id}">
+                        <td>${row.exam_type || '-'}</td>
+                        <td>${row.subject || '-'}</td>
+                        <td><span class="badge ${getLevelBadgeClass(row.level_achieved)}">${row.level_achieved || '-'}</span></td>
+                        <td>${formatDate(row.diagnostic_date)}</td>
+                        <td>${formatDate(row.end_date)}</td>
+                        <td>${row.is_published ? '✅ Опубликовано' : '❌ Нет'}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteMckoTeacherDiag(${row.id}, '${row.subject || 'запись'}')" title="Удалить диагностику">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showVsohData() {
+            const data = (currentTeacherData.olympiads || []).filter(o => o.olympiad_type === 'ВсОШ');
+            const showActions = user.role === 'admin';
+
+            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о ВсОШ</p>' : `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Этап</th>
+                    <th>Участников</th>
+                    <th>Призёры</th>
+                    <th>Победители</th>
+                    <th>Год</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr>
+                        <td>${row.subject || '-'}</td>
+                        <td><span class="badge badge-info">${row.stage || '-'}</span></td>
+                        <td>${row.total_participants || 0}</td>
+                        <td>${row.prize_winners_count || 0}</td>
+                        <td>${row.winners_count || 0}</td>
+                        <td>${row.academic_year || '-'}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteOlympiad(${row.id}, 'ВсОШ ${row.subject || ''}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showMoshData() {
+            const data = (currentTeacherData.olympiads || []).filter(o => o.olympiad_type === 'МОШ');
+            const showActions = user.role === 'admin';
+
+            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о МОШ</p>' : `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Параллель</th>
+                    <th>Результат</th>
+                    <th>Ученик</th>
+                    <th>Год</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr>
+                        <td>${row.subject || '-'}</td>
+                        <td>${row.parallel ? row.parallel + ' класс' : '-'}</td>
+                        <td><span class="badge ${row.winners_count > 0 ? 'badge-success' : 'badge-warning'}">
+                            ${row.winners_count > 0 ? '🏆 Победитель' : (row.prize_winners_count > 0 ? '🥉 Призёр' : 'Участник')}
+                        </span></td>
+                        <td>${row.student || '-'}</td>
+                        <td>${row.academic_year || '-'}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteOlympiad(${row.id}, 'МОШ ${row.subject || ''}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showOgeData() {
+            const data = (currentTeacherData.exam_results_oge || []);
+            const showActions = user.role === 'admin';
+
+            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных об ОГЭ</p>' : `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Год</th>
+                    <th>Учеников</th>
+                    <th style="text-align: center; background: #fee2e2; color: #991b1b;">2</th>
+                    <th style="text-align: center; background: #fef3c7; color: #92400e;">3</th>
+                    <th style="text-align: center; background: #dbeafe; color: #1e40af;">4</th>
+                    <th style="text-align: center; background: #d1fae5; color: #065f46;">5</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr>
+                        <td><strong>${row.subject || '-'}</strong></td>
+                        <td>${row.academic_year || '-'}</td>
+                        <td style="text-align: center; font-weight: 600;">${row.total_students || 0}</td>
+                        <td style="text-align: center; background: #fef2f2;">${row.grade_2_count || 0}</td>
+                        <td style="text-align: center; background: #fffbeb;">${row.grade_3_count || 0}</td>
+                        <td style="text-align: center; background: #eff6ff;">${row.grade_4_count || 0}</td>
+                        <td style="text-align: center; background: #f0fdf4;">${row.grade_5_count || 0}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteExamOge(${row.id}, '${escapeHtml(row.subject || '')}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showEgeData() {
+            const data = (currentTeacherData.exam_results_ege || []);
+            const showActions = user.role === 'admin';
+
+            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о ЕГЭ</p>' : `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Год</th>
+                    <th>Учеников</th>
+                    <th style="text-align: center; background: #fee2e2; color: #991b1b;" title="< минимума">&lt; мин</th>
+                    <th style="text-align: center; background: #fef3c7; color: #92400e;" title="0-59">0-59</th>
+                    <th style="text-align: center; background: #dbeafe; color: #1e40af;" title="60-79">60-79</th>
+                    <th style="text-align: center; background: #d1fae5; color: #065f46;" title="80-100">80-100</th>
+                    ${showActions ? '<th style="width: 60px; text-align: center;">🗑️</th>' : ''}
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `
+                    <tr>
+                        <td><strong>${row.subject || '-'}</strong></td>
+                        <td>${row.academic_year || '-'}</td>
+                        <td style="text-align: center; font-weight: 600;">${row.total_students || 0}</td>
+                        <td style="text-align: center; background: #fef2f2; font-weight: 600; color: ${(row.threshold_lt_count || 0) > 0 ? '#dc2626' : 'inherit'}">${row.threshold_lt_count || 0}</td>
+                        <td style="text-align: center; background: #fffbeb; font-weight: 600;">${row.threshold_0_59_count || 0}</td>
+                        <td style="text-align: center; background: #eff6ff; font-weight: 600;">${row.threshold_60_79_count || 0}</td>
+                        <td style="text-align: center; background: #f0fdf4; font-weight: 600; color: #16a34a;">${row.threshold_80_100_count || 0}</td>
+                        ${showActions ? `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-danger" onclick="deleteExamEge(${row.id}, '${escapeHtml(row.subject || '')}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function getLevelBadgeClass(level) {
+            if (!level) return '';
+            const l = level.toLowerCase();
+            if (l.includes('эксперт')) return 'badge-success';
+            if (l.includes('высок')) return 'badge-primary';
+            if (l.includes('базов')) return 'badge-warning';
+            return 'badge-secondary';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        function showTabContent(tabName, data, columns, headers) {
+            const container = document.getElementById('tabContent');
+            const showActions = user.role === 'admin';
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#666;">Нет данных</p>';
+                return;
+            }
+
+            let html = '<table class="table"><thead><tr>';
+            headers.forEach(h => html += `<th>${h}</th>`);
+            if (showActions) html += '<th style="width: 60px; text-align: center;">🗑️</th>';
+            html += '</tr></thead><tbody>';
+
+            data.forEach(row => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    let val = row[col];
+                    if (col.includes('date') && val) {
+                        val = new Date(val).toLocaleDateString('ru-RU');
+                    }
+                    html += `<td>${val || '-'}</td>`;
+                });
+
+                if (showActions) {
+                    const id = row.id;
+                    let name = 'запись';
+                    let deleteFunc = '';
+
+                    if (tabName === 'courses') {
+                        name = row.course_name || 'запись';
+                        deleteFunc = `deleteCourse(${id}, '${name.replace(/'/g, "\\'")}')`;
+                    } else if (tabName === 'other') {
+                        name = row.event_name || 'запись';
+                        deleteFunc = `deleteOtherDoc(${id}, '${name.replace(/'/g, "\\'")}')`;
+                    }
+
+                    if (deleteFunc) {
+                        html += `
+                    <td style="text-align: center;">
+                        <button class="btn btn-sm btn-danger" onclick="${deleteFunc}" title="Удалить">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                    } else {
+                        html += '<td></td>';
+                    }
+                }
+
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function loadTeachers(page = 1) {
+            const tbody = document.getElementById('teachersTableBody');
+            const search = searchInput?.value || '';
+            const subject = subjectFilter?.value || '';
+
+            teachersState.page = page;
+
+            tbody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align:center; padding: 40px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #667eea;"></i>
+                <div style="margin-top: 10px; color: #666;">Загрузка...</div>
+            </td>
+        </tr>
+    `;
+
+            try {
+                const response = await api(`/api/teachers?page=${page}&limit=${teachersState.limit}&search=${encodeURIComponent(search)}&subject=${encodeURIComponent(subject)}`);
+
+                const { data, pagination } = response;
+
+                console.log('API response:', response); // Отладка
+
+                // Обновляем состояние
+                teachersState.totalPages = pagination?.totalPages || 1;
+                teachersState.total = pagination?.total || 0;
+
+                renderTeachers(data, search);
+
+                // ВАЖНО: Вызываем обновление пагинации
+                updateTeachersPagination(pagination);
+
+            } catch (err) {
+                console.error('Ошибка загрузки:', err);
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align:center; padding: 20px; color: #e53e3e;">
+                    <i class="fas fa-exclamation-circle"></i> Ошибка загрузки списка
+                </td>
+            </tr>
+        `;
+            }
+        }
+
+        function openAddTeacherModal() {
+            currentTeacherId = null;
+            document.getElementById('editId').value = '';
+            document.getElementById('editName').value = '';
+            document.getElementById('editSubjects').value = '';
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function openEditTeacher(id) {
+            currentTeacherId = id;
+            if (currentTeacherData && currentTeacherData.id === id) {
+                document.getElementById('editId').value = id;
+                document.getElementById('editName').value = currentTeacherData.full_name || '';
+                document.getElementById('editSubjects').value = Array.isArray(currentTeacherData.subjects)
+                    ? currentTeacherData.subjects.join(', ')
+                    : (currentTeacherData.subjects || '');
+                document.getElementById('editModal').classList.add('active');
+            } else {
+                api(`/api/teachers/${id}`).then(t => {
+                    currentTeacherData = t;
+                    document.getElementById('editId').value = id;
+                    document.getElementById('editName').value = t.full_name || '';
+                    document.getElementById('editSubjects').value = Array.isArray(t.subjects) ? t.subjects.join(', ') : '';
+                    document.getElementById('editModal').classList.add('active');
+                });
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        async function saveTeacher() {
+            const id = document.getElementById('editId').value;
+            const name = document.getElementById('editName').value;
+            const subjects = document.getElementById('editSubjects').value.split(',').map(s => s.trim()).filter(s => s);
+
+            try {
+                if (id) {
+                    await api(`/api/teachers/${id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ full_name: name, subjects })
+                    });
+                } else {
+                    await api('/api/teachers', {
+                        method: 'POST',
+                        body: JSON.stringify({ full_name: name, subjects })
+                    });
+                }
+                showToast('Данные успешно сохранены!', 'success');
+                closeEditModal();
+                loadTeachers();
+                loadStats();
+            } catch (err) {
+                alert('Ошибка сохранения: ' + err.message);
+            }
+        }
+
+        async function deleteTeacher() {
+            if (!confirm('Удалить учителя?')) return;
+            const id = document.getElementById('editId').value;
+            if (!id) {
+                closeEditModal();
+                return;
+            }
+            try {
+                await api(`/api/teachers/${id}`, { method: 'DELETE' });
+                closeEditModal();
+                closeModal();
+                loadTeachers();
+                loadStats();
+            } catch (err) {
+                alert('Ошибка удаления: ' + err.message);
+            }
+        }
+
+        function editTeacher() {
+            if (currentTeacherId) openEditTeacher(currentTeacherId);
+        }
+
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+                if (event.target.id === 'profileModal') {
+                    hideAllSubTabs();
+                }
+            }
+        }
+
+        // Графики
+        let charts = {};
+
+        async function loadAnalytics() {
+            try {
+                const [ogeData, egeData, vsohData, moshData, mckoClassData, mckoTeacherData] = await Promise.all([
+                    api('/api/stats/exams-oge-by-subject').catch(() => null),
+                    api('/api/stats/exams-ege-by-subject').catch(() => null),
+                    api('/api/stats/vsoh-by-subject').catch(() => null),
+                    api('/api/stats/mosh-by-subject').catch(() => null),
+                    api('/api/stats/mcko-class-by-subject').catch(() => null),
+                    api('/api/stats/mcko-teacher-by-subject').catch(() => null)
+                ]);
+
+                createOgeChart(ogeData);
+                createEgeChart(egeData);
+                createVsohChart(vsohData);
+                createMoshChart(moshData);
+                createMckoClassChart(mckoClassData);
+                createMckoTeacherChart(mckoTeacherData);
+
+            } catch (err) {
+                console.error('Ошибка загрузки аналитики:', err);
+                showChartPlaceholder();
+            }
+        }
+
+        function createOgeChart(data) {
+            const ctx = document.getElementById('ogeChart');
+            if (!ctx) return;
+
+            if (!data || !data.subjects || data.subjects.length === 0) {
+                showPlaceholder(ctx, 'Нет данных об ОГЭ');
+                return;
+            }
+
+            if (charts.oge) charts.oge.destroy();
+
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: data.subjects,
+                    datasets: [
+                        {
+                            label: '2',
+                            data: data.grade_2_counts || [],
+                            backgroundColor: '#dc2626', // красный
+                            borderColor: '#991b1b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '3',
+                            data: data.grade_3_counts || [],
+                            backgroundColor: '#f59e0b', // оранжевый
+                            borderColor: '#92400e',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '4',
+                            data: data.grade_4_counts || [],
+                            backgroundColor: '#3b82f6', // синий
+                            borderColor: '#1e40af',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '5',
+                            data: data.grade_5_counts || [],
+                            backgroundColor: '#22c55e', // зеленый
+                            borderColor: '#166534',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            font: { size: 16 }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 5 },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            };
+
+            charts.oge = new Chart(ctx, config);
+        }
+
+        function createEgeChart(data) {
+            const ctx = document.getElementById('egeChart');
+            if (!ctx) return;
+
+            if (!data || !data.subjects || data.subjects.length === 0) {
+                showPlaceholder(ctx, 'Нет данных о ЕГЭ');
+                return;
+            }
+
+            if (charts.ege) charts.ege.destroy();
+
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: data.subjects,
+                    datasets: [
+                        {
+                            label: '80-100 баллов',
+                            data: data.threshold_3_counts || [],
+                            backgroundColor: 'rgba(34, 197, 94, 0.8)',   // зелёный
+                            borderColor: '#16a34a',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: '60-79 баллов',
+                            data: data.threshold_2_counts || [],
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',   // синий
+                            borderColor: '#2563eb',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: '0-59 баллов',
+                            data: data.threshold_1_counts || [],
+                            backgroundColor: 'rgba(249, 115, 22, 0.8)',   // оранжевый
+                            borderColor: '#ea580c',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: '< минимума ',
+                            data: data.threshold_0_counts || [],
+                            backgroundColor: 'rgba(239, 68, 68, 0.8)',    // красный
+                            borderColor: '#dc2626',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 15 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { stepSize: 1 }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            };
+
+            charts.ege = new Chart(ctx, config);
+        }
+
+        function createVsohChart(data) {
+            const ctx = document.getElementById('vsohChart');
+            if (!ctx) return;
+
+            if (!data || !data.labels || data.labels.length === 0) {
+                showPlaceholder(ctx, 'Нет данных о ВсОШ');
+                return;
+            }
+
+            if (charts.vsoh) charts.vsoh.destroy();
+
+            const colors = ['#667eea', '#48bb78', '#ed8936', '#e53e3e', '#38b2ac', '#9f7aea', '#f56565', '#ecc94b'];
+
+            const config = {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values || [],
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff',
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 15, usePointStyle: true, font: { size: 11 } }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            };
+
+            charts.vsoh = new Chart(ctx, config);
+        }
+
+        function createMoshChart(data) {
+            const ctx = document.getElementById('moshChart');
+            if (!ctx) return;
+
+            if (!data || !data.labels || data.labels.length === 0) {
+                showPlaceholder(ctx, 'Нет данных о МОШ');
+                return;
+            }
+
+            if (charts.mosh) charts.mosh.destroy();
+
+            // Другая цветовая схема для МОШ (теплые тона)
+            const colors = ['#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#10b981', '#f97316', '#ec4899', '#84cc16'];
+
+            const config = {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values || [],
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff',
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 15, usePointStyle: true, font: { size: 11 } }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            };
+
+            charts.mosh = new Chart(ctx, config);
+        }
+
+        function createMckoClassChart(data) {
+            const ctx = document.getElementById('mckoClassChart');
+            if (!ctx) return;
+
+            if (!data || !data.subjects || data.subjects.length === 0) {
+                showPlaceholder(ctx, 'Нет данных о МЦКО по классам');
+                return;
+            }
+
+            if (charts.mckoClass) charts.mckoClass.destroy();
+
+            const subjects = data.subjects;
+            const counts = data.counts;
+
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: subjects,
+                    datasets: [{
+                        label: 'Количество диагностик',
+                        data: counts,
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.9)',
+                            'rgba(102, 126, 234, 0.7)',
+                            'rgba(102, 126, 234, 0.5)',
+                            'rgba(102, 126, 234, 0.3)',
+                            'rgba(102, 126, 234, 0.2)'
+                        ],
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const detail = data.details?.[context.dataIndex];
+                                    return [
+                                        `Диагностик: ${context.parsed.x}`,
+                                        `Учеников: ${detail?.totalStudents || 0}`,
+                                        `Ср. качество: ${detail?.avgQuality || 0}%`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 12, weight: '500' }
+                            }
+                        }
+                    }
+                }
+            };
+
+            charts.mckoClass = new Chart(ctx, config);
+        }
+
+        function createMckoTeacherChart(data) {
+            const ctx = document.getElementById('mckoTeacherChart');
+            if (!ctx) return;
+
+            if (!data || !data.subjects || data.subjects.length === 0) {
+                showPlaceholder(ctx, 'Нет данных о МЦКО учителя');
+                return;
+            }
+
+            if (charts.mckoTeacher) charts.mckoTeacher.destroy();
+
+            // Зелёная гамма для отличия от МЦКО по классам
+            const colors = [
+                'rgba(34, 197, 94, 0.9)',
+                'rgba(34, 197, 94, 0.7)',
+                'rgba(34, 197, 94, 0.5)',
+                'rgba(34, 197, 94, 0.3)',
+                'rgba(34, 197, 94, 0.2)'
+            ];
+
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: data.subjects,
+                    datasets: [{
+                        label: 'Количество диагностик',
+                        data: data.counts,
+                        backgroundColor: colors,
+                        borderColor: '#22c55e',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const detail = data.details?.[context.dataIndex];
+                                    return [
+                                        `Диагностик: ${context.parsed.x}`,
+                                        `Эксперт: ${detail?.expertCount || 0}`,
+                                        `Высокий: ${detail?.highCount || 0}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 12, weight: '500' }
+                            }
+                        }
+                    }
+                }
+            };
+
+            charts.mckoTeacher = new Chart(ctx, config);
+        }
+
+        function showPlaceholder(canvas, message) {
+            const parent = canvas.parentElement;
+            parent.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #999;">
+                    <i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+        }
+
+        function showChartPlaceholder() {
+            ['ogeChart', 'egeChart', 'vsohChart', 'moshChart', 'mckoClassChart', 'mckoTeacherChart'].forEach(id => {
+                const canvas = document.getElementById(id);
+                if (canvas) {
+                    const message = id === 'ogeChart' ? 'Нет данных об ОГЭ' :
+                        id === 'egeChart' ? 'Нет данных о ЕГЭ' :
+                            id === 'vsohChart' ? 'Нет данных о ВсОШ' :
+                                id === 'moshChart' ? 'Нет данных о МОШ' :
+                                    id === 'mckoClassChart' ? 'Нет данных о МЦКО по классам' :
+                                        'Нет данных о МЦКО учителя';
+                    showPlaceholder(canvas, message);
+                }
+            });
+        }
+
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-times-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} toast-icon"></i>
+                <div class="toast-content">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        function generateAcademicYears() {
+            const select = document.getElementById('academicYear');
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth();
+
+            const currentAcademicYear = currentMonth >= 8 ?
+                `${currentYear}/${currentYear + 1}` :
+                `${currentYear - 1}/${currentYear}`;
+
+            const years = [];
+            for (let i = 2022; i <= currentYear + 2; i++) {
+                years.push(`${i}/${i + 1}`);
+            }
+
+            select.innerHTML = years.map(year => {
+                let label = year;
+                if (year === currentAcademicYear) label += ' (текущий)';
+                else if (year > currentAcademicYear) label += ' (будущий)';
+                else label += ' (архив)';
+
+                return `<option value="${year}" ${year === currentAcademicYear ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+        }
+
+        // Генерация PDF
+        async function downloadTeacherPDF() {
+            if (!currentTeacherId) {
+                showToast('Ошибка: учитель не выбран', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btnPdf');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерация...';
+
+            try {
+                const response = await fetch(`/api/teachers/${currentTeacherId}/pdf`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
+                    throw new Error(error.error || 'Ошибка генерации PDF');
+                }
+
+                // Получаем blob и скачиваем
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Profile_${currentTeacherData.full_name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                showToast('PDF успешно сгенерирован!', 'success');
+
+            } catch (err) {
+                console.error('Ошибка PDF:', err);
+                showToast('Ошибка: ' + err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Инициализация
+        loadStats();
+        generateAcademicYears();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAnalytics();
+            loadTeachers();
+        });
+
+        window.addEventListener('resize', () => {
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.resize();
+            });
+        });
+    </script>
+</body>
+
+</html>

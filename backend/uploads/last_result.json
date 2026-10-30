@@ -1,0 +1,158 @@
+[
+  {
+    "full_name": "Ализаде Фикрат Рагим Оглы",
+    "subject": "физика",
+    "diagnostic_date": "2025-11-26",
+    "end_date": "2028-11-26",
+    "exam_type": "Диагностика ЕГЭ",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-12-03"
+  },
+  {
+    "full_name": "Аляудинова Вероника Маратовна",
+    "subject": "Информатика",
+    "diagnostic_date": "2025-11-17",
+    "end_date": "2028-11-17",
+    "exam_type": "Диагностика ЕГЭ",
+    "level_achieved": "Базовый",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-12-08"
+  },
+  {
+    "full_name": "Андреева Татьяна Николаевна",
+    "subject": "География",
+    "diagnostic_date": "2025-07-21",
+    "end_date": "2028-07-21",
+    "exam_type": "Диагностика ЕГЭ",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-07-29"
+  },
+  {
+    "full_name": "Астахова Анастасия Сергеевна",
+    "subject": "Информатика",
+    "diagnostic_date": "2025-07-31",
+    "end_date": "2028-07-31",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-08-08"
+  },
+  {
+    "full_name": "Бойчук Алевтина Степановна",
+    "subject": "Математика (профильный уровень)",
+    "diagnostic_date": "2025-08-12",
+    "end_date": "2028-08-12",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Экспертный",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-07-30"
+  },
+  {
+    "full_name": "Божко Наталья Николаевна",
+    "subject": "Английский язык (письменная + устная части)",
+    "diagnostic_date": "2024-05-30",
+    "end_date": "2027-05-30",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Экспертный",
+    "publication_status": "Опубликован",
+    "publication_date": "2024-12-12"
+  },
+  {
+    "full_name": "Бородина Ирина Львовна",
+    "subject": "Химия",
+    "diagnostic_date": "2025-07-22",
+    "end_date": "2028-07-22",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Экспертный",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-07-29"
+  },
+  {
+    "full_name": "Бородина Наталья Владимировна",
+    "subject": "Музыка",
+    "diagnostic_date": "2023-08-14",
+    "end_date": "2026-08-14",
+    "exam_type": "Предметная и метапредметная диагностика",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2023-09-15"
+  },
+  {
+    "full_name": "Бубнова Татьяна Владимировна",
+    "subject": "Музыка",
+    "diagnostic_date": "2025-06-19",
+    "end_date": "2028-06-19",
+    "exam_type": "ПД МПУ уч",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-08-26"
+  },
+  {
+    "full_name": "Дубинин Александр Игоревич",
+    "subject": "История",
+    "diagnostic_date": "2025-07-24",
+    "end_date": "2028-07-24",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-07-31"
+  },
+  {
+    "full_name": "Егорова Мария Александровна",
+    "subject": "Биология",
+    "diagnostic_date": "2025-08-05",
+    "end_date": "2028-08-05",
+    "exam_type": "Комплексная диагностика ЕГЭ",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-08-13"
+  },
+  {
+    "full_name": "Кудрявцева Лариса Михайловна",
+    "diagnostic_date": null,
+    "end_date": null,
+    "publication_date": null
+  },
+  {
+    "full_name": "Жумаева Лариса Юрьевна",
+    "subject": "Метапредметные умения (начальное образование)",
+    "diagnostic_date": "2024-09-19",
+    "end_date": "2027-09-19",
+    "exam_type": "Комплексная диагностика НОО",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2024-09-20"
+  },
+  {
+    "full_name": "Зиновкина Анна Евгеньевна",
+    "subject": "Метапредметные умения (начальное образование)",
+    "diagnostic_date": "2025-06-17",
+    "end_date": "2028-06-17",
+    "exam_type": "Комплексная диагностика НОО",
+    "level_achieved": "Экспертный",
+    "publication_status": "Опубликован",
+    "publication_date": "2025-06-18"
+  },
+  {
+    "full_name": "Иванова Наталья Серафимовна",
+    "subject": "Русский язык (уровень НОО)",
+    "diagnostic_date": "2023-07-05",
+    "end_date": "2026-07-05",
+    "exam_type": "Предметная и метапредметная диагностика",
+    "level_achieved": "Высокий",
+    "publication_status": "Опубликован",
+    "publication_date": "2023-09-19"
+  },
+  {
+    "full_name": "Курбатова Ирина Валерьевна",
+    "subject": "Метапредметные умения (дошкольное образование)",
+    "diagnostic_date": "2025-11-12",
+    "end_date": "2028-11-12",
+    "exam_type": "Предметная и метапредметная диагностика",
+    "level_achieved": "экспертный",
+    "publication_status": "опубликован",
+    "publication_date": "2025-11-13"
+  }
+]
