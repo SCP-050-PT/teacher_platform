@@ -120,7 +120,7 @@ class EgeParser {
                         academic_year: academicYear,
                         total_students: totalStudents,
                         threshold_lt_count: lt,
-                        threshold_0_59_count: t0_59,
+                        threshold_40_59_count: t0_59,
                         threshold_60_79_count: t60_79,
                         threshold_80_100_count: t80_100
                     });

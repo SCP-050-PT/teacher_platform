@@ -56,7 +56,7 @@ class StatsController {
                     subject,
                     SUM(total_students) as total_students,
                     SUM(threshold_lt_count) as threshold_0_count,
-                    SUM(threshold_0_59_count) as threshold_1_count,
+                    SUM(threshold_40_59_count) as threshold_1_count,
                     SUM(threshold_60_79_count) as threshold_2_count,
                     SUM(threshold_80_100_count) as threshold_3_count
                 FROM exam_results_ege
