@@ -12,7 +12,8 @@ const teacherRoutes = require('./routes/teachers');
 const uploadRoutes = require('./routes/upload');
 const statsRoutes = require('./routes/stats');
 const adminRoutes = require('./routes/admin');
-
+const orientirRoutes = require('./routes/orientir');
+const iprRoutes = require('./routes/ipr');
 // Импорт middleware
 const { apiLimiter } = require('./middleware/rateLimiters');
 
@@ -23,7 +24,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use('/api/orientir', orientirRoutes);
+app.use('/api/ipr', iprRoutes);
 // ============ ИСПРАВЛЕННЫЕ ПУТИ К СТАТИЧЕСКИМ ФАЙЛАМ ============
 // Определяем путь к frontend относительно backend/src/server.js
 // backend/src/server.js → backend/ → project-root/ → frontend/src/pages

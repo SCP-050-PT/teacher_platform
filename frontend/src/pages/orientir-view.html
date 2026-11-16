@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр ориентира</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @media print {
+    
+            .main-header,
+            .btn,
+            a.btn {
+                display: none !important;
+            }
+    
+            body {
+                background: #fff;
+            }
+    
+            .card {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+        }
+    
+        .crit-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+    
+        .crit-row .val {
+            font-weight: 700;
+        }
+    
+        .val-1 {
+            color: #10b981;
+        }
+    
+        .val-0 {
+            color: #ef4444;
+        }
+    
+        .section-title {
+            margin: 16px 0 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo" style="display:flex;align-items:center;gap:12px;">
+                <img src="../assets/images/Logo_main_RGB.png"
+                    style="height:40px;background:#fff;padding:4px;border-radius:8px;">
+                <span class="school-name">Школа №777</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
+                    <i class="fas fa-cog"></i> Админ
+                </a>
+                <a href="orientir-uroka.html" class="nav-link">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
+            </nav>
+        </header>
+        <main class="main-content">
+            <div class="card" id="content">Загрузка...</div>
+            <div style="margin-top:20px">
+                <button class="btn btn-primary" onclick="window.print()">Печать / PDF</button>
+                <a href="orientir-list.html" class="btn btn-secondary">Назад</a>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function load() {
+                const id = new URLSearchParams(location.search).get('id');
+                if (!id) return;
+                const res = await fetch('/api/orientir/' + id);
+                const d = await res.json();
+                let html = `
+    <h3>Ориентир урока #${d.id}</h3>
+    <p><b>ФИО:</b> ${d.fio || '—'}</p>
+    <p><b>Предмет:</b> ${d.predmet || '—'}</p>
+    <p><b>Класс:</b> ${d.class_name || '—'}</p>
+    <p><b>Дата:</b> ${d.visit_date ? d.visit_date.slice(0, 10) : '—'}</p>
+    <p><b>Цель:</b> ${d.goal || '—'}</p>
+    <p><b>Балл:</b> ${d.score}/${d.max_score} (${d.percentage}%)</p>
+    <h4>Рекомендации</h4>
+    <p>${d.recommendations || '—'}</p>
+  `;
+                if (d.data) {
+                    const data = typeof d.data === 'string' ? JSON.parse(d.data) : d.data;
+                    if (data.stages) {
+                        html += '<div class="section-title">Этапы урока</div>';
+                        Object.keys(data.stages).forEach(name => {
+                            const v = data.stages[name];
+                            html += `<div class="crit-row"><span>${name}</span><span class="val val-${v}">${v === 1 ? '1' : '0'}</span></div>`;
+                        });
+                    }
+                    const CRIT_NAMES = {
+                        "predmet": "Предметные компетенции",
+                        "method": "Методические компетенции",
+                        "forms": "Формы работы",
+                        "tasks": "Типы заданий",
+                        "ocen": "Оценивание и рефлексия",
+                        "lichn": "Личностные компетенции",
+                        "vovl": "Вовлечённость учеников"
+                    };
+                    if (data.crit) {
+                        html += '<div class="section-title">Критерии</div>';
+                        Object.keys(data.crit).forEach(k => {
+                            const v = data.crit[k];
+                            const [sec, idx] = k.split(":");
+                            const label = (CRIT_NAMES[sec] || sec) + " — пункт " + (parseInt(idx) + 1);
+                            html += `<div class="crit-row"><span>${label}</span><span class="val val-${v}">${v === 1 ? '1' : '0'}</span></div>`;
+                        });
+                    }
+                }
+                document.getElementById('content').innerHTML = html;
+            }
+            load();
+    </script>
+</body>
+
+</html>

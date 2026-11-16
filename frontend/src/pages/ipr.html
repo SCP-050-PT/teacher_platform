@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор ИПР — Платформа</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --card: #fff;
+            --ink: #1e293b;
+            --muted: #64748b;
+            --brand: #667eea;
+            --brand-dark: #764ba2;
+            --line: #e2e8f0;
+            --ok: #10b981
+        }
+
+        body {
+            background: var(--bg)
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 0 60px
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .05)
+        }
+
+        .card h2 {
+            margin: 0 0 14px;
+            font-size: 16px;
+            color: var(--brand);
+            border-bottom: 2px solid var(--line);
+            padding-bottom: 8px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-weight: 600
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font: inherit;
+            font-size: 14px
+        }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .section-head h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600
+        }
+
+        .item {
+  display: grid;
+  grid-template-columns: 1fr 140px 130px auto;
+        }
+
+        .item .del {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: none;
+            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer
+        }
+
+        .add {
+            background: none;
+            border: 1px dashed var(--brand);
+            color: var(--brand);
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 13px
+        }
+
+        #result {
+            display: none
+        }
+
+        @media print {
+
+            header,
+            .toolbar,
+            .no-print {
+                display: none !important
+            }
+
+            #result {
+                display: block !important
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo" style="display:flex;align-items:center;gap:12px;">
+                <img src="../assets/images/Logo_main_RGB.png"
+                    style="height:40px;background:#fff;padding:4px;border-radius:8px;">
+                <span class="school-name">Школа №777</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
+                    <i class="fas fa-cog"></i> Админ
+                </a>
+                <a href="orientir-uroka.html" class="nav-link">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
+            </nav>
+            <div class="user-menu">
+                <span id="userName"></span>
+                <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+        <main class="main-content">
+            <div class="wrap" id="form">
+                <div class="toolbar">
+                    <button class="btn btn-primary" onclick="generate()">Сформировать план</button>
+                    <button class="btn btn-secondary" onclick="saveToServer()">Сохранить на сервер</button>
+                    <button class="btn btn-secondary" onclick="printDoc()">Печать / PDF</button>
+                    <button class="btn btn-danger" onclick="resetAll()">Очистить</button>
+                </div>
+                <div class="card">
+                    <h2>Сведения о педагоге</h2>
+                    <div class="grid">
+                        <div class="field"><label>ФИО</label><input id="fio" placeholder="Иванова Мария Петровна"></div>
+                        <div class="field"><label>Должность</label><input id="pos" placeholder="Учитель"></div>
+                        <div class="field"><label>Организация</label><input id="org" value="ГБОУ Школа №777"></div>
+                        <div class="field"><label>Категория</label>
+                            <select id="cat">
+                                <option value="">—</option>
+                                <option>Не имею</option>
+                                <option>Первая</option>
+                                <option>Высшая</option>
+                            </select>
+                        </div>
+                        <div class="field"><label>Стаж (лет)</label><input id="stazh" placeholder="15"></div>
+                        <div class="field"><label>Период</label><input id="period" placeholder="2026–2031 гг."></div>
+                        <div class="field"><label>Предмет</label><input id="subject" placeholder="Русский язык"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Разделы плана</h2>
+                    <div id="sections"></div>
+                </div>
+            </div>
+            <div class="wrap" id="result"></div>
+        </main>
+    </div>
+    <script>
+        const SECTION_DEFS = [
+            { id: "edu", title: "Повышение квалификации", icon: "🎓", item: ["Название", "Срок", "Результат"], presets: ["Курсы по ФГОС", "Цифровые технологии", "Работа с ОВЗ"] },
+            { id: "att", title: "Подготовка к аттестации", icon: "📋", item: ["Мероприятие", "Срок", "Результат"], presets: ["Подготовить портфолио", "Подать заявление"] },
+            { id: "method", title: "Методическая работа", icon: "🧩", item: ["Мероприятие", "Срок", "Результат"], presets: ["Выступление на МО", "Разработка программ"] },
+            { id: "open", title: "Открытые уроки", icon: "🖥️", item: ["Мероприятие", "Срок", "Результат"], presets: ["Открытый урок", "Мастер-класс"] },
+            { id: "tech", title: "Современные технологии", icon: "⚙️", item: ["Технология", "Срок", "Результат"], presets: ["Проектная технология", "Формирующее оценивание"] },
+            { id: "gifted", title: "Работа с одарёнными", icon: "⭐", item: ["Мероприятие", "Срок", "Результат"], presets: ["Подготовка к олимпиадам"] },
+            { id: "support", title: "Работа с ОВЗ", icon: "🤝", item: ["Мероприятие", "Срок", "Результат"], presets: ["Адаптированная программа"] },
+            { id: "contest", title: "Конкурсы и события", icon: "🏆", item: ["Мероприятие", "Срок", "Результат"], presets: ["Конкурс профмастерства"] },
+            { id: "self", title: "Самообразование", icon: "📚", item: ["Тема", "Срок", "Результат"], presets: ["Изучение ФГОС", "Онлайн-курс"] }
+        ];
+        let state = {};
+        let editId = null;
+        SECTION_DEFS.forEach(s => state[s.id] = []);
+
+        function renderSections() {
+            const host = document.getElementById("sections");
+            host.innerHTML = "";
+            SECTION_DEFS.forEach(s => {
+                const sec = document.createElement("div");
+                sec.className = "section";
+                sec.id = "sec-" + s.id;
+                sec.innerHTML = `<div class="section-head"><h3>${s.icon} ${s.title}</h3><label><input type="checkbox" checked onchange="toggleSection('${s.id}',this.checked)"> включить</label></div>
+      <div class="items" id="items-${s.id}"><button class="add" onclick="addItem('${s.id}')">+ Добавить</button></div>`;
+                host.appendChild(sec);
+                s.presets.forEach(p => addItem(s.id, p));
+            });
+        }
+        function toggleSection(id, on) { document.getElementById("items-" + id).style.display = on ? "" : "none"; }
+        function addItem(sid, preset) {
+                const def = SECTION_DEFS.find(s => s.id === sid);
+                const box = document.getElementById("items-" + sid);
+                if (!preset) { preset = prompt("Мероприятие:"); if (!preset) return; }
+                const row = document.createElement("div");
+                row.className = "item";
+                row.innerHTML = `
+    <input class="c1" value="${preset}" placeholder="${def.item[0]}">
+    <input class="c2" placeholder="${def.item[1] || 'Срок'}">
+    <select class="status" style="width:130px;font-size:13px">
+      <option value="">—</option>
+      <option value="done">Выполнено</option>
+      <option value="overdue">Не выполнено</option>
+    </select>
+    <button class="del" onclick="this.parentNode.remove()">×</button>`;
+                box.insertBefore(row, box.querySelector(".add"));
+            }
+        function collect() {
+                state = {};
+                SECTION_DEFS.forEach(s => state[s.id] = []);
+                SECTION_DEFS.forEach(s => {
+                    const box = document.getElementById("items-" + s.id);
+                    if (box.style.display === "none") return;
+                    box.querySelectorAll(".item").forEach(row => {
+                        const vals = [
+                            row.querySelector(".c1").value,
+                            row.querySelector(".c2").value,
+                            row.querySelector(".status") ? row.querySelector(".status").value : ""
+                        ].map(v => (v || "").trim());
+                        if (vals[0] || vals[1]) state[s.id].push(vals);
+                    });
+                });
+            }
+        function generate() {
+                collect();
+                const data = id => document.getElementById(id).value.trim();
+                const statusLabel = v => v === "done" ? "Выполнено" : v === "overdue" ? "Не выполнено" : "—";
+                let rows = "";
+                SECTION_DEFS.forEach(s => {
+                    if (state[s.id].length) {
+                        rows += `<tr><td colspan="3" style="font-weight:bold;padding-top:12px">${s.icon} ${s.title}</td></tr>`;
+                        state[s.id].forEach(v => rows += `<tr><td>${v[0]}</td><td>${v[1]}</td><td>${statusLabel(v[2])}</td></tr>`);
+                    }
+                });
+                document.getElementById("result").innerHTML = `<div class="card"><h2>ИНДИВИДУАЛЬНЫЙ ПЛАН РАЗВИТИЯ</h2>
+    <p><b>ФИО:</b> ${data("fio")}</p><p><b>Должность:</b> ${data("pos")}</p><p><b>Предмет:</b> ${data("subject")}</p>
+    <p><b>Период:</b> ${data("period")}</p>
+    <table style="width:100%;border-collapse:collapse;margin-top:10px">
+      <tr><th>Мероприятие</th><th>Срок</th><th>Статус</th></tr>${rows}
+    </table></div>`;
+                document.getElementById("result").style.display = "block";
+            }
+        async function saveToServer() {
+            collect();
+            const payload = {
+                fio: document.getElementById("fio").value,
+                position: document.getElementById("pos").value,
+                organization: document.getElementById("org").value,
+                category: document.getElementById("cat").value,
+                experience: document.getElementById("stazh").value,
+                period: document.getElementById("period").value,
+                subject: document.getElementById("subject").value,
+                data: state
+            };
+            const url = editId ? "/api/ipr/" + editId : "/api/ipr";
+            const method = editId ? "PUT" : "POST";
+            const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            const json = await res.json();
+            alert(json.success ? (editId ? "Изменения сохранены" : "Сохранено (ID: " + json.id + ")") : "Ошибка");
+            if (json.id) editId = json.id;
+        }
+        function printDoc() { generate(); window.print(); }
+        function resetAll() { if (confirm("Очистить?")) location.href = "ipr.html"; }
+        async function loadForEdit() {
+            const id = new URLSearchParams(location.search).get("edit");
+            if (!id) return;
+            const res = await fetch("/api/ipr/" + id);
+            const d = await res.json();
+            if (!d.id) return;
+            editId = d.id;
+            document.getElementById("fio").value = d.fio || "";
+            document.getElementById("pos").value = d.position || "";
+            document.getElementById("org").value = d.organization || "";
+            document.getElementById("cat").value = d.category || "";
+            document.getElementById("stazh").value = d.experience || "";
+            document.getElementById("period").value = d.period || "";
+            document.getElementById("subject").value = d.subject || "";
+            if (d.data) {
+                Object.keys(d.data).forEach(sid => {
+                    const box = document.getElementById("items-" + sid);
+                    if (!box) return;
+                    box.querySelectorAll(".item").forEach(r => r.remove());
+                    (d.data[sid] || []).forEach(vals => {
+                        const row = document.createElement("div");
+                        row.className = "item";
+                        // поддержка старых записей (4 элемента) и новых (3)
+                        const status = vals[3] !== undefined ? vals[3] : (vals[2] || "");
+                        const dateVal = vals[3] !== undefined ? vals[1] : vals[1];
+                        row.innerHTML = `
+    <input class="c1" value="${vals[0] || ""}">
+    <input class="c2" value="${dateVal || ""}">
+    <select class="status" style="width:130px;font-size:13px">
+      <option value="">—</option>
+      <option value="done" ${status === "done" ? "selected" : ""}>Выполнено</option>
+      <option value="overdue" ${status === "overdue" ? "selected" : ""}>Не выполнено</option>
+    </select>
+    <button class="del" onclick="this.parentNode.remove()">×</button>`;
+                        box.insertBefore(row, box.querySelector(".add"));
+                    });
+                });
+            }
+        }
+        function logout() { localStorage.removeItem("token"); localStorage.removeItem("user"); location.href = "login.html"; }
+        renderSections();
+        loadForEdit();
+    </script>
+</body>
+
+</html>

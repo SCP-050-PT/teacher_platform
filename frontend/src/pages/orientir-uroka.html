@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ориентир урока — Платформа для учителей</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #f1f5f9;
+            --surface: #ffffff;
+            --ink: #1e293b;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --accent: #667eea;
+            --accent-dark: #764ba2;
+            --accent-soft: rgba(102, 126, 234, 0.12);
+            --good: #10b981;
+            --good-soft: #d1fae5;
+            --warn: #f59e0b;
+            --warn-soft: #fef3c7;
+            --bad: #ef4444;
+            --bad-soft: #fee2e2;
+            --r: 16px;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 0 60px
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .scorepill {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        }
+
+        .scorepill .num {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1
+        }
+
+        .scorepill .cap {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.2
+        }
+
+        .fieldgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .fieldgrid label {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        .fieldgrid input {
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            padding: 9px 11px;
+            font-size: 15px;
+            color: var(--ink);
+            background: #fff;
+            outline: none;
+            transition: .15s;
+        }
+
+        .fieldgrid input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft)
+        }
+
+        section.block {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        section.block h2 {
+            margin: 0;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+            background: #f8fafc;
+        }
+
+        section.block h2 .ic {
+            color: var(--accent)
+        }
+
+        section.block h2 .cnt {
+            margin-left: auto;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        section.block.exc {
+            opacity: .62
+        }
+
+        section.block.low {
+            border-color: #fca5a5;
+            box-shadow: 0 0 0 2px #fee2e2 inset
+        }
+
+        section.block.low>h2 {
+            background: #fef2f2;
+            color: var(--bad)
+        }
+
+        .lowtag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--bad);
+            background: var(--bad-soft);
+            border-radius: 6px;
+            padding: 2px 7px;
+            margin-left: 8px
+        }
+
+        .exbt {
+            border: 1px solid var(--line);
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            margin-left: 10px;
+            font-family: inherit;
+        }
+
+        section.block.exc .exbt {
+            border-color: var(--good);
+            color: var(--good);
+            background: var(--good-soft)
+        }
+
+        .try {
+            background: var(--accent-soft);
+            border: 1px dashed #a5b4fc;
+            border-radius: 11px;
+            padding: 14px 16px;
+            margin: 14px 18px;
+            font-size: 14px
+        }
+
+        .try .ttl {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px
+        }
+
+        .stages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            padding: 16px 18px
+        }
+
+        .kriterii {
+            padding: 4px 18px 16px
+        }
+
+        .krit {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 12px 4px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .krit:hover {
+            background: #fafbff
+        }
+
+        .krit.done .txt {
+            color: var(--muted);
+            text-decoration: line-through
+        }
+
+        .krit .txt {
+            flex: 1;
+            font-size: 14.5px
+        }
+
+        .seg {
+            flex: none;
+            display: inline-flex;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            overflow: hidden
+        }
+
+        .seg button {
+            border: none;
+            background: transparent;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--muted);
+            font-family: inherit;
+        }
+
+        .seg button.on-1 {
+            background: var(--good);
+            color: #fff
+        }
+
+        .seg button.on-0 {
+            background: var(--bad);
+            color: #fff
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 16px 18px
+        }
+
+        .chip {
+            border: 1.5px solid var(--line);
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 13.5px;
+            background: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chip.on {
+            border-color: var(--good);
+            background: var(--good-soft);
+            font-weight: 600
+        }
+
+        .chip .badge {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--line)
+        }
+
+        .chip.on .badge {
+            background: var(--good)
+        }
+
+        .chip.ex {
+            opacity: .55;
+            background: #f1f5f9
+        }
+
+        .bands {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 18px
+        }
+
+        .band {
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 14px 16px;
+            background: var(--surface);
+        }
+
+        .band.cur {
+            box-shadow: 0 0 0 2px currentColor
+        }
+
+        .band.good {
+            color: var(--good)
+        }
+
+        .band.warn {
+            color: var(--warn)
+        }
+
+        .band.bad {
+            color: var(--bad)
+        }
+
+        textarea.rec {
+            width: 100%;
+            min-height: 110px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea.rec:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft)
+        }
+
+        .recwrap {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 20px;
+            margin-top: 18px
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%) translateY(20px);
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 11px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .2s;
+            z-index: 50;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        @media print {
+
+            .main-header,
+            .actions,
+            .toast {
+                display: none !important
+            }
+
+            body {
+                background: #fff
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo" style="display:flex;align-items:center;gap:12px;">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777"
+                    style="height:40px;background:#fff;padding:4px;border-radius:8px;">
+                <span class="school-name">Школа №777</span>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
+                    <i class="fas fa-cog"></i> Админ
+                </a>
+                <a href="orientir-uroka.html" class="nav-link">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
+            </nav>
+            <div class="user-menu">
+                <span id="userName"></span>
+                <button onclick="logout()" class="btn-logout" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="wrap">
+                <div class="topbar">
+                    <div style="font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;">
+                        <i class="fas fa-clipboard-check" style="color:var(--accent)"></i> Оценка качества урока
+                    </div>
+                    <div class="scorepill">
+                        <div>
+                            <div class="num" id="scoreNum">0</div>
+                            <div class="cap">из <span id="scoreMax">47</span> баллов</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fieldgrid">
+                    <label>Предмет <input id="fPredmet" type="text" placeholder="Математика"></label>
+                    <label>Класс <input id="fClass" type="text" placeholder="7 «А»"></label>
+                    <label>ФИО учителя <input id="fFio" type="text" placeholder="Фамилия Имя Отчество"></label>
+                    <label>Дата посещения <input id="fDate" type="date"></label>
+                    <label style="grid-column:1/-1">Цель посещения <input id="fGoal" type="text"
+                            placeholder="Контроль, аттестация, методическая помощь…"></label>
+                </div>
+
+                <div id="app"></div>
+                <div class="bands" id="bands"></div>
+
+                <div class="recwrap">
+                    <h3 style="margin:0 0 4px;font-size:16px;">Рекомендации</h3>
+                    <p style="color:var(--muted);font-size:13px;margin:0 0 10px;">Замечания и рекомендации наблюдателя
+                    </p>
+                    <textarea id="recs" class="rec" placeholder="Запишите рекомендации учителю…"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnPrint"><i class="fas fa-print"></i> Печать / PDF</button>
+                    <button class="btn btn-secondary" id="btnSave"><i class="fas fa-save"></i> Сохранить</button>
+                    <button class="btn btn-danger" id="btnReset"><i class="fas fa-trash"></i> Очистить</button>
+                </div>
+
+                <div class="toast" id="toast"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        (function () {
+            var LESSON_HEADER = "Этапы урока";
+            var typeA = { name: "Урок открытия новых знаний", desc: "Цель: получение нового знания и освоение нового учебного действия.", stages: ["Организационный момент", "Актуализация знаний", "Постановка проблемы", "Целеполагание, определение результата", "Разработка плана достижения цели", "Основная часть", "Итог урока", "Рефлексия", "Оценивание", "Домашнее задание"] };
+            var typeB = { name: "Урок отработки и практического применения умений", desc: "Цель: формирование способности применять знания на практике.", stages: ["Организационный момент", "Актуализация знаний", "Целеполагание, определение результата", "Разработка плана достижения цели", "Основная часть", "Рефлексия", "Оценивание", "Домашнее задание"] };
+
+            var SECTIONS = [
+                { id: "predmet", title: "Предметные компетенции учителя", icon: "🎯", items: [{ t: "Учитель уверенно владеет предметным содержанием, не допускает предметных ошибок" }, { t: "Тема урока соответствует поурочному планированию" }, { t: "Цель урока, тема и планируемые результаты соотносятся" }, { t: "Объем изучаемого материала и темп урока оптимальны" }, { t: "Учебный материал связан с жизнью / способствует раскрытию межпредметных связей" }, { t: "Выбран оптимальный способ для проведения оргмомента" }] },
+                { id: "method", title: "Методические компетенции учителя", icon: "🧭", items: [{ t: "Урок структурирован, последовательность этапов логична" }, { t: "Материал излагается доступно, нет методических ошибок" }, { t: "Материал представлен наглядно" }, { t: "Учитель организует активную познавательную деятельность" }, { t: "Учитель актуализирует ранее полученные знания" }] },
+                { id: "forms", title: "Формы работы", icon: "👥", items: [{ t: "Учитель создаёт учебную ситуацию, при которой ученик сам формулирует цель" }, { t: "Учитель организует деятельность с учётом индивидуальных особенностей" }, { t: "Организована продуктивная парная работа" }, { t: "Организована продуктивная групповая работа" }, { t: "Организована фронтальная работа" }, { t: "Используются дифференцированные задания" }] },
+                { id: "tasks", title: "Типы заданий", icon: "📋", items: [{ t: "Используются продуктивные задания" }, { t: "Задания соответствуют уровню и профилю класса" }, { t: "Есть задания на функциональную грамотность" }, { t: "Есть задания на метапредметные компетенции" }, { t: "Есть задания-контролёры" }] },
+                { id: "ocen", title: "Оценивание и рефлексия", icon: "💬", items: [{ t: "Планируется организация рефлексии" }, { t: "Большая часть класса охвачена обратной связью" }, { t: "Учитель комментирует ответы" }, { t: "Используется критериальное оценивание" }, { t: "Учитель комментирует отметки" }] },
+                { id: "lichn", title: "Личностные компетенции", icon: "🤝", items: [{ t: "Учитель удерживает дисциплину" }, { t: "Создаётся комфортная атмосфера" }, { t: "Культура общения: внимателен, вежлив" }, { t: "Речь грамотная и понятная" }, { t: "Активная лидерская позиция" }] },
+                { id: "vovl", title: "Вовлечённость учеников", icon: "📚", items: [{ t: "Все ученики вовлечены в работу" }, { t: "Ученики не теряют интерес на протяжении урока" }, { t: "Рабочее место организовано" }, { t: "Тетради ведутся систематично" }, { t: "Тетради проверяются учителем" }] }
+            ];
+
+            var state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" };
+            var storeOk = false;
+            try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); storeOk = true; } catch (e) { }
+
+            function key() { return "urok-orientir-v1"; }
+            function load() { if (!storeOk) return; try { var raw = localStorage.getItem(key()); if (raw) { var d = JSON.parse(raw); if (d && d.type) state = Object.assign(state, d); } } catch (e) { } }
+            function save() { if (!storeOk) return; try { localStorage.setItem(key(), JSON.stringify(state)); } catch (e) { } }
+            function el(id) { return document.getElementById(id); }
+            function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+            function stageNames() { return (state.type === "A" ? typeA : typeB).stages; }
+            function excludedStageCount() { var c = 0; stageNames().forEach(function (n) { if (state.excluded[n]) c++; }); return c; }
+            function maxScore() { var m = 0; SECTIONS.forEach(function (sec) { if (!state.exclSections[sec.id]) m += sec.items.length; }); return m + stageNames().length - excludedStageCount(); }
+            function totalScore() { var s = 0; SECTIONS.forEach(function (sec) { if (!state.exclSections[sec.id]) sec.items.forEach(function (it, i) { if (state.crit[sec.id + ":" + i] === 1) s++; }); }); stageNames().forEach(function (k) { if (state.stages[k] === 1) s++; }); return s; }
+            function percentScore() { var mx = maxScore(); return mx <= 0 ? 0 : Math.round(totalScore() / mx * 100); }
+
+            function renderStages() {
+                var steps = state.type === "A" ? typeA : typeB;
+                var html = '<div class="try"><div class="ttl">' + LESSON_HEADER + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">' +
+                    '<button class="btn btn-secondary" data-tbtn data-tipe="A" style="font-size:13px;padding:6px 10px">Урок открытия новых знаний</button>' +
+                    '<button class="btn btn-secondary" data-tbtn data-tipe="B" style="font-size:13px;padding:6px 10px">Урок отработки умений</button></div>' +
+                    '<div style="color:var(--muted);font-size:13px">' + steps.desc + '</div></div>';
+                html += '<div class="stages">';
+                steps.stages.forEach(function (name) {
+                    var on = state.stages[name] === 1, ex = !!state.excluded[name];
+                    html += '<div class="chip' + (on ? " on" : "") + (ex ? " ex" : "") + '" data-stage="' + esc(name) + '"><span class="badge"></span><span class="txt">' + esc(name) + '</span><button type="button" class="excl" data-excl="' + esc(name) + '" style="border:none;background:transparent;cursor:pointer;color:var(--muted)">×</button></div>';
+                });
+                html += '</div>';
+                return html;
+            }
+
+            function render() {
+                var html = '<section class="block"><h2><span class="ic">🧩</span>' + LESSON_HEADER + '<span class="cnt">Да / нет · 1 балл</span></h2>' + renderStages() + '</section>';
+                SECTIONS.forEach(function (sec) {
+                    var done = 0; sec.items.forEach(function (it, i) { if (state.crit[sec.id + ":" + i] === 1) done++; });
+                    var exc = !!state.exclSections[sec.id], pct = sec.items.length ? Math.round(done / sec.items.length * 100) : 0, low = !exc && pct < 50;
+                    html += '<section class="block' + (exc ? " exc" : "") + (low ? " low" : "") + '" data-section="' + sec.id + '"><h2><span class="ic">' + sec.icon + '</span>' + sec.title +
+                        (low ? '<span class="lowtag">' + pct + '% &lt; 50%</span>' : '') +
+                        '<button type="button" class="exbt" data-exsec="' + sec.id + '">' + (exc ? "✓ в анализе" : "Исключить") + '</button><span class="cnt">' + done + ' / ' + sec.items.length + '</span></h2><div class="kriterii">';
+                    sec.items.forEach(function (it, i) {
+                        var v = state.crit[sec.id + ":" + i];
+                        html += '<div class="krit' + (v === 1 ? " done" : "") + '" data-sel="' + sec.id + ':' + i + '"><div class="txt">' + esc(it.t) + '</div><div class="seg">' +
+                            '<button type="button" data-v="1"' + (v === 1 ? ' class="on-1"' : '') + '>1</button><button type="button" data-v="0"' + (v === 0 ? ' class="on-0"' : '') + '>0</button></div></div>';
+                    });
+                    html += '</div></section>';
+                });
+                el("app").innerHTML = html;
+                renderBands(); updateUI();
+            }
+
+            function renderBands() {
+                var pct = percentScore(), bands = [{ cls: "good", t1: "Качественно организованный урок", range: "81–100%", lo: 81, hi: 100 }, { cls: "warn", t1: "Есть недочёты", range: "51–80%", lo: 51, hi: 80 }, { cls: "bad", t1: "Урок организован некачественно", range: "менее 50%", lo: 0, hi: 50 }];
+                el("bands").innerHTML = bands.map(function (b) { var cur = pct >= b.lo && pct <= b.hi; return '<div class="band ' + b.cls + (cur ? " cur" : "") + '"><div class="t1">' + b.t1 + '</div><div class="range">' + b.range + '</div></div>'; }).join("");
+            }
+
+            function updateUI() { el("scoreNum").textContent = totalScore(); el("scoreMax").textContent = maxScore(); renderBands(); }
+
+            document.addEventListener("click", function (e) {
+                var seg = e.target.closest("[data-v]");
+                if (seg) { var row = seg.closest(".krit"), sel = row.getAttribute("data-sel"), v = parseInt(seg.getAttribute("data-v"), 10); state.crit[sel] = state.crit[sel] === v ? -1 : v; save(); render(); return; }
+                var excl = e.target.closest("[data-excl]");
+                if (excl) { var en = excl.getAttribute("data-excl"); delete state.excluded[en]; state.stages[en] = 0; save(); render(); toast("Этап возвращён"); return; }
+                var exsec = e.target.closest("[data-exsec]");
+                if (exsec) { var sid = exsec.getAttribute("data-exsec"); if (state.exclSections[sid]) delete state.exclSections[sid]; else state.exclSections[sid] = true; save(); render(); return; }
+                var chip = e.target.closest("[data-stage]");
+                if (chip && !e.target.closest(".excl")) { var name = chip.getAttribute("data-stage"); delete state.excluded[name]; state.stages[name] = state.stages[name] === 1 ? 0 : 1; save(); render(); return; }
+                var tbtn = e.target.closest("[data-tbtn]");
+                if (tbtn) { state.type = tbtn.getAttribute("data-tipe"); save(); render(); return; }
+            });
+
+            function bindFields() {
+                var map = { fPredmet: "predmet", fClass: "class", fFio: "fio", fDate: "date", fGoal: "goal" };
+                Object.keys(map).forEach(function (id) { var inp = el(id); if (inp) { inp.value = state.fields[map[id]] || ""; inp.addEventListener("input", function () { state.fields[map[id]] = inp.value; save(); }); } });
+                el("recs").value = state.recs || ""; el("recs").addEventListener("input", function () { state.recs = el("recs").value; save(); });
+            }
+
+            el("btnReset").addEventListener("click", function () { if (!confirm("Очистить все оценки?")) return; state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" }; save(); bindFields(); render(); toast("Форма очищена"); });
+            el("btnPrint").addEventListener("click", function () { window.print(); });
+            el("btnSave").addEventListener("click", async function () {
+                save();
+                const payload = {
+                    predmet: state.fields.predmet,
+                    class_name: state.fields.class,
+                    fio: state.fields.fio,
+                    visit_date: state.fields.date || null,
+                    goal: state.fields.goal,
+                    score: totalScore(),
+                    max_score: maxScore(),
+                    percentage: percentScore(),
+                    data: { crit: state.crit, stages: state.stages, excluded: state.excluded, exclSections: state.exclSections, type: state.type },
+                    recommendations: state.recs
+                };
+                try {
+                    const url = window.editId ? '/api/orientir/' + window.editId : '/api/orientir';
+                    const method = window.editId ? 'PUT' : 'POST';
+                    const res = await fetch(url, {
+                        method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const json = await res.json();
+                    if (json.success) {
+                        toast(window.editId ? 'Изменения сохранены' : 'Сохранено на сервер (ID: ' + json.id + ')');
+                        if (!window.editId) {
+                            state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" };
+                            bindFields();
+                            render();
+                        }
+                    } else toast('Ошибка: ' + (json.error || 'неизвестно'));
+                } catch (e) {
+                    toast('Ошибка сети');
+                }
+            });
+
+            function toast(m) { var t = el("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 2000); }
+
+            // Простая проверка авторизации
+            function checkAuth() { var token = localStorage.getItem("token"); if (!token) { window.location.href = "login.html"; return; } try { var u = JSON.parse(localStorage.getItem("user") || "{}"); el("userName").textContent = u.full_name || u.username || ""; } catch (e) { } }
+            function logout() { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "login.html"; }
+
+            async function loadForEdit() {
+                const params = new URLSearchParams(location.search);
+                const editId = params.get('edit');
+                if (!editId) return;
+                try {
+                    const res = await fetch('/api/orientir/' + editId);
+                    const d = await res.json();
+                    if (d && d.id) {
+                        state.fields = {
+                            predmet: d.predmet || '',
+                            class: d.class_name || '',
+                            fio: d.fio || '',
+                            date: d.visit_date ? d.visit_date.slice(0, 10) : '',
+                            goal: d.goal || ''
+                        };
+                        state.recs = d.recommendations || '';
+                        if (d.data) {
+                            state.crit = d.data.crit || {};
+                            state.stages = d.data.stages || {};
+                            state.excluded = d.data.excluded || {};
+                            state.exclSections = d.data.exclSections || {};
+                            state.type = d.data.type || 'A';
+                        }
+                        window.editId = d.id;
+                        bindFields();
+                        render();
+                        toast('Загружено для редактирования');
+                    }
+                } catch (e) { }
+            }
+            const params = new URLSearchParams(location.search);
+            if (!params.get('edit')) {
+                load();
+            }
+            bindFields();
+            render();
+            loadForEdit();
+
+        })();
+    </script>
+</body>
+
+</html>

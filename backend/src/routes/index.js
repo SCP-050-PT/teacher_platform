@@ -6,5 +6,5 @@ router.use('/teachers', require('./teachers'));
 router.use('/upload', require('./upload'));
 router.use('/stats', require('./stats'));
 router.use('/admin', require('./admin'));
-
+router.use('/orientir', require('./orientir'));
 module.exports = router;

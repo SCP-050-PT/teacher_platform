@@ -35,7 +35,7 @@ class UploadController {
 
             const academicYear = req.body.academicYear || '2025/2026';
             let fileType = req.body.fileType || 'auto';
-
+            if (fileType === 'exam') fileType = 'auto';
             if (fileType === 'auto') {
                 fileType = parsers.fileIdentifier.identify(req.file.buffer, decodedFilename);
             }
