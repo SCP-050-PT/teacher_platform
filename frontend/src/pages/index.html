@@ -7,6 +7,9 @@
     <title>Профиль педагога - Платформа для учителей</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/teacher-profile-panel.css">
+    <link rel="stylesheet" href="../assets/css/teacher-profile-panel-polish.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="../assets/images/Logo_main_RGB.png">
@@ -15,76 +18,83 @@
 <body>
     <div class="app-container">
         <!-- Header -->
-        <header class="main-header">
-            <div class="logo" style="display: flex; align-items: center; gap: 12px;">
-                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777"
-                    style="height: 40px; width: auto; object-fit: contain;">
-                <span class="school-name" style="font-size: 18px; font-weight: 600; color: white;">Школа №777 </span>
-            </div>
-            <nav class="main-nav">
-                <a href="index.html" class="nav-link active">
-                    <i class="fas fa-home"></i> Главная
-                </a>
-                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
-                    <i class="fas fa-cog"></i> Админ
-                </a>
-                <a href="orientir-uroka.html" class="nav-link">
-                    <i class="fas fa-clipboard-check"></i> Ориентир урока
-                </a>
-                <a href="orientir-list.html" class="nav-link">
-                    <i class="fas fa-list"></i> Список ОУ
-                </a>
-                <a href="ipr.html" class="nav-link">
-                    <i class="fas fa-file-alt"></i> ИПР
-                </a>
-                <a href="ipr-list.html" class="nav-link">
-                    <i class="fas fa-list"></i> Список ИПР
-                </a>
-            </nav>
-            <div class="user-menu">
-                <span id="userName"></span>
-                <button onclick="logout()" class="btn-logout" title="Выйти">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </header>
+                <header class="main-header header-modern">
+                    <a href="index.html" class="logo">
+                        <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                        <div class="logo-text-block">
+                            <span class="school-name">Школа №777</span>
+                            <span class="platform-name">Профиль педагога</span>
+                        </div>
+                    </a>
+                
+                    <nav class="main-nav">
+                        <a href="index.html" class="nav-link" data-nav="index">
+                            <i class="fas fa-home"></i> Главная
+                        </a>
+                        <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
+                            <i class="fas fa-clipboard-check"></i> Ориентир урока
+                        </a>
+                        <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
+                            <i class="fas fa-list"></i> Список ОУ
+                        </a>
+                        <a href="ipr.html" class="nav-link" data-nav="ipr">
+                            <i class="fas fa-file-alt"></i> ИПР
+                        </a>
+                        <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
+                            <i class="fas fa-list"></i> Список ИПР
+                        </a>
+                    </nav>
+                
+                    <div class="user-menu" id="userMenu">
+                        <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar" id="userAvatar">A</span>
+                            <span class="user-meta">
+                                <span class="user-name" id="userName">Пользователь</span>
+                                <span class="user-role" id="userRole">—</span>
+                            </span>
+                            <i class="fas fa-chevron-down chevron"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown" role="menu">
+                            <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                                <i class="fas fa-cog"></i> Админ-панель
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button type="button" class="dropdown-danger" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Hero Section -->
-            <section class="hero-section">
-                <div class="hero-content">
-                    <h1>Профиль педагога</h1>
-                    <p>Платформа для формирования и анализа индивидуального профиля учителя</p>
-                </div>
-            </section>
-
-            <!-- Stats Grid -->
-            <div class="dashboard-grid">
-                <!-- Statistics Card -->
-                <div class="card stats-card">
-                    <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item purple">
-                            <div class="stat-number" id="totalTeachers">0</div>
-                            <div class="stat-label">Учителей</div>
-                        </div>
-                        <div class="stat-item purple">
-                            <div class="stat-number" id="totalCourses">0</div>
-                            <div class="stat-label">Курсов</div>
-                        </div>
-                        <div class="stat-item purple">
-                            <div class="stat-number" id="totalDiagnostics">0</div>
-                            <div class="stat-label">Диагностик</div>
-                        </div>
-                        <div class="stat-item purple">
-                            <div class="stat-number" id="totalOlympiads">0</div>
-                            <div class="stat-label">Олимпиад</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
+                        <!-- Stats Grid -->
+                        <div class="dashboard-grid">
+                            <!-- Statistics Card — новый визуал -->
+                            <div class="card stats-card stats-card--modern">
+                                <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
+                                <div class="stats-grid stats-grid--modern">
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalTeachers">0</div>
+                                        <div class="stat-label">Учителей</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalCourses">0</div>
+                                        <div class="stat-label">Курсов</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalDiagnostics">0</div>
+                                        <div class="stat-label">Диагностик</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalOlympiads">0</div>
+                                        <div class="stat-label">Олимпиад</div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
                     <h3><i class="fas fa-cloud-upload-alt"></i> Загрузка данных</h3>
 
                     <!-- Выбор учебного года -->
@@ -142,51 +152,49 @@
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="card" style="margin-top: 30px;">
-                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
-
-                    <!-- График 1: ОГЭ по предметам -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">ОГЭ по предметам</h4>
-                        <canvas id="ogeChart"></canvas>
-                    </div>
-
-                    <!-- График 2: ЕГЭ по предметам -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">ЕГЭ по предметам</h4>
-                        <canvas id="egeChart"></canvas>
-                    </div>
-
-                    <!-- График 3: ВсОШ по предметам -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">ВсОШ по предметам</h4>
-                        <canvas id="vsohChart"></canvas>
-                    </div>
-
-                    <!-- График 4: МОШ по предметам -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">МОШ по предметам</h4>
-                        <canvas id="moshChart"></canvas>
-                    </div>
-
-                    <!-- График 5: МЦКО по классам -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">МЦКО по классам</h4>
-                        <canvas id="mckoClassChart"></canvas>
-                    </div>
-
-                    <!-- График 6: МЦКО учителя -->
-                    <div>
-                        <h4 style="margin-bottom: 15px; color: #667eea;">МЦКО учителя</h4>
-                        <canvas id="mckoTeacherChart"></canvas>
-                    </div>
-                </div>
-            </div>
+                        <!-- Charts Section -->
+                        <div class="card charts-section-card">
+                            <div class="section-head">
+                                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
+                                <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
+                            </div>
+                            <div class="charts-grid charts-grid--modern">
+                        
+                                <div class="chart-card">
+                                    <h4>ОГЭ по предметам</h4>
+                                    <canvas id="ogeChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>ЕГЭ по предметам</h4>
+                                    <canvas id="egeChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>ВсОШ по предметам</h4>
+                                    <canvas id="vsohChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МОШ по предметам</h4>
+                                    <canvas id="moshChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МЦКО по классам</h4>
+                                    <canvas id="mckoClassChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МЦКО учителя</h4>
+                                    <canvas id="mckoTeacherChart"></canvas>
+                                </div>
+                        
+                            </div>
+                        </div>
 
             <!-- Teachers Section -->
-            <div class="card teachers-section">
+            <div class="card teachers-section" id="teachersSection">
                 <div class="page-header"
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3><i class="fas fa-users"></i> Список учителей</h3>
@@ -194,7 +202,75 @@
                         <i class="fas fa-plus"></i> Добавить учителя
                     </button>
                 </div>
-
+                <!-- Панель профиля учителя (вместо модалки) -->
+                <div class="teacher-profile-panel" id="profileModal">
+                    <div class="panel-top">
+                        <div class="panel-top-left">
+                            <button type="button" class="btn-back" onclick="closeModal()">
+                                <i class="fas fa-arrow-left"></i> К списку
+                            </button>
+                            <div class="profile-avatar"><span id="modalAvatar">—</span></div>
+                            <div class="profile-info">
+                                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                                    <h2 id="modalName" style="margin:0;font-size:1.25rem;"></h2>
+                                    <button class="btn btn-sm btn-warning admin-only" onclick="openEditTeacherModal()"
+                                        id="btnEditTeacherName" style="display:none;">
+                                        <i class="fas fa-edit"></i> Редактировать
+                                    </button>
+                                </div>
+                                <span class="subject-badge" id="modalSubject"></span>
+                            </div>
+                        </div>
+                        <div class="panel-actions">
+                            <button class="btn btn-pdf btn-sm" onclick="downloadTeacherPDF()" id="btnPdf">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button type="button" class="btn-close" onclick="closeModal()" title="Закрыть">&times;</button>
+                        </div>
+                    </div>
+                
+                    <div class="panel-body">
+                        <div class="profile-stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="statCourses">0</div>
+                                <div class="stat-label">Курсов повышения квалификации</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="statDiagnostics">0</div>
+                                <div class="stat-label">Диагностик МЦКО</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="statOlympiads">0</div>
+                                <div class="stat-label">Результатов олимпиад</div>
+                            </div>
+                        </div>
+                
+                        <div class="tabs" id="mainTabs">
+                            <button class="tab-btn active" onclick="switchTab('courses')"><i class="fas fa-graduation-cap"></i>
+                                Курсы</button>
+                            <button class="tab-btn" onclick="switchTab('diagnostics')"><i class="fas fa-stethoscope"></i>
+                                Диагностики</button>
+                            <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i> Экзамены</button>
+                            <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i> Олимпиады</button>
+                            <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i> Иное</button>
+                        </div>
+                
+                        <div class="sub-tabs" id="diagnosticsSubTabs" style="display:none;">
+                            <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">МЦКО по классам</button>
+                            <button class="sub-tab-btn" onclick="switchSubTab('mcko_teacher')">МЦКО учителя</button>
+                        </div>
+                        <div class="sub-tabs" id="olympiadsSubTabs" style="display:none;">
+                            <button class="sub-tab-btn active" onclick="switchSubTab('vsoh')">ВсОШ</button>
+                            <button class="sub-tab-btn" onclick="switchSubTab('mosh')">МОШ</button>
+                        </div>
+                        <div class="sub-tabs" id="examsSubTabs" style="display:none;">
+                            <button class="sub-tab-btn active" onclick="switchSubTab('oge')">ОГЭ</button>
+                            <button class="sub-tab-btn" onclick="switchSubTab('ege')">ЕГЭ</button>
+                        </div>
+                
+                        <div class="tab-content" id="tabContent"></div>
+                    </div>
+                </div>
                 <div class="filters-bar">
                     <div class="search-box" style="position: relative;">
                         <i class="fas fa-search"></i>
@@ -259,115 +335,6 @@
             </div>
         </main>
     </div>
-
-    <!-- Profile Modal -->
-    <div class="modal" id="profileModal">
-        <div class="modal-dialog modal-lg ">
-            <div class="modal-content" style="padding: 20px;">
-                <div class="modal-header"
-                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-                    <div class="profile-header" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                        <div class="profile-avatar">
-                            <span id="modalAvatar">АФ</span>
-                        </div>
-                        <div class="profile-info" style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                <h2 id="modalName" style="margin: 0;"></h2>
-                                <button class="btn btn-sm btn-warning admin-only" onclick="openEditTeacherModal()"
-                                    id="btnEditTeacherName" style="display: none;">
-                                    <i class="fas fa-edit"></i> Редактировать
-                                </button>
-                            </div>
-                            <span class="subject-badge" id="modalSubject"></span>
-                        </div>
-                    </div>
-                    <button class="btn-close" onclick="closeModal()"
-                        style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="profile-stats">
-                        <div class="stat-card">
-                            <div class="stat-value" id="statCourses">0</div>
-                            <div class="stat-label">Курсов повышения квалификации</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="statDiagnostics">0</div>
-                            <div class="stat-label">Диагностик МЦКО</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="statOlympiads">0</div>
-                            <div class="stat-label">Результатов олимпиад</div>
-                        </div>
-                    </div>
-
-                    <!-- Основные табы -->
-                    <div class="tabs" id="mainTabs">
-                        <button class="tab-btn active" onclick="switchTab('courses')">
-                            <i class="fas fa-graduation-cap"></i> Курсы
-                        </button>
-                        <button class="tab-btn" onclick="switchTab('diagnostics')">
-                            <i class="fas fa-stethoscope"></i> Диагностики
-                        </button>
-                        <button class="tab-btn" onclick="switchTab('exams')">
-                            <i class="fas fa-chart-line"></i> Экзамены
-                        </button>
-                        <button class="tab-btn" onclick="switchTab('olympiads')">
-                            <i class="fas fa-trophy"></i> Олимпиады
-                        </button>
-                        <button class="tab-btn" onclick="switchTab('other')">
-                            <i class="fas fa-folder"></i> Иное
-                        </button>
-                    </div>
-
-                    <!-- Подтабы для Диагностик -->
-                    <div class="sub-tabs" id="diagnosticsSubTabs"
-                        style="display: none; margin-top: 10px; padding-left: 20px;">
-                        <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">
-                            <i class="fas fa-chalkboard"></i> МЦКО по классам
-                        </button>
-                        <button class="sub-tab-btn" onclick="switchSubTab('mcko_teacher')">
-                            <i class="fas fa-user-graduate"></i> МЦКО учителя
-                        </button>
-                    </div>
-
-                    <!-- Подтабы для Олимпиад -->
-                    <div class="sub-tabs" id="olympiadsSubTabs"
-                        style="display: none; margin-top: 10px; padding-left: 20px;">
-                        <button class="sub-tab-btn active" onclick="switchSubTab('vsoh')">
-                            <i class="fas fa-medal"></i> ВсОШ (4 этапа)
-                        </button>
-                        <button class="sub-tab-btn" onclick="switchSubTab('mosh')">
-                            <i class="fas fa-award"></i> МОШ
-                        </button>
-                    </div>
-
-                    <!-- Подтабы для Экзаменов -->
-                    <div class="sub-tabs" id="examsSubTabs"
-                        style="display: none; margin-top: 10px; padding-left: 20px;">
-                        <button class="sub-tab-btn active" onclick="switchSubTab('oge')">
-                            <i class="fas fa-graduation-cap"></i> ОГЭ
-                        </button>
-                        <button class="sub-tab-btn" onclick="switchSubTab('ege')">
-                            <i class="fas fa-university"></i> ЕГЭ
-                        </button>
-                    </div>
-
-                    <div class="tab-content" id="tabContent"></div>
-                </div>
-                <div class="modal-footer"
-                    style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                    <button class="btn btn-pdf" onclick="downloadTeacherPDF()" id="btnPdf">
-                        <i class="fas fa-file-pdf"></i> Скачать PDF
-                    </button>
-
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Edit Modal -->
     <div class="modal" id="editModal">
         <div class="modal-dialog">
@@ -527,6 +494,16 @@
     </div>
 
     <script>
+        
+        function miniBar(value, maxRef) {
+                const v = Number(value) || 0;
+                const max = Math.max(maxRef || 10, 1);
+                const pct = Math.min(100, Math.round((v / max) * 100));
+                return `<div class="mini-bar-wrap">
+    <span class="n">${v}</span>
+    <div class="mini-bar"><span style="width:${pct}%"></span></div>
+  </div>`;
+            }
         // ==========================================
         // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
         // ==========================================
@@ -539,19 +516,13 @@
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
 
         // ==========================================
         // ИНИЦИАЛИЗАЦИЯ И ПРОВЕРКА
         // ==========================================
-        if (!token) {
-            window.location.href = 'login.html';
-        }
+        //if (!token) {
+        //    window.location.href = 'login.html';
+        //}
 
         document.getElementById('userName').textContent = user.fullName || user.username || 'Пользователь';
 
@@ -1073,12 +1044,19 @@
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-        let teachersState = {
-            page: 1,
-            limit: 20,
-            totalPages: 1,
-            total: 0
-        };
+        function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            let teachersState = {
+                page: 1,
+                limit: 20,
+                totalPages: 1,
+                total: 0
+            };
 
         function renderTeachers(teachers, searchQuery = '') {
             const tbody = document.getElementById('teachersTableBody');
@@ -1115,9 +1093,9 @@
                     </a>
                 </td>
                 <td>${escapeHtml(subjectsStr)}</td>
-                <td style="text-align: center; font-weight: 600; color: #667eea;">${t.courses_count || 0}</td>
-                <td style="text-align: center;">${t.diagnostics_count || 0}</td>
-                <td style="text-align: center; font-weight: 600; color: #f59e0b;">${t.olympiads_count || 0}</td>
+                <td>${miniBar(t.courses_count || 0, 10)}</td>
+                <td>${miniBar(t.diagnostics_count || 0, 15)}</td>
+                <td>${miniBar(t.olympiads_count || 0, 20)}</td>
                 <td>
                     <button class="btn btn-sm btn-primary" onclick="openProfile(${t.id})" title="Просмотр">
                         <i class="fas fa-eye"></i>
@@ -1225,19 +1203,21 @@
                 document.querySelector('.tab-btn:first-child').classList.add('active');
                 showTabContent('courses', teacher.courses || [], ['course_name', 'organization', 'completion_date'], ['Курс', 'Организация', 'Дата']);
 
-                document.getElementById('profileModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
+                const panel = document.getElementById('profileModal');
+                panel.classList.add('is-open');
+                document.getElementById('teachersSection')?.classList.add('profile-open');
+                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (err) {
                 alert('Ошибка: ' + err.message);
             }
         }
 
         function closeModal() {
-            document.getElementById('profileModal').classList.remove('active');
-            document.body.style.overflow = '';
-            currentTeacherId = null;
-            hideAllSubTabs();
-        }
+                document.getElementById('profileModal').classList.remove('is-open');
+                document.getElementById('teachersSection')?.classList.remove('profile-open');
+                currentTeacherId = null;
+                hideAllSubTabs();
+            }
 
         function hideAllSubTabs() {
             document.getElementById('diagnosticsSubTabs').style.display = 'none';
@@ -1792,9 +1772,6 @@
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
                 document.body.style.overflow = '';
-                if (event.target.id === 'profileModal') {
-                    hideAllSubTabs();
-                }
             }
         }
 
@@ -2336,6 +2313,7 @@
             });
         });
     </script>
+    <script src="../assets/js/header-modern.js"></script>
 </body>
 
 </html>

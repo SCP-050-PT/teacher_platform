@@ -1,0 +1,104 @@
+/* Панель профиля учителя (вместо модалки) — добавить в dashboard.css или style.css */
+
+.teacher-profile-panel {
+    display: none;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.teacher-profile-panel.is-open {
+    display: block;
+    animation: panelIn 0.2s ease-out;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.teacher-profile-panel .panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+    flex-wrap: wrap;
+}
+
+.teacher-profile-panel .panel-top-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.teacher-profile-panel .panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.teacher-profile-panel .btn-back {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.teacher-profile-panel .btn-back:hover {
+    background: #e2e8f0;
+}
+
+.teacher-profile-panel .panel-body {
+    padding: 16px 20px 8px;
+}
+
+.teacher-profile-panel .panel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+    flex-wrap: wrap;
+}
+
+/* При открытом профиле слегка приглушаем таблицу */
+.teachers-section.profile-open .table-responsive {
+    opacity: 0.55;
+    pointer-events: none;
+    user-select: none;
+}
+
+.teachers-section.profile-open #teachersPagination {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* На широких экранах можно оставить таблицу кликабельной — раскомментируй при желании:
+.teachers-section.profile-open .table-responsive {
+    opacity: 1;
+    pointer-events: auto;
+}
+*/

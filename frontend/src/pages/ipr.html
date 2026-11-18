@@ -6,174 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Конструктор ИПР — Платформа</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/ipr-orientir.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f1f5f9;
-            --card: #fff;
-            --ink: #1e293b;
-            --muted: #64748b;
-            --brand: #667eea;
-            --brand-dark: #764ba2;
-            --line: #e2e8f0;
-            --ok: #10b981
-        }
-
-        body {
-            background: var(--bg)
-        }
-
-        .wrap {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px 0 60px
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 18px
-        }
-
-        .card {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .05)
-        }
-
-        .card h2 {
-            margin: 0 0 14px;
-            font-size: 16px;
-            color: var(--brand);
-            border-bottom: 2px solid var(--line);
-            padding-bottom: 8px
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px
-        }
-
-        .field label {
-            display: block;
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 4px;
-            font-weight: 600
-        }
-
-        .field input,
-        .field select {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            font: inherit;
-            font-size: 14px
-        }
-
-        .section {
-            background: #f8fafc;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 12px
-        }
-
-        .section-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap
-        }
-
-        .section-head h3 {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 600
-        }
-
-        .item {
-  display: grid;
-  grid-template-columns: 1fr 140px 130px auto;
-        }
-
-        .item .del {
-            background: #fee2e2;
-            color: #b91c1c;
-            border: none;
-            border-radius: 6px;
-            width: 30px;
-            height: 30px;
-            cursor: pointer
-        }
-
-        .add {
-            background: none;
-            border: 1px dashed var(--brand);
-            color: var(--brand);
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px
-        }
-
-        #result {
-            display: none
-        }
-
-        @media print {
-
-            header,
-            .toolbar,
-            .no-print {
-                display: none !important
-            }
-
-            #result {
-                display: block !important
-            }
-        }
-    </style>
 </head>
 
 <body>
     <div class="app-container">
-        <header class="main-header">
-            <div class="logo" style="display:flex;align-items:center;gap:12px;">
-                <img src="../assets/images/Logo_main_RGB.png"
-                    style="height:40px;background:#fff;padding:4px;border-radius:8px;">
-                <span class="school-name">Школа №777</span>
-            </div>
+        <header class="main-header header-modern">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                <div class="logo-text-block">
+                    <span class="school-name">Школа №777</span>
+                    <span class="platform-name">Профиль педагога</span>
+                </div>
+            </a>
+        
             <nav class="main-nav">
-                <a href="index.html" class="nav-link active">
+                <a href="index.html" class="nav-link" data-nav="index">
                     <i class="fas fa-home"></i> Главная
                 </a>
-                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
-                    <i class="fas fa-cog"></i> Админ
-                </a>
-                <a href="orientir-uroka.html" class="nav-link">
+                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
                     <i class="fas fa-clipboard-check"></i> Ориентир урока
                 </a>
-                <a href="orientir-list.html" class="nav-link">
+                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
                     <i class="fas fa-list"></i> Список ОУ
                 </a>
-                <a href="ipr.html" class="nav-link">
+                <a href="ipr.html" class="nav-link" data-nav="ipr">
                     <i class="fas fa-file-alt"></i> ИПР
                 </a>
-                <a href="ipr-list.html" class="nav-link">
+                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
                     <i class="fas fa-list"></i> Список ИПР
                 </a>
             </nav>
-            <div class="user-menu">
-                <span id="userName"></span>
-                <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+        
+            <div class="user-menu" id="userMenu">
+                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-meta">
+                        <span class="user-name" id="userName">Пользователь</span>
+                        <span class="user-role" id="userRole">—</span>
+                    </span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </button>
+                <div class="user-dropdown" id="userDropdown" role="menu">
+                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                        <i class="fas fa-cog"></i> Админ-панель
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
             </div>
         </header>
         <main class="main-content">
@@ -357,6 +241,8 @@
         renderSections();
         loadForEdit();
     </script>
+    <script src="../assets/js/auth-ui.js"></script>
+    <script src="../assets/js/header-modern.js"></script>
 </body>
 
 </html>

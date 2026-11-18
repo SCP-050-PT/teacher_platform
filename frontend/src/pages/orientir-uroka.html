@@ -6,426 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ориентир урока — Платформа для учителей</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/ipr-orientir.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --paper: #f1f5f9;
-            --surface: #ffffff;
-            --ink: #1e293b;
-            --muted: #64748b;
-            --line: #e2e8f0;
-            --accent: #667eea;
-            --accent-dark: #764ba2;
-            --accent-soft: rgba(102, 126, 234, 0.12);
-            --good: #10b981;
-            --good-soft: #d1fae5;
-            --warn: #f59e0b;
-            --warn-soft: #fef3c7;
-            --bad: #ef4444;
-            --bad-soft: #fee2e2;
-            --r: 16px;
-        }
-
-        .wrap {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px 0 60px
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            gap: 10px
-        }
-
-        .scorepill {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            padding: 8px 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
-        }
-
-        .scorepill .num {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--accent);
-            line-height: 1
-        }
-
-        .scorepill .cap {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.2
-        }
-
-        .fieldgrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 12px;
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: var(--r);
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-
-        .fieldgrid label {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 600
-        }
-
-        .fieldgrid input {
-            border: 1px solid var(--line);
-            border-radius: 9px;
-            padding: 9px 11px;
-            font-size: 15px;
-            color: var(--ink);
-            background: #fff;
-            outline: none;
-            transition: .15s;
-        }
-
-        .fieldgrid input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-soft)
-        }
-
-        section.block {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: var(--r);
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-
-        section.block h2 {
-            margin: 0;
-            padding: 14px 18px;
-            font-size: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--line);
-            background: #f8fafc;
-        }
-
-        section.block h2 .ic {
-            color: var(--accent)
-        }
-
-        section.block h2 .cnt {
-            margin-left: auto;
-            font-size: 13px;
-            color: var(--muted);
-            font-weight: 600
-        }
-
-        section.block.exc {
-            opacity: .62
-        }
-
-        section.block.low {
-            border-color: #fca5a5;
-            box-shadow: 0 0 0 2px #fee2e2 inset
-        }
-
-        section.block.low>h2 {
-            background: #fef2f2;
-            color: var(--bad)
-        }
-
-        .lowtag {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--bad);
-            background: var(--bad-soft);
-            border-radius: 6px;
-            padding: 2px 7px;
-            margin-left: 8px
-        }
-
-        .exbt {
-            border: 1px solid var(--line);
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--muted);
-            cursor: pointer;
-            margin-left: 10px;
-            font-family: inherit;
-        }
-
-        section.block.exc .exbt {
-            border-color: var(--good);
-            color: var(--good);
-            background: var(--good-soft)
-        }
-
-        .try {
-            background: var(--accent-soft);
-            border: 1px dashed #a5b4fc;
-            border-radius: 11px;
-            padding: 14px 16px;
-            margin: 14px 18px;
-            font-size: 14px
-        }
-
-        .try .ttl {
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 6px
-        }
-
-        .stages {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-            padding: 16px 18px
-        }
-
-        .kriterii {
-            padding: 4px 18px 16px
-        }
-
-        .krit {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 12px 4px;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .krit:hover {
-            background: #fafbff
-        }
-
-        .krit.done .txt {
-            color: var(--muted);
-            text-decoration: line-through
-        }
-
-        .krit .txt {
-            flex: 1;
-            font-size: 14.5px
-        }
-
-        .seg {
-            flex: none;
-            display: inline-flex;
-            background: var(--paper);
-            border: 1px solid var(--line);
-            border-radius: 9px;
-            overflow: hidden
-        }
-
-        .seg button {
-            border: none;
-            background: transparent;
-            padding: 7px 14px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            color: var(--muted);
-            font-family: inherit;
-        }
-
-        .seg button.on-1 {
-            background: var(--good);
-            color: #fff
-        }
-
-        .seg button.on-0 {
-            background: var(--bad);
-            color: #fff
-        }
-
-        .chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 16px 18px
-        }
-
-        .chip {
-            border: 1.5px solid var(--line);
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-size: 13.5px;
-            background: #fff;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chip.on {
-            border-color: var(--good);
-            background: var(--good-soft);
-            font-weight: 600
-        }
-
-        .chip .badge {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--line)
-        }
-
-        .chip.on .badge {
-            background: var(--good)
-        }
-
-        .chip.ex {
-            opacity: .55;
-            background: #f1f5f9
-        }
-
-        .bands {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 18px
-        }
-
-        .band {
-            border: 1px solid var(--line);
-            border-radius: var(--r);
-            padding: 14px 16px;
-            background: var(--surface);
-        }
-
-        .band.cur {
-            box-shadow: 0 0 0 2px currentColor
-        }
-
-        .band.good {
-            color: var(--good)
-        }
-
-        .band.warn {
-            color: var(--warn)
-        }
-
-        .band.bad {
-            color: var(--bad)
-        }
-
-        textarea.rec {
-            width: 100%;
-            min-height: 110px;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 15px;
-            font-family: inherit;
-            resize: vertical;
-            outline: none;
-        }
-
-        textarea.rec:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-soft)
-        }
-
-        .recwrap {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: var(--r);
-            padding: 20px;
-            margin-top: 18px
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 18px;
-            flex-wrap: wrap
-        }
-
-        .toast {
-            position: fixed;
-            left: 50%;
-            bottom: 26px;
-            transform: translateX(-50%) translateY(20px);
-            background: #1e293b;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 11px;
-            font-size: 14px;
-            opacity: 0;
-            pointer-events: none;
-            transition: .2s;
-            z-index: 50;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0)
-        }
-
-        @media print {
-
-            .main-header,
-            .actions,
-            .toast {
-                display: none !important
-            }
-
-            body {
-                background: #fff
-            }
-        }
-    </style>
 </head>
 
 <body>
     <div class="app-container">
-        <header class="main-header">
-            <div class="logo" style="display:flex;align-items:center;gap:12px;">
-                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777"
-                    style="height:40px;background:#fff;padding:4px;border-radius:8px;">
-                <span class="school-name">Школа №777</span>
-            </div>
+        <header class="main-header header-modern">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                <div class="logo-text-block">
+                    <span class="school-name">Школа №777</span>
+                    <span class="platform-name">Профиль педагога</span>
+                </div>
+            </a>
+        
             <nav class="main-nav">
-                <a href="index.html" class="nav-link active">
+                <a href="index.html" class="nav-link" data-nav="index">
                     <i class="fas fa-home"></i> Главная
                 </a>
-                <a href="admin-panel.html" class="nav-link admin-only" id="navAdmin" style="display: none;">
-                    <i class="fas fa-cog"></i> Админ
-                </a>
-                <a href="orientir-uroka.html" class="nav-link">
+                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
                     <i class="fas fa-clipboard-check"></i> Ориентир урока
                 </a>
-                <a href="orientir-list.html" class="nav-link">
+                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
                     <i class="fas fa-list"></i> Список ОУ
                 </a>
-                <a href="ipr.html" class="nav-link">
+                <a href="ipr.html" class="nav-link" data-nav="ipr">
                     <i class="fas fa-file-alt"></i> ИПР
                 </a>
-                <a href="ipr-list.html" class="nav-link">
+                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
                     <i class="fas fa-list"></i> Список ИПР
                 </a>
             </nav>
-            <div class="user-menu">
-                <span id="userName"></span>
-                <button onclick="logout()" class="btn-logout" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
+        
+            <div class="user-menu" id="userMenu">
+                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-meta">
+                        <span class="user-name" id="userName">Пользователь</span>
+                        <span class="user-role" id="userRole">—</span>
+                    </span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </button>
+                <div class="user-dropdown" id="userDropdown" role="menu">
+                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                        <i class="fas fa-cog"></i> Админ-панель
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -649,6 +282,8 @@
 
         })();
     </script>
+    <script src="../assets/js/auth-ui.js"></script>
+    <script src="../assets/js/header-modern.js"></script>
 </body>
 
 </html>

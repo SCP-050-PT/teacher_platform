@@ -1,0 +1,240 @@
+/* ===== Современная шапка (референс-стиль) =====
+   Подключить: <link rel="stylesheet" href="../assets/css/header-modern.css">
+*/
+
+.main-header.header-modern {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #5b4cdb 0%, #7c3aed 55%, #6d28d9 100%);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.25);
+  flex-wrap: wrap;
+}
+
+.header-modern .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.header-modern .logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.header-modern .logo-text-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.header-modern .school-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+}
+
+.header-modern .platform-name {
+  font-size: 12px;
+  opacity: 0.85;
+  color: #e0e7ff;
+}
+
+/* Навигация по центру */
+.header-modern .main-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.header-modern .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.header-modern .nav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.header-modern .nav-link.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Правый блок — профиль */
+.header-modern .user-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header-modern .user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  color: #fff;
+  font: inherit;
+  transition: background 0.15s;
+}
+
+.header-modern .user-chip:hover,
+.header-modern .user-chip.is-open {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.header-modern .user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  color: #5b4cdb;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-modern .user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.header-modern .user-meta .user-name {
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-modern .user-meta .user-role {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.header-modern .user-chip .chevron {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-left: 2px;
+}
+
+/* Выпадающее меню */
+.header-modern .user-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  border: 1px solid #e2e8f0;
+  padding: 6px;
+  z-index: 1100;
+}
+
+.header-modern .user-dropdown.is-open {
+  display: block;
+  animation: dropIn 0.15s ease-out;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-modern .user-dropdown a,
+.header-modern .user-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.header-modern .user-dropdown a:hover,
+.header-modern .user-dropdown button:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.header-modern .user-dropdown .dropdown-danger {
+  color: #dc2626;
+}
+
+.header-modern .user-dropdown .dropdown-danger:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.header-modern .user-dropdown .dropdown-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 4px 0;
+}
+
+@media (max-width: 860px) {
+  .header-modern .main-nav {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .header-modern .user-meta {
+    display: none;
+  }
+}

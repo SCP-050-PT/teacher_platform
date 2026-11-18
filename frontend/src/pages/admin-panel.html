@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админ-панель | Профиль педагога</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin-panel.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="../assets/images/Logo_main_RGB.png">
 </head>
@@ -13,20 +15,51 @@
 <body>
     <div class="app-container">
         <!-- Header -->
-        <header class="main-header">
-            <div class="logo">
+        <header class="main-header header-modern">
+            <a href="index.html" class="logo">
                 <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
-                <span class="school-name">Школа №777</span>
-            </div>
+                <div class="logo-text-block">
+                    <span class="school-name">Школа №777</span>
+                    <span class="platform-name">Профиль педагога</span>
+                </div>
+            </a>
+        
             <nav class="main-nav">
-                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> <span>Главная</span></a>
-                <a href="admin-panel.html" class="nav-link active"><i class="fas fa-cog"></i> <span>Админ</span></a>
+                <a href="index.html" class="nav-link" data-nav="index">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link" data-nav="ipr">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
             </nav>
-            <div class="user-menu">
-                <span id="currentUser"></span>
-                <button onclick="logout()" class="btn-logout" title="Выйти">
-                    <i class="fas fa-sign-out-alt"></i>
+        
+            <div class="user-menu" id="userMenu">
+                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-meta">
+                        <span class="user-name" id="userName">Пользователь</span>
+                        <span class="user-role" id="userRole">—</span>
+                    </span>
+                    <i class="fas fa-chevron-down chevron"></i>
                 </button>
+                <div class="user-dropdown" id="userDropdown" role="menu">
+                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                        <i class="fas fa-cog"></i> Админ-панель
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -671,6 +704,7 @@ function getFileTypeLabel(type) {
         loadUsers();
         loadUploadHistory();
     </script>
+    <script src="../assets/js/header-modern.js"></script>
 </body>
 
 </html>
