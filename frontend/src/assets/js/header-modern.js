@@ -40,12 +40,7 @@
 
   function fillUserChip() {
     const user = getUser();
-    const name =
-      user.full_name ||
-      user.name ||
-      [user.last_name, user.first_name].filter(Boolean).join(' ') ||
-      user.username ||
-      'Пользователь';
+    const name = user.fullName || user.full_name || user.username || 'Пользователь';
 
     const nameEl = document.getElementById('userName');
     const roleEl = document.getElementById('userRole');

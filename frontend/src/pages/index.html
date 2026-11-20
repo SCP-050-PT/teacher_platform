@@ -58,6 +58,9 @@
                             <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
                                 <i class="fas fa-cog"></i> Админ-панель
                             </a>
+                            <a href="settings.html">
+                                <i class="fas fa-user-cog"></i> Настройки
+                            </a>
                             <div class="dropdown-divider"></div>
                             <button type="button" class="dropdown-danger" onclick="logout()">
                                 <i class="fas fa-sign-out-alt"></i> Выйти
@@ -253,6 +256,8 @@
                             <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i> Экзамены</button>
                             <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i> Олимпиады</button>
                             <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i> Иное</button>
+                            <button class="tab-btn" onclick="switchTab('orientir')"><i class="fas fa-clipboard-check"></i> Ориентиры</button>
+                            <button class="tab-btn" onclick="switchTab('ipr')"><i class="fas fa-file-alt"></i> ИПР</button>
                         </div>
                 
                         <div class="sub-tabs" id="diagnosticsSubTabs" style="display:none;">
@@ -269,6 +274,40 @@
                         </div>
                 
                         <div class="tab-content" id="tabContent"></div>
+                        <div id="tab-orientir" class="tab-content" style="display:none;">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Дата</th>
+                                            <th>Предмет</th>
+                                            <th>Класс</th>
+                                            <th>Балл</th>
+                                            <th>%</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="orientirTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div id="tab-ipr" class="tab-content" style="display:none;">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Период</th>
+                                            <th>Предмет</th>
+                                            <th>Должность</th>
+                                            <th>Категория</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="iprTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="filters-bar">
@@ -1229,6 +1268,9 @@
         function switchTab(tabName) {
             if (!currentTeacherData) return;
             document.getElementById('tabContent').innerHTML = '';
+            document.getElementById('tabContent').style.display = 'block';
+            document.getElementById('tab-orientir').style.display = 'none';
+            document.getElementById('tab-ipr').style.display = 'none';
             currentMainTab = tabName;
             currentSubTab = null;
 
@@ -1272,9 +1314,59 @@
                         ['event_name', 'status', 'participants_count'],
                         ['Мероприятие', 'Статус', 'Участники']);
                     break;
-            }
-        }
 
+                case 'orientir':
+                    document.getElementById('tabContent').style.display = 'none';
+                    document.getElementById('tab-orientir').style.display = 'block';
+                    document.getElementById('tab-ipr').style.display = 'none';
+                    fillOrientirTab();
+                    break;
+
+                case 'ipr':
+                    document.getElementById('tabContent').style.display = 'none';
+                    document.getElementById('tab-orientir').style.display = 'none';
+                    document.getElementById('tab-ipr').style.display = 'block';
+                    fillIprTab();
+                    break;
+            }
+            
+        }
+        function fillOrientirTab() {
+                const tbody = document.getElementById('orientirTableBody');
+                const rows = currentTeacherData.orientir || [];
+                if (!rows.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#666;padding:24px;">Нет ориентиров урока</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td>${r.visit_date ? String(r.visit_date).slice(0, 10) : '—'}</td>
+            <td>${r.predmet || '—'}</td>
+            <td>${r.class_name || '—'}</td>
+            <td>${r.score ?? '—'}/${r.max_score ?? '—'}</td>
+            <td>${r.percentage != null ? r.percentage + '%' : '—'}</td>
+            <td><a class="btn btn-sm btn-secondary" href="orientir-view.html?id=${r.id}" target="_blank">Открыть</a></td>
+        </tr>
+    `).join('');
+            }
+
+            function fillIprTab() {
+                const tbody = document.getElementById('iprTableBody');
+                const rows = currentTeacherData.ipr || [];
+                if (!rows.length) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;padding:24px;">Нет планов ИПР</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td>${r.period || '—'}</td>
+            <td>${r.subject || '—'}</td>
+            <td>${r.position || '—'}</td>
+            <td>${r.category || '—'}</td>
+            <td><a class="btn btn-sm btn-secondary" href="ipr.html?edit=${r.id}" target="_blank">Открыть</a></td>
+        </tr>
+    `).join('');
+            }
         function switchSubTab(subTabName) {
             currentSubTab = subTabName;
 

@@ -12,5 +12,6 @@ router.post('/login', authLimiter, (req, res) => adminController.login(req, res)
 router.get('/me', authenticateToken, (req, res) => adminController.getMe(req, res));
 router.put('/change-password', authenticateToken, (req, res) => adminController.changePassword(req, res));
 router.put('/change-username', authenticateToken, (req, res) => adminController.changeUsername(req, res));
+router.put('/profile', authenticateToken, (req, res) => adminController.updateProfile(req, res));
 
 module.exports = router;

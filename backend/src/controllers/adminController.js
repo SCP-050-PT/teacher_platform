@@ -273,7 +273,39 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 };
+const updateProfile = async (req, res) => {
+    try {
+        const fullName = (req.body.fullName || req.body.full_name || '').trim();
 
+        if (!fullName || fullName.length < 2) {
+            return res.status(400).json({ error: 'Укажите ФИО (минимум 2 символа)' });
+        }
+
+        const { rows } = await db.query(
+            `UPDATE users SET full_name = $1 WHERE id = $2
+             RETURNING id, username, role, full_name`,
+            [fullName, req.user.id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Пользователь не найден' });
+        }
+
+        res.json({
+            message: 'Профиль обновлён',
+            user: {
+                id: rows[0].id,
+                username: rows[0].username,
+                role: rows[0].role,
+                fullName: rows[0].full_name,
+                full_name: rows[0].full_name
+            }
+        });
+    } catch (error) {
+        console.error('Ошибка обновления профиля:', error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+};
 module.exports = {
     createInitialAdmin,
     login,
@@ -283,5 +315,6 @@ module.exports = {
     getUsers,      
     createUser,    
     deleteUser,
-    resetPassword
+    resetPassword,
+    updateProfile,
 };

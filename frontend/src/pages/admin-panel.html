@@ -14,7 +14,6 @@
 
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header class="main-header header-modern">
             <a href="index.html" class="logo">
                 <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
@@ -23,7 +22,7 @@
                     <span class="platform-name">Профиль педагога</span>
                 </div>
             </a>
-        
+
             <nav class="main-nav">
                 <a href="index.html" class="nav-link" data-nav="index">
                     <i class="fas fa-home"></i> Главная
@@ -41,7 +40,7 @@
                     <i class="fas fa-list"></i> Список ИПР
                 </a>
             </nav>
-        
+
             <div class="user-menu" id="userMenu">
                 <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
                     <span class="user-avatar" id="userAvatar">A</span>
@@ -55,6 +54,9 @@
                     <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
                         <i class="fas fa-cog"></i> Админ-панель
                     </a>
+                    <a href="settings.html">
+                        <i class="fas fa-user-cog"></i> Настройки
+                    </a>
                     <div class="dropdown-divider"></div>
                     <button type="button" class="dropdown-danger" onclick="logout()">
                         <i class="fas fa-sign-out-alt"></i> Выйти
@@ -63,73 +65,8 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Hero Section -->
-            <section class="hero-section">
-                <div class="hero-content">
-                    <h1>Администрирование</h1>
-                    <p>Управление пользователями, журнал загрузок и настройки системы</p>
-                </div>
-            </section>
-
-            <div class="dashboard-grid">
-                <!-- Секция управления аккаунтом -->
-                <div class="section-grid">
-                    <!-- Смена пароля -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2><i class="fas fa-lock" style="color: var(--warning);"></i> Сменить свой пароль</h2>
-                        </div>
-                        <form id="changePasswordForm">
-                            <div class="form-group">
-                                <label>Текущий пароль</label>
-                                <input type="password" id="oldPasswordInput" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Новый пароль (мин. 6 символов)</label>
-                                <input type="password" id="newPasswordInput" required minlength="6">
-                            </div>
-                            <div class="form-group">
-                                <label>Подтвердите новый пароль</label>
-                                <input type="password" id="confirmPasswordInput" required minlength="6"
-                                    placeholder="new_password">
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-key"></i> Изменить пароль
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Смена логина -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2><i class="fas fa-user-edit" style="color: var(--primary);"></i> Сменить логин</h2>
-                        </div>
-                        <form id="changeUsernameForm">
-                            <div class="form-group">
-                                <label>Текущий пароль (для подтверждения)</label>
-                                <input type="password" id="currentPwdForLogin" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Новый логин (мин. 3 символа)</label>
-                                <input type="text" id="newLoginInput" required minlength="3" pattern="[a-zA-Z0-9_]+"
-                                    placeholder="new_login">
-                                <small style="color: var(--gray); font-size: 12px;">Только латинские буквы, цифры и
-                                    подчеркивание</small>
-                            </div>
-                            <div class="form-group">
-                                <label>Подтвердите новый логин</label>
-                                <input type="text" id="confirmLoginInput" required minlength="3"
-                                    placeholder="new_login">
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Сохранить логин
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
+            <div class="dashboard-grid" style="padding-top: 20px;">
                 <!-- Журнал загрузок -->
                 <div class="card">
                     <div class="card-header">
@@ -139,7 +76,6 @@
                         </button>
                     </div>
 
-                    <!-- Поиск -->
                     <div class="mb-3" style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
@@ -152,7 +88,6 @@
                         </button>
                     </div>
 
-                    <!-- Таблица -->
                     <div class="table-responsive">
                         <table>
                             <thead>
@@ -179,7 +114,6 @@
                         </table>
                     </div>
 
-                    <!-- Пагинация -->
                     <div class="pagination-container" id="uploadPagination" style="display: none;">
                         <div class="pagination-info" id="uploadPaginationInfo"></div>
                         <div class="pagination-controls" id="uploadPaginationControls"></div>
@@ -244,7 +178,7 @@
         </div>
     </div>
 
-    <!-- Модал сброса пароля -->
+    <!-- Модал сброса пароля методиста -->
     <div id="resetPasswordModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -293,11 +227,9 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
     <script>
-        // Auth check
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -307,9 +239,6 @@
             window.location.href = 'index.html';
         }
 
-        document.getElementById('currentUser').textContent = user.fullName + ' (admin)';
-
-        // API helper
         async function api(url, options = {}) {
             const res = await fetch(url, {
                 ...options,
@@ -321,12 +250,11 @@
             });
             if (!res.ok) {
                 const err = await res.json().catch(() => ({ error: 'Ошибка сервера' }));
-                throw new Error(err.error);
+                throw new Error(err.error || err.message || 'Ошибка сервера');
             }
             return res.json();
         }
 
-        // Toast
         function showToast(message, type = 'info', duration = 4000) {
             const container = document.getElementById('toastContainer');
             const icons = {
@@ -362,64 +290,6 @@
             document.getElementById(id).classList.remove('active');
         }
 
-        // Смена пароля
-        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const oldPass = document.getElementById('oldPasswordInput').value;
-            const newPass = document.getElementById('newPasswordInput').value;
-            const confirm = document.getElementById('confirmPasswordInput').value;
-
-            if (newPass !== confirm) {
-                return showToast('Новые пароли не совпадают', 'error');
-            }
-
-            try {
-                await api('/api/auth/change-password', {
-                    method: 'PUT',
-                    body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })
-                });
-                showToast('Пароль успешно изменен!', 'success');
-                e.target.reset();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        });
-
-        // Смена логина
-        document.getElementById('changeUsernameForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const currentPassword = document.getElementById('currentPwdForLogin').value;
-            const newUsername = document.getElementById('newLoginInput').value;
-            const confirmUsername = document.getElementById('confirmLoginInput').value;
-
-            if (newUsername !== confirmUsername) {
-                return showToast('Новые логины не совпадают', 'error');
-            }
-
-            if (!/^[a-zA-Z0-9_]+$/.test(newUsername)) {
-                return showToast('Логин может содержать только латинские буквы, цифры и подчеркивание', 'error');
-            }
-
-            try {
-                const res = await api('/api/auth/change-username', {
-                    method: 'PUT',
-                    body: JSON.stringify({ currentPassword, newUsername })
-                });
-
-                localStorage.setItem('token', res.token);
-                localStorage.setItem('user', JSON.stringify(res.user));
-
-                showToast('Логин успешно изменен! Перезагрузка...', 'success');
-                e.target.reset();
-
-                setTimeout(() => location.reload(), 1500);
-
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        });
-
-        // Load users
         async function loadUsers() {
             try {
                 const users = await api('/api/admin/users');
@@ -441,12 +311,12 @@
                     <tr>
                         <td>${u.id}</td>
                         <td><strong>${u.username}</strong></td>
-                        <td>${u.full_name}</td>
+                        <td>${u.full_name || '—'}</td>
                         <td><span class="badge badge-${u.role}">${u.role === 'admin' ? 'Админ' : 'Методист'}</span></td>
-                        <td>${new Date(u.created_at).toLocaleDateString('ru-RU')}</td>
+                        <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('ru-RU') : '—'}</td>
                         <td>
                             ${u.role !== 'admin' ? `
-                                <button class="btn btn-sm btn-warning" onclick="openResetPassword(${u.id}, '${u.username}')" title="Сбросить пароль">
+                                <button class="btn btn-sm btn-warning" onclick="openResetPassword(${u.id}, '${String(u.username).replace(/'/g, "\\'")}')" title="Сбросить пароль">
                                     <i class="fas fa-key"></i>
                                 </button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})" title="Удалить" style="margin-left: 5px;">
@@ -462,7 +332,6 @@
             }
         }
 
-        // Create user
         document.getElementById('createUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('newUserLogin').value;
@@ -496,7 +365,6 @@
             }
         });
 
-        // Reset password
         function openResetPassword(id, username) {
             document.getElementById('resetUserId').value = id;
             document.getElementById('resetUsernameDisplay').textContent = username;
@@ -510,23 +378,22 @@
             const password = document.getElementById('resetNewPasswordInput').value;
 
             try {
-                await api(`/api/admin/users/${id}/reset-password`, {
+                await api('/api/admin/users/' + id + '/reset-password', {
                     method: 'PUT',
                     body: JSON.stringify({ newPassword: password })
                 });
-                showToast(`Пароль сброшен. Новый пароль: ${password}`, 'success');
+                showToast('Пароль сброшен. Новый пароль: ' + password, 'success');
                 closeModal('resetPasswordModal');
             } catch (err) {
                 showToast(err.message, 'error');
             }
         });
 
-        // Delete user
         async function deleteUser(id) {
             if (!confirm('Удалить методиста? Это действие нельзя отменить.')) return;
 
             try {
-                await api(`/api/admin/users/${id}`, { method: 'DELETE' });
+                await api('/api/admin/users/' + id, { method: 'DELETE' });
                 showToast('Пользователь удален', 'success');
                 loadUsers();
             } catch (err) {
@@ -540,10 +407,7 @@
             window.location.href = 'login.html';
         }
 
-        // ==========================================
-        // ЖУРНАЛ ЗАГРУЗОК С УДАЛЕНИЕМ
-        // ==========================================
-
+        // ===== Журнал загрузок =====
         let uploadHistoryState = { page: 1, limit: 20, totalPages: 1 };
         let deleteUploadId = null;
         let deleteUploadFilename = null;
@@ -555,7 +419,7 @@
             tbody.innerHTML = '<tr><td colspan="8" class="text-center" style="padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Загрузка...</td></tr>';
 
             try {
-                const response = await api(`/api/upload/history?page=${page}&limit=${uploadHistoryState.limit}&search=${encodeURIComponent(search)}`);
+                const response = await api('/api/upload/history?page=' + page + '&limit=' + uploadHistoryState.limit + '&search=' + encodeURIComponent(search));
                 const { data, pagination } = response;
 
                 uploadHistoryState.page = pagination.page;
@@ -572,7 +436,7 @@
                 tbody.innerHTML = data.map(item => `
                     <tr>
                         <td>${item.id}</td>
-                        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.filename.replace(/"/g, '&quot;')}">
+                        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${String(item.filename || '').replace(/"/g, '&quot;')}">
                             <i class="fas fa-file-excel" style="color: var(--secondary); margin-right: 8px;"></i>${item.filename}
                         </td>
                         <td><span class="file-badge ${item.fileType}">${getFileTypeLabel(item.fileType)}</span></td>
@@ -581,7 +445,7 @@
                         <td class="text-center">${getStatusBadge(item.status)}</td>
                         <td style="font-size: 13px; color: var(--gray); white-space: nowrap;"><i class="far fa-clock" style="color: var(--gray-lighter); margin-right: 5px;"></i>${item.uploadedAt}</td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-danger" onclick="confirmDeleteUpload(${item.id}, '${item.filename.replace(/'/g, "\\'")}')" title="Удалить файл и все данные">
+                            <button class="btn btn-sm btn-danger" onclick="confirmDeleteUpload(${item.id}, '${String(item.filename || '').replace(/'/g, "\\'")}')" title="Удалить файл и все данные">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -600,7 +464,7 @@
         function confirmDeleteUpload(id, filename) {
             deleteUploadId = id;
             deleteUploadFilename = filename;
-            document.getElementById('confirmDeleteText').innerHTML = `Вы уверены, что хотите удалить файл <strong>"${filename}"</strong>?`;
+            document.getElementById('confirmDeleteText').innerHTML = 'Вы уверены, что хотите удалить файл <strong>"' + filename + '"</strong>?';
             openModal('confirmDeleteModal');
         }
 
@@ -611,7 +475,7 @@
             }
 
             try {
-                await api(`/api/upload/history/${deleteUploadId}`, { method: 'DELETE' });
+                await api('/api/upload/history/' + deleteUploadId, { method: 'DELETE' });
                 showToast('Файл успешно удалён вместе со всеми данными', 'success');
                 closeConfirmDelete();
                 loadUploadHistory(uploadHistoryState.page);
@@ -632,75 +496,82 @@
             const start = (page - 1) * limit + 1;
             const end = Math.min(page * limit, total);
 
-            document.getElementById('uploadPaginationInfo').innerHTML = `Показано <strong>${start}-${end}</strong> из <strong>${total}</strong> записей`;
+            document.getElementById('uploadPaginationInfo').innerHTML =
+                'Показано <strong>' + start + '-' + end + '</strong> из <strong>' + total + '</strong> записей';
 
             let buttons = '';
-            buttons += `<button class="btn btn-sm ${page === 1 ? 'btn-disabled' : 'btn-secondary'}" onclick="${page > 1 ? `loadUploadHistory(${page - 1})` : ''}"><i class="fas fa-chevron-left"></i></button>`;
+            buttons += '<button class="btn btn-sm ' + (page === 1 ? 'btn-disabled' : 'btn-secondary') + '" ' +
+                (page > 1 ? 'onclick="loadUploadHistory(' + (page - 1) + ')"' : '') +
+                '><i class="fas fa-chevron-left"></i></button>';
 
             let startPage = Math.max(1, page - 2);
             let endPage = Math.min(totalPages, startPage + 4);
             if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
 
             if (startPage > 1) {
-                buttons += `<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(1)">1</button>`;
-                if (startPage > 2) buttons += `<span style="padding: 6px; color: var(--gray-light);">...</span>`;
+                buttons += '<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(1)">1</button>';
+                if (startPage > 2) buttons += '<span style="padding: 6px; color: var(--gray-light);">...</span>';
             }
 
             for (let i = startPage; i <= endPage; i++) {
-                buttons += `<button class="btn btn-sm ${i === page ? 'btn-primary' : 'btn-secondary'}" onclick="loadUploadHistory(${i})">${i}</button>`;
+                buttons += '<button class="btn btn-sm ' + (i === page ? 'btn-primary' : 'btn-secondary') +
+                    '" onclick="loadUploadHistory(' + i + ')">' + i + '</button>';
             }
 
             if (endPage < totalPages) {
-                if (endPage < totalPages - 1) buttons += `<span style="padding: 6px; color: var(--gray-light);">...</span>`;
-                buttons += `<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(${totalPages})">${totalPages}</button>`;
+                if (endPage < totalPages - 1) buttons += '<span style="padding: 6px; color: var(--gray-light);">...</span>';
+                buttons += '<button class="btn btn-sm btn-secondary" onclick="loadUploadHistory(' + totalPages + ')">' + totalPages + '</button>';
             }
 
-            buttons += `<button class="btn btn-sm ${page === totalPages ? 'btn-disabled' : 'btn-secondary'}" onclick="${page < totalPages ? `loadUploadHistory(${page + 1})` : ''}"><i class="fas fa-chevron-right"></i></button>`;
+            buttons += '<button class="btn btn-sm ' + (page === totalPages ? 'btn-disabled' : 'btn-secondary') + '" ' +
+                (page < totalPages ? 'onclick="loadUploadHistory(' + (page + 1) + ')"' : '') +
+                '><i class="fas fa-chevron-right"></i></button>';
+
             document.getElementById('uploadPaginationControls').innerHTML = buttons;
         }
 
         function getStatusBadge(status) {
-    const icons = { 
-        'completed': 'check-circle', 
-        'processing': 'spinner fa-spin', 
-        'error': 'exclamation-circle', 
-        'pending': 'clock',
-        'failed': 'times-circle'
-    };
-    const labels = {
-        'completed': 'Завершено',
-        'processing': 'Обработка',
-        'error': 'Ошибка',
-        'pending': 'В очереди',
-        'failed': 'Ошибка'
-    };
-    return `<span class="status-badge ${status}"><i class="fas fa-${icons[status] || 'question-circle'}"></i> ${labels[status] || status}</span>`;
-}
+            const icons = {
+                'completed': 'check-circle',
+                'processing': 'spinner fa-spin',
+                'error': 'exclamation-circle',
+                'pending': 'clock',
+                'failed': 'times-circle'
+            };
+            const labels = {
+                'completed': 'Завершено',
+                'processing': 'Обработка',
+                'error': 'Ошибка',
+                'pending': 'В очереди',
+                'failed': 'Ошибка'
+            };
+            return '<span class="status-badge ' + status + '"><i class="fas fa-' + (icons[status] || 'question-circle') +
+                '"></i> ' + (labels[status] || status) + '</span>';
+        }
 
-// Добавь маппинг типов файлов для отображения
-function getFileTypeLabel(type) {
-    const labels = {
-        'mcko_teacher': 'МЦКО учитель',
-        'mcko_class': 'МЦКО класс',
-        'vsoh': 'ВсОШ',
-        'olympiad': 'МОШ',
-        'mosh': 'МОШ',
-        'exam_ege': 'ЕГЭ',
-        'ege': 'ЕГЭ',
-        'exam_oge': 'ОГЭ',
-        'oge': 'ОГЭ',
-        'courses': 'Курсы',
-        'other': 'Иное'
-    };
-    return labels[type] || type || 'Неизвестно';
-}
+        function getFileTypeLabel(type) {
+            const labels = {
+                'mcko_teacher': 'МЦКО учитель',
+                'mcko_class': 'МЦКО класс',
+                'vsoh': 'ВсОШ',
+                'olympiad': 'МОШ',
+                'mosh': 'МОШ',
+                'exam_ege': 'ЕГЭ',
+                'ege': 'ЕГЭ',
+                'exam_oge': 'ОГЭ',
+                'oge': 'ОГЭ',
+                'courses': 'Курсы',
+                'other': 'Иное'
+            };
+            return labels[type] || type || 'Неизвестно';
+        }
+
         window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
             }
         };
 
-        // Init
         loadUsers();
         loadUploadHistory();
     </script>
