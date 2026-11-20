@@ -18,86 +18,86 @@
 <body>
     <div class="app-container">
         <!-- Header -->
-        <header class="main-header header-modern">
-            <a href="index.html" class="logo">
-                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
-                <div class="logo-text-block">
-                    <span class="school-name">Школа №777</span>
-                    <span class="platform-name">Профиль педагога</span>
-                </div>
-            </a>
-
-            <nav class="main-nav">
-                <a href="index.html" class="nav-link" data-nav="index">
-                    <i class="fas fa-home"></i> Главная
-                </a>
-                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
-                    <i class="fas fa-clipboard-check"></i> Ориентир урока
-                </a>
-                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
-                    <i class="fas fa-list"></i> Список ОУ
-                </a>
-                <a href="ipr.html" class="nav-link" data-nav="ipr">
-                    <i class="fas fa-file-alt"></i> ИПР
-                </a>
-                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
-                    <i class="fas fa-list"></i> Список ИПР
-                </a>
-            </nav>
-
-            <div class="user-menu" id="userMenu">
-                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
-                    <span class="user-avatar" id="userAvatar">A</span>
-                    <span class="user-meta">
-                        <span class="user-name" id="userName">Пользователь</span>
-                        <span class="user-role" id="userRole">—</span>
-                    </span>
-                    <i class="fas fa-chevron-down chevron"></i>
-                </button>
-                <div class="user-dropdown" id="userDropdown" role="menu">
-                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
-                        <i class="fas fa-cog"></i> Админ-панель
+                <header class="main-header header-modern">
+                    <a href="index.html" class="logo">
+                        <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                        <div class="logo-text-block">
+                            <span class="school-name">Школа №777</span>
+                            <span class="platform-name">Профиль педагога</span>
+                        </div>
                     </a>
-                    <a href="settings.html">
-                        <i class="fas fa-user-cog"></i> Настройки
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <button type="button" class="dropdown-danger" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Выйти
-                    </button>
-                </div>
-            </div>
-        </header>
+                
+                    <nav class="main-nav">
+                        <a href="index.html" class="nav-link" data-nav="index">
+                            <i class="fas fa-home"></i> Главная
+                        </a>
+                        <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
+                            <i class="fas fa-clipboard-check"></i> Ориентир урока
+                        </a>
+                        <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
+                            <i class="fas fa-list"></i> Список ОУ
+                        </a>
+                        <a href="ipr.html" class="nav-link" data-nav="ipr">
+                            <i class="fas fa-file-alt"></i> ИПР
+                        </a>
+                        <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
+                            <i class="fas fa-list"></i> Список ИПР
+                        </a>
+                    </nav>
+                
+                    <div class="user-menu" id="userMenu">
+                        <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar" id="userAvatar">A</span>
+                            <span class="user-meta">
+                                <span class="user-name" id="userName">Пользователь</span>
+                                <span class="user-role" id="userRole">—</span>
+                            </span>
+                            <i class="fas fa-chevron-down chevron"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown" role="menu">
+                            <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                                <i class="fas fa-cog"></i> Админ-панель
+                            </a>
+                            <a href="settings.html">
+                                <i class="fas fa-user-cog"></i> Настройки
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button type="button" class="dropdown-danger" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </button>
+                        </div>
+                    </div>
+                </header>
 
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Stats Grid -->
-            <div class="dashboard-grid">
-                <!-- Statistics Card — новый визуал -->
-                <div class="card stats-card stats-card--modern">
-                    <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
-                    <div class="stats-grid stats-grid--modern">
-                        <div class="stat-item-modern">
-                            <div class="stat-number" id="totalTeachers">0</div>
-                            <div class="stat-label">Учителей</div>
-                        </div>
-                        <div class="stat-item-modern">
-                            <div class="stat-number" id="totalCourses">0</div>
-                            <div class="stat-label">Курсов</div>
-                        </div>
-                        <div class="stat-item-modern">
-                            <div class="stat-number" id="totalDiagnostics">0</div>
-                            <div class="stat-label">Диагностик</div>
-                        </div>
-                        <div class="stat-item-modern">
-                            <div class="stat-number" id="totalOlympiads">0</div>
-                            <div class="stat-label">Олимпиад</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
+                        <!-- Stats Grid -->
+                        <div class="dashboard-grid">
+                            <!-- Statistics Card — новый визуал -->
+                            <div class="card stats-card stats-card--modern">
+                                <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
+                                <div class="stats-grid stats-grid--modern">
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalTeachers">0</div>
+                                        <div class="stat-label">Учителей</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalCourses">0</div>
+                                        <div class="stat-label">Курсов</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalDiagnostics">0</div>
+                                        <div class="stat-label">Диагностик</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalOlympiads">0</div>
+                                        <div class="stat-label">Олимпиад</div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
                     <h3><i class="fas fa-cloud-upload-alt"></i> Загрузка данных</h3>
 
                     <!-- Выбор учебного года -->
@@ -155,46 +155,46 @@
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="card charts-section-card">
-                <div class="section-head">
-                    <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
-                    <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
-                </div>
-                <div class="charts-grid charts-grid--modern">
-
-                    <div class="chart-card">
-                        <h4>ОГЭ по предметам</h4>
-                        <canvas id="ogeChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h4>ЕГЭ по предметам</h4>
-                        <canvas id="egeChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h4>ВсОШ по предметам</h4>
-                        <canvas id="vsohChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h4>МОШ по предметам</h4>
-                        <canvas id="moshChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h4>МЦКО по классам</h4>
-                        <canvas id="mckoClassChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h4>МЦКО учителя</h4>
-                        <canvas id="mckoTeacherChart"></canvas>
-                    </div>
-
-                </div>
-            </div>
+                        <!-- Charts Section -->
+                        <div class="card charts-section-card">
+                            <div class="section-head">
+                                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
+                                <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
+                            </div>
+                            <div class="charts-grid charts-grid--modern">
+                        
+                                <div class="chart-card">
+                                    <h4>ОГЭ по предметам</h4>
+                                    <canvas id="ogeChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>ЕГЭ по предметам</h4>
+                                    <canvas id="egeChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>ВсОШ по предметам</h4>
+                                    <canvas id="vsohChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МОШ по предметам</h4>
+                                    <canvas id="moshChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МЦКО по классам</h4>
+                                    <canvas id="mckoClassChart"></canvas>
+                                </div>
+                        
+                                <div class="chart-card">
+                                    <h4>МЦКО учителя</h4>
+                                    <canvas id="mckoTeacherChart"></canvas>
+                                </div>
+                        
+                            </div>
+                        </div>
 
             <!-- Teachers Section -->
             <div class="card teachers-section" id="teachersSection">
@@ -209,39 +209,35 @@
                 <div class="teacher-profile-panel" id="profileModal">
                     <div class="panel-top">
                         <div class="panel-top-left">
-                            <button type="button" class="btn-back" onclick="closeModal()">
-                                <i class="fas fa-arrow-left"></i> К списку
+                            <button type="button" class="btn-back" onclick="closeModal()" title="Вернуться к списку">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>К списку</span>
                             </button>
                             <div class="profile-avatar"><span id="modalAvatar">—</span></div>
                             <div class="profile-info">
-                                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                                    <h2 id="modalName" style="margin:0;font-size:1.25rem;"></h2>
-                                    <button class="btn btn-sm btn-warning admin-only" onclick="openEditTeacherModal()"
-                                        id="btnEditTeacherName" style="display:none;">
-                                        <i class="fas fa-edit"></i> Редактировать
-                                    </button>
-                                </div>
-                                <span class="subject-badge" id="modalSubject"></span>
+                                <h2 id="modalName" class="profile-name">—</h2>
+                                <div id="modalSubject" class="profile-subjects">—</div>
                             </div>
                         </div>
                         <div class="panel-actions">
-                            <button class="btn btn-pdf btn-sm" onclick="downloadTeacherPDF()" id="btnPdf">
-                                <i class="fas fa-file-pdf"></i> PDF
+                            <button type="button" class="btn-icon-action btn-pdf" onclick="downloadTeacherPDF()" id="btnPdf" title="Скачать PDF">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>PDF</span>
                             </button>
-                            <button type="button" class="btn-close" onclick="closeModal()"
-                                title="Закрыть">&times;</button>
+                            <button type="button" class="btn-icon-action btn-edit admin-only" onclick="openEditTeacherModal()"
+                                id="btnEditTeacherName" style="display:none;" title="Редактировать">
+                                <i class="fas fa-pen"></i>
+                            </button>
                         </div>
                     </div>
-
+                
                     <div class="panel-body">
                         <div class="profile-summary" id="profileSummary">
-                            <button type="button" class="summary-chip" data-tab="courses"
-                                onclick="switchTab('courses')">
+                            <button type="button" class="summary-chip" data-tab="courses" onclick="switchTab('courses')">
                                 <span class="summary-chip-label">Курсы</span>
                                 <span class="summary-chip-val" id="statCourses">0</span>
                             </button>
-                            <button type="button" class="summary-chip" data-tab="diagnostics"
-                                onclick="switchTab('diagnostics')">
+                            <button type="button" class="summary-chip" data-tab="diagnostics" onclick="switchTab('diagnostics')">
                                 <span class="summary-chip-label">Диагностики</span>
                                 <span class="summary-chip-val" id="statDiagnostics">0</span>
                             </button>
@@ -249,8 +245,7 @@
                                 <span class="summary-chip-label">ОГЭ/ЕГЭ</span>
                                 <span class="summary-chip-val" id="statExams">0</span>
                             </button>
-                            <button type="button" class="summary-chip" data-tab="olympiads"
-                                onclick="switchTab('olympiads')">
+                            <button type="button" class="summary-chip" data-tab="olympiads" onclick="switchTab('olympiads')">
                                 <span class="summary-chip-label">Олимпиады</span>
                                 <span class="summary-chip-val" id="statOlympiads">0</span>
                             </button>
@@ -258,8 +253,7 @@
                                 <span class="summary-chip-label">Иное</span>
                                 <span class="summary-chip-val" id="statOther">0</span>
                             </button>
-                            <button type="button" class="summary-chip" data-tab="orientir"
-                                onclick="switchTab('orientir')">
+                            <button type="button" class="summary-chip" data-tab="orientir" onclick="switchTab('orientir')">
                                 <span class="summary-chip-label">Ориентиры</span>
                                 <span class="summary-chip-val" id="statOrientir">0</span>
                             </button>
@@ -268,29 +262,21 @@
                                 <span class="summary-chip-val" id="statIpr">0</span>
                             </button>
                         </div>
-
+                
                         <div class="tabs" id="mainTabs">
-                            <button class="tab-btn active" onclick="switchTab('courses')"><i
-                                    class="fas fa-graduation-cap"></i>
+                            <button class="tab-btn active" onclick="switchTab('courses')"><i class="fas fa-graduation-cap"></i>
                                 Курсы</button>
-                            <button class="tab-btn" onclick="switchTab('diagnostics')"><i
-                                    class="fas fa-stethoscope"></i>
+                            <button class="tab-btn" onclick="switchTab('diagnostics')"><i class="fas fa-stethoscope"></i>
                                 Диагностики</button>
-                            <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i>
-                                Экзамены</button>
-                            <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i>
-                                Олимпиады</button>
-                            <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i>
-                                Иное</button>
-                            <button class="tab-btn" onclick="switchTab('orientir')"><i
-                                    class="fas fa-clipboard-check"></i> Ориентиры</button>
-                            <button class="tab-btn" onclick="switchTab('ipr')"><i class="fas fa-file-alt"></i>
-                                ИПР</button>
+                            <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i> Экзамены</button>
+                            <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i> Олимпиады</button>
+                            <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i> Иное</button>
+                            <button class="tab-btn" onclick="switchTab('orientir')"><i class="fas fa-clipboard-check"></i> Ориентиры</button>
+                            <button class="tab-btn" onclick="switchTab('ipr')"><i class="fas fa-file-alt"></i> ИПР</button>
                         </div>
-
+                
                         <div class="sub-tabs" id="diagnosticsSubTabs" style="display:none;">
-                            <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">МЦКО по
-                                классам</button>
+                            <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">МЦКО по классам</button>
                             <button class="sub-tab-btn" onclick="switchSubTab('mcko_teacher')">МЦКО учителя</button>
                         </div>
                         <div class="sub-tabs" id="olympiadsSubTabs" style="display:none;">
@@ -301,7 +287,7 @@
                             <button class="sub-tab-btn active" onclick="switchSubTab('oge')">ОГЭ</button>
                             <button class="sub-tab-btn" onclick="switchSubTab('ege')">ЕГЭ</button>
                         </div>
-
+                
                         <div class="tab-content" id="tabContent"></div>
                         <div id="tab-orientir" class="tab-content" style="display:none;">
                             <div class="table-responsive">
@@ -320,7 +306,7 @@
                                 </table>
                             </div>
                         </div>
-
+                        
                         <div id="tab-ipr" class="tab-content" style="display:none;">
                             <div class="table-responsive">
                                 <table class="table">
@@ -340,20 +326,10 @@
                     </div>
                 </div>
                 <div class="filters-bar">
-                    <div class="search-box" style="position: relative;">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Поиск по ФИО или предмету...">
-                        <button class="btn-clear-search" onclick="clearFilters()" style="
-            position: absolute; 
-            right: 10px; 
-            top: 50%; 
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            display: none;
-        " id="clearSearchBtn">
+                    <div class="search-box">
+                        <i class="fas fa-search search-box-icon"></i>
+                        <input type="text" id="searchInput" placeholder="ФИО, предмет или ID...">
+                        <button type="button" class="btn-clear-search" onclick="clearFilters()" id="clearSearchBtn" title="Очистить" style="display:none;">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
@@ -381,14 +357,11 @@
                     <table class="teachers-table">
                         <thead>
                             <tr>
-                                <th width="40">ID</th>
-                                <th width="40">Аватар</th>
+                                <th class="col-id">ID</th>
                                 <th>Учитель</th>
                                 <th>Предметы</th>
-                                <th width="80">Курсы</th>
-                                <th width="100">Диагностики</th>
-                                <th width="100">Олимпиады</th>
-                                <th width="130">Действия</th>
+                                <th class="col-summary">Сводка</th>
+                                <th class="col-actions">Действия</th>
                             </tr>
                         </thead>
                         <tbody id="teachersTableBody"></tbody>
@@ -562,16 +535,16 @@
     </div>
 
     <script>
-
+        
         function miniBar(value, maxRef) {
-            const v = Number(value) || 0;
-            const max = Math.max(maxRef || 10, 1);
-            const pct = Math.min(100, Math.round((v / max) * 100));
-            return `<div class="mini-bar-wrap">
+                const v = Number(value) || 0;
+                const max = Math.max(maxRef || 10, 1);
+                const pct = Math.min(100, Math.round((v / max) * 100));
+                return `<div class="mini-bar-wrap">
     <span class="n">${v}</span>
     <div class="mini-bar"><span style="width:${pct}%"></span></div>
   </div>`;
-        }
+            }
         // ==========================================
         // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
         // ==========================================
@@ -1109,18 +1082,18 @@
         }
 
         function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
 
-        let teachersState = {
-            page: 1,
-            limit: 20,
-            totalPages: 1,
-            total: 0
-        };
+            let teachersState = {
+                page: 1,
+                limit: 20,
+                totalPages: 1,
+                total: 0
+            };
 
         function renderTeachers(teachers, searchQuery = '') {
             const tbody = document.getElementById('teachersTableBody');
@@ -1129,54 +1102,71 @@
             if (!teachers || teachers.length === 0) {
                 tbody.innerHTML = `
             <tr>
-                <td colspan="8" style="text-align:center; padding: 40px; color: #666;">
-                    <i class="fas fa-search" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
-                    <div>Учителя не найдены</div>
-                    <div style="font-size: 14px; color: #999; margin-top: 5px;">
-                        Попробуйте изменить параметры поиска
+                <td colspan="5" class="table-empty">
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                        <div class="empty-state-title">Учителя не найдены</div>
+                        <div class="empty-state-hint">Измените запрос или сбросьте фильтры</div>
                     </div>
                 </td>
-            </tr>
-        `;
+            </tr>`;
                 return;
             }
 
             tbody.innerHTML = teachers.map(t => {
                 const initials = (t.full_name || '').substring(0, 2).toUpperCase();
-                const highlightedName = searchQuery ? highlightText(escapeHtml(t.full_name) || '', searchQuery) : (escapeHtml(t.full_name) || '');
-                const subjectsStr = Array.isArray(t.subjects) ? t.subjects.join(', ') : (t.subjects || '');
+                const nameRaw = t.full_name || '';
+                const highlightedName = searchQuery && !/^\d+$/.test(searchQuery.trim())
+                    ? highlightText(escapeHtml(nameRaw), searchQuery)
+                    : escapeHtml(nameRaw);
+                const subjectsStr = Array.isArray(t.subjects) ? t.subjects.join(', ') : (t.subjects || '—');
+                const c = Number(t.courses_count || 0);
+                const d = Number(t.diagnostics_count || 0);
+                const o = Number(t.olympiads_count || 0);
+                const idHl = searchQuery && /^\d+$/.test(searchQuery.trim()) && String(t.id) === searchQuery.trim()
+                    ? `<mark class="search-mark">${t.id}</mark>`
+                    : t.id;
+
+                const adminBtns = user.role === 'admin' ? `
+                    <button type="button" class="tbl-act tbl-act-edit" onclick="openEditTeacher(${t.id})" title="Редактировать">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button type="button" class="tbl-act tbl-act-danger" onclick="confirmDeleteTeacher(${t.id}, '${escapeHtml(nameRaw).replace(/'/g, "\\'")}')" title="Удалить">
+                        <i class="fas fa-trash"></i>
+                    </button>` : '';
 
                 return `
             <tr>
-                <td>${t.id}</td>
-                <td><div class="avatar">${initials}</div></td>
+                <td class="col-id">${idHl}</td>
                 <td>
-                    <a href="#" onclick="openProfile(${t.id}); return false;" 
-                       style="font-weight: 500; text-decoration: none; color: #667eea;">
-                        ${highlightedName}
-                    </a>
+                    <div class="teacher-cell">
+                        <div class="avatar">${initials}</div>
+                        <a href="#" class="teacher-name-link" onclick="openProfile(${t.id}); return false;">${highlightedName}</a>
+                    </div>
                 </td>
-                <td>${escapeHtml(subjectsStr)}</td>
-                <td>${miniBar(t.courses_count || 0, 10)}</td>
-                <td>${miniBar(t.diagnostics_count || 0, 15)}</td>
-                <td>${miniBar(t.olympiads_count || 0, 20)}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="openProfile(${t.id})" title="Просмотр">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    ${user.role === 'admin' ?
-                        `<button class="btn btn-sm btn-warning" onclick="openEditTeacher(${t.id})" title="Редактировать" style="margin-left: 5px;">
-                            <i class="fas fa-edit"></i>
-                        </button>` : ''}
+                <td class="col-subjects">${escapeHtml(subjectsStr)}</td>
+                <td class="col-summary">
+                    <div class="summary-inline" title="Курсы / Диагностики / Олимпиады">
+                        <span class="sum-pill"><b>К</b> ${c}</span>
+                        <span class="sum-pill"><b>Д</b> ${d}</span>
+                        <span class="sum-pill"><b>Ол</b> ${o}</span>
+                    </div>
                 </td>
-            </tr>
-        `;
+                <td class="col-actions">
+                    <div class="tbl-actions">
+                        <button type="button" class="tbl-act tbl-act-view" onclick="openProfile(${t.id})" title="Открыть карточку">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button type="button" class="tbl-act tbl-act-pdf" onclick="downloadTeacherPDFById(${t.id}, '${escapeHtml(nameRaw).replace(/'/g, "\\'")}')" title="PDF">
+                            <i class="fas fa-file-pdf"></i>
+                        </button>
+                        ${adminBtns}
+                    </div>
+                </td>
+            </tr>`;
             }).join('');
         }
 
-        // ==========================================
-        // ПАГИНАЦИЯ
-        // ==========================================
         function updateTeachersPagination(pagination) {
             const container = document.getElementById('teachersPagination');
             const info = document.getElementById('teachersPaginationInfo');
@@ -1300,11 +1290,11 @@
         }
 
         function closeModal() {
-            document.getElementById('profileModal').classList.remove('is-open');
-            document.getElementById('teachersSection')?.classList.remove('profile-open');
-            currentTeacherId = null;
-            hideAllSubTabs();
-        }
+                document.getElementById('profileModal').classList.remove('is-open');
+                document.getElementById('teachersSection')?.classList.remove('profile-open');
+                currentTeacherId = null;
+                hideAllSubTabs();
+            }
 
         function hideAllSubTabs() {
             document.getElementById('diagnosticsSubTabs').style.display = 'none';
@@ -1314,23 +1304,23 @@
         }
 
         function switchTab(tabName) {
-            if (!currentTeacherData) return;
-            document.getElementById('tabContent').innerHTML = '';
-            document.getElementById('tabContent').style.display = 'block';
-            document.getElementById('tab-orientir').style.display = 'none';
-            document.getElementById('tab-ipr').style.display = 'none';
-            currentMainTab = tabName;
-            currentSubTab = null;
+                if (!currentTeacherData) return;
+                document.getElementById('tabContent').innerHTML = '';
+                document.getElementById('tabContent').style.display = 'block';
+                document.getElementById('tab-orientir').style.display = 'none';
+                document.getElementById('tab-ipr').style.display = 'none';
+                currentMainTab = tabName;
+                currentSubTab = null;
 
-            // Активная вкладка + чип сводки
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const tabOrder = ['courses', 'diagnostics', 'exams', 'olympiads', 'other', 'orientir', 'ipr'];
-            const idx = tabOrder.indexOf(tabName);
-            const tabBtns = document.querySelectorAll('#mainTabs .tab-btn');
-            if (idx >= 0 && tabBtns[idx]) tabBtns[idx].classList.add('active');
-            document.querySelectorAll('.summary-chip').forEach(ch => {
-                ch.classList.toggle('is-active', ch.getAttribute('data-tab') === tabName);
-            });
+                // Активная вкладка + чип сводки
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                const tabOrder = ['courses', 'diagnostics', 'exams', 'olympiads', 'other', 'orientir', 'ipr'];
+                const idx = tabOrder.indexOf(tabName);
+                const tabBtns = document.querySelectorAll('#mainTabs .tab-btn');
+                if (idx >= 0 && tabBtns[idx]) tabBtns[idx].classList.add('active');
+                document.querySelectorAll('.summary-chip').forEach(ch => {
+                    ch.classList.toggle('is-active', ch.getAttribute('data-tab') === tabName);
+                });
 
             // Показываем/скрываем подтабы
             hideAllSubTabs();
@@ -1383,16 +1373,16 @@
                     fillIprTab();
                     break;
             }
-
+            
         }
         function fillOrientirTab() {
-            const tbody = document.getElementById('orientirTableBody');
-            const rows = currentTeacherData.orientir || [];
-            if (!rows.length) {
-                tbody.innerHTML = '<tr><td colspan="6">' + emptyStateHtml('Нет ориентиров урока', 'Создайте запись в разделе «Ориентир урока»') + '</td></tr>';
-                return;
-            }
-            tbody.innerHTML = rows.map(r => `
+                const tbody = document.getElementById('orientirTableBody');
+                const rows = currentTeacherData.orientir || [];
+                if (!rows.length) {
+                    tbody.innerHTML = '<tr><td colspan="6">' + emptyStateHtml('Нет ориентиров урока', 'Создайте запись в разделе «Ориентир урока»') + '</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(r => `
         <tr>
             <td>${r.visit_date ? String(r.visit_date).slice(0, 10) : '—'}</td>
             <td>${r.predmet || '—'}</td>
@@ -1402,16 +1392,16 @@
             <td><a class="btn btn-sm btn-secondary" href="orientir-view.html?id=${r.id}" target="_blank">Открыть</a></td>
         </tr>
     `).join('');
-        }
-
-        function fillIprTab() {
-            const tbody = document.getElementById('iprTableBody');
-            const rows = currentTeacherData.ipr || [];
-            if (!rows.length) {
-                tbody.innerHTML = '<tr><td colspan="5">' + emptyStateHtml('Нет планов ИПР', 'Создайте запись в разделе «ИПР»') + '</td></tr>';
-                return;
             }
-            tbody.innerHTML = rows.map(r => `
+
+            function fillIprTab() {
+                const tbody = document.getElementById('iprTableBody');
+                const rows = currentTeacherData.ipr || [];
+                if (!rows.length) {
+                    tbody.innerHTML = '<tr><td colspan="5">' + emptyStateHtml('Нет планов ИПР', 'Создайте запись в разделе «ИПР»') + '</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(r => `
         <tr>
             <td>${r.period || '—'}</td>
             <td>${r.subject || '—'}</td>
@@ -1420,7 +1410,7 @@
             <td><a class="btn btn-sm btn-secondary" href="ipr.html?edit=${r.id}" target="_blank">Открыть</a></td>
         </tr>
     `).join('');
-        }
+            }
         function switchSubTab(subTabName) {
             currentSubTab = subTabName;
 
@@ -1799,7 +1789,7 @@
 
             tbody.innerHTML = `
         <tr>
-            <td colspan="8" style="text-align:center; padding: 40px;">
+            <td colspan="5" style="text-align:center; padding: 40px;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #667eea;"></i>
                 <div style="margin-top: 10px; color: #666;">Загрузка...</div>
             </td>
@@ -1826,7 +1816,7 @@
                 console.error('Ошибка загрузки:', err);
                 tbody.innerHTML = `
             <tr>
-                <td colspan="8" style="text-align:center; padding: 20px; color: #e53e3e;">
+                <td colspan="5" style="text-align:center; padding: 20px; color: #e53e3e;">
                     <i class="fas fa-exclamation-circle"></i> Ошибка загрузки списка
                 </td>
             </tr>
@@ -2396,6 +2386,34 @@
 
                 return `<option value="${year}" ${year === currentAcademicYear ? 'selected' : ''}>${label}</option>`;
             }).join('');
+        }
+
+
+        async function confirmDeleteTeacher(id, name) {
+            if (user.role !== 'admin') return;
+            if (!confirm('Удалить учителя «' + name + '» (ID ' + id + ')?\nВсе связанные данные будут удалены.')) return;
+            try {
+                await api('/api/teachers/' + id, { method: 'DELETE' });
+                showToast('Учитель удалён', 'success');
+                if (currentTeacherId === id) closeModal();
+                loadTeachers(teachersState.page || 1);
+                loadStats();
+            } catch (err) {
+                showToast('Ошибка удаления: ' + err.message, 'error');
+            }
+        }
+
+        async function downloadTeacherPDFById(id, name) {
+            const prev = currentTeacherId;
+            const prevData = currentTeacherData;
+            currentTeacherId = id;
+            currentTeacherData = { full_name: name || ('teacher_' + id) };
+            try {
+                await downloadTeacherPDF();
+            } finally {
+                currentTeacherId = prev;
+                currentTeacherData = prevData;
+            }
         }
 
         // Генерация PDF

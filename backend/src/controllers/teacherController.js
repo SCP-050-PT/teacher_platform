@@ -105,8 +105,22 @@ const getAll = async (req, res) => {
         let paramIndex = 1;
 
         if (search) {
-            whereClause += ` AND LOWER(t.full_name) LIKE $${paramIndex}`;
-            params.push(`%${String(search).toLowerCase().trim()}%`);
+            const q = String(search).trim();
+            if (/^\d+$/.test(q)) {
+                whereClause += ` AND t.id = $${paramIndex}`;
+                params.push(parseInt(q, 10));
+            } else {
+                // ФИО или предмет
+                whereClause += ` AND (
+                    LOWER(t.full_name) LIKE $${paramIndex}
+                    OR EXISTS (
+                        SELECT 1 FROM teacher_subjects tsx
+                        JOIN subjects sx ON sx.id = tsx.subject_id
+                        WHERE tsx.teacher_id = t.id AND LOWER(sx.name) LIKE $${paramIndex}
+                    )
+                )`;
+                params.push('%' + q.toLowerCase() + '%');
+            }
             paramIndex++;
         }
 
