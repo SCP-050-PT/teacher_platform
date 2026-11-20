@@ -18,86 +18,86 @@
 <body>
     <div class="app-container">
         <!-- Header -->
-                <header class="main-header header-modern">
-                    <a href="index.html" class="logo">
-                        <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
-                        <div class="logo-text-block">
-                            <span class="school-name">Школа №777</span>
-                            <span class="platform-name">Профиль педагога</span>
-                        </div>
+        <header class="main-header header-modern">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                <div class="logo-text-block">
+                    <span class="school-name">Школа №777</span>
+                    <span class="platform-name">Профиль педагога</span>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link" data-nav="index">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link" data-nav="ipr">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
+            </nav>
+
+            <div class="user-menu" id="userMenu">
+                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-meta">
+                        <span class="user-name" id="userName">Пользователь</span>
+                        <span class="user-role" id="userRole">—</span>
+                    </span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </button>
+                <div class="user-dropdown" id="userDropdown" role="menu">
+                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                        <i class="fas fa-cog"></i> Админ-панель
                     </a>
-                
-                    <nav class="main-nav">
-                        <a href="index.html" class="nav-link" data-nav="index">
-                            <i class="fas fa-home"></i> Главная
-                        </a>
-                        <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
-                            <i class="fas fa-clipboard-check"></i> Ориентир урока
-                        </a>
-                        <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
-                            <i class="fas fa-list"></i> Список ОУ
-                        </a>
-                        <a href="ipr.html" class="nav-link" data-nav="ipr">
-                            <i class="fas fa-file-alt"></i> ИПР
-                        </a>
-                        <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
-                            <i class="fas fa-list"></i> Список ИПР
-                        </a>
-                    </nav>
-                
-                    <div class="user-menu" id="userMenu">
-                        <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
-                            <span class="user-avatar" id="userAvatar">A</span>
-                            <span class="user-meta">
-                                <span class="user-name" id="userName">Пользователь</span>
-                                <span class="user-role" id="userRole">—</span>
-                            </span>
-                            <i class="fas fa-chevron-down chevron"></i>
-                        </button>
-                        <div class="user-dropdown" id="userDropdown" role="menu">
-                            <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
-                                <i class="fas fa-cog"></i> Админ-панель
-                            </a>
-                            <a href="settings.html">
-                                <i class="fas fa-user-cog"></i> Настройки
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <button type="button" class="dropdown-danger" onclick="logout()">
-                                <i class="fas fa-sign-out-alt"></i> Выйти
-                            </button>
-                        </div>
-                    </div>
-                </header>
+                    <a href="settings.html">
+                        <i class="fas fa-user-cog"></i> Настройки
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+        </header>
 
 
         <!-- Main Content -->
         <main class="main-content">
-                        <!-- Stats Grid -->
-                        <div class="dashboard-grid">
-                            <!-- Statistics Card — новый визуал -->
-                            <div class="card stats-card stats-card--modern">
-                                <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
-                                <div class="stats-grid stats-grid--modern">
-                                    <div class="stat-item-modern">
-                                        <div class="stat-number" id="totalTeachers">0</div>
-                                        <div class="stat-label">Учителей</div>
-                                    </div>
-                                    <div class="stat-item-modern">
-                                        <div class="stat-number" id="totalCourses">0</div>
-                                        <div class="stat-label">Курсов</div>
-                                    </div>
-                                    <div class="stat-item-modern">
-                                        <div class="stat-number" id="totalDiagnostics">0</div>
-                                        <div class="stat-label">Диагностик</div>
-                                    </div>
-                                    <div class="stat-item-modern">
-                                        <div class="stat-number" id="totalOlympiads">0</div>
-                                        <div class="stat-label">Олимпиад</div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <!-- Statistics Card — новый визуал -->
+                <div class="card stats-card stats-card--modern">
+                    <h3><i class="fas fa-chart-bar"></i> Статистика платформы</h3>
+                    <div class="stats-grid stats-grid--modern">
+                        <div class="stat-item-modern">
+                            <div class="stat-number" id="totalTeachers">0</div>
+                            <div class="stat-label">Учителей</div>
+                        </div>
+                        <div class="stat-item-modern">
+                            <div class="stat-number" id="totalCourses">0</div>
+                            <div class="stat-label">Курсов</div>
+                        </div>
+                        <div class="stat-item-modern">
+                            <div class="stat-number" id="totalDiagnostics">0</div>
+                            <div class="stat-label">Диагностик</div>
+                        </div>
+                        <div class="stat-item-modern">
+                            <div class="stat-number" id="totalOlympiads">0</div>
+                            <div class="stat-label">Олимпиад</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
                     <h3><i class="fas fa-cloud-upload-alt"></i> Загрузка данных</h3>
 
                     <!-- Выбор учебного года -->
@@ -155,46 +155,46 @@
                 </div>
             </div>
 
-                        <!-- Charts Section -->
-                        <div class="card charts-section-card">
-                            <div class="section-head">
-                                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
-                                <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
-                            </div>
-                            <div class="charts-grid charts-grid--modern">
-                        
-                                <div class="chart-card">
-                                    <h4>ОГЭ по предметам</h4>
-                                    <canvas id="ogeChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>ЕГЭ по предметам</h4>
-                                    <canvas id="egeChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>ВсОШ по предметам</h4>
-                                    <canvas id="vsohChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МОШ по предметам</h4>
-                                    <canvas id="moshChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МЦКО по классам</h4>
-                                    <canvas id="mckoClassChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МЦКО учителя</h4>
-                                    <canvas id="mckoTeacherChart"></canvas>
-                                </div>
-                        
-                            </div>
-                        </div>
+            <!-- Charts Section -->
+            <div class="card charts-section-card">
+                <div class="section-head">
+                    <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
+                    <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
+                </div>
+                <div class="charts-grid charts-grid--modern">
+
+                    <div class="chart-card">
+                        <h4>ОГЭ по предметам</h4>
+                        <canvas id="ogeChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>ЕГЭ по предметам</h4>
+                        <canvas id="egeChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>ВсОШ по предметам</h4>
+                        <canvas id="vsohChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>МОШ по предметам</h4>
+                        <canvas id="moshChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>МЦКО по классам</h4>
+                        <canvas id="mckoClassChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>МЦКО учителя</h4>
+                        <canvas id="mckoTeacherChart"></canvas>
+                    </div>
+
+                </div>
+            </div>
 
             <!-- Teachers Section -->
             <div class="card teachers-section" id="teachersSection">
@@ -228,40 +228,69 @@
                             <button class="btn btn-pdf btn-sm" onclick="downloadTeacherPDF()" id="btnPdf">
                                 <i class="fas fa-file-pdf"></i> PDF
                             </button>
-                            <button type="button" class="btn-close" onclick="closeModal()" title="Закрыть">&times;</button>
+                            <button type="button" class="btn-close" onclick="closeModal()"
+                                title="Закрыть">&times;</button>
                         </div>
                     </div>
-                
+
                     <div class="panel-body">
-                        <div class="profile-stats">
-                            <div class="stat-card">
-                                <div class="stat-value" id="statCourses">0</div>
-                                <div class="stat-label">Курсов повышения квалификации</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="statDiagnostics">0</div>
-                                <div class="stat-label">Диагностик МЦКО</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="statOlympiads">0</div>
-                                <div class="stat-label">Результатов олимпиад</div>
-                            </div>
+                        <div class="profile-summary" id="profileSummary">
+                            <button type="button" class="summary-chip" data-tab="courses"
+                                onclick="switchTab('courses')">
+                                <span class="summary-chip-label">Курсы</span>
+                                <span class="summary-chip-val" id="statCourses">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="diagnostics"
+                                onclick="switchTab('diagnostics')">
+                                <span class="summary-chip-label">Диагностики</span>
+                                <span class="summary-chip-val" id="statDiagnostics">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="exams" onclick="switchTab('exams')">
+                                <span class="summary-chip-label">ОГЭ/ЕГЭ</span>
+                                <span class="summary-chip-val" id="statExams">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="olympiads"
+                                onclick="switchTab('olympiads')">
+                                <span class="summary-chip-label">Олимпиады</span>
+                                <span class="summary-chip-val" id="statOlympiads">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="other" onclick="switchTab('other')">
+                                <span class="summary-chip-label">Иное</span>
+                                <span class="summary-chip-val" id="statOther">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="orientir"
+                                onclick="switchTab('orientir')">
+                                <span class="summary-chip-label">Ориентиры</span>
+                                <span class="summary-chip-val" id="statOrientir">0</span>
+                            </button>
+                            <button type="button" class="summary-chip" data-tab="ipr" onclick="switchTab('ipr')">
+                                <span class="summary-chip-label">ИПР</span>
+                                <span class="summary-chip-val" id="statIpr">0</span>
+                            </button>
                         </div>
-                
+
                         <div class="tabs" id="mainTabs">
-                            <button class="tab-btn active" onclick="switchTab('courses')"><i class="fas fa-graduation-cap"></i>
+                            <button class="tab-btn active" onclick="switchTab('courses')"><i
+                                    class="fas fa-graduation-cap"></i>
                                 Курсы</button>
-                            <button class="tab-btn" onclick="switchTab('diagnostics')"><i class="fas fa-stethoscope"></i>
+                            <button class="tab-btn" onclick="switchTab('diagnostics')"><i
+                                    class="fas fa-stethoscope"></i>
                                 Диагностики</button>
-                            <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i> Экзамены</button>
-                            <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i> Олимпиады</button>
-                            <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i> Иное</button>
-                            <button class="tab-btn" onclick="switchTab('orientir')"><i class="fas fa-clipboard-check"></i> Ориентиры</button>
-                            <button class="tab-btn" onclick="switchTab('ipr')"><i class="fas fa-file-alt"></i> ИПР</button>
+                            <button class="tab-btn" onclick="switchTab('exams')"><i class="fas fa-chart-line"></i>
+                                Экзамены</button>
+                            <button class="tab-btn" onclick="switchTab('olympiads')"><i class="fas fa-trophy"></i>
+                                Олимпиады</button>
+                            <button class="tab-btn" onclick="switchTab('other')"><i class="fas fa-folder"></i>
+                                Иное</button>
+                            <button class="tab-btn" onclick="switchTab('orientir')"><i
+                                    class="fas fa-clipboard-check"></i> Ориентиры</button>
+                            <button class="tab-btn" onclick="switchTab('ipr')"><i class="fas fa-file-alt"></i>
+                                ИПР</button>
                         </div>
-                
+
                         <div class="sub-tabs" id="diagnosticsSubTabs" style="display:none;">
-                            <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">МЦКО по классам</button>
+                            <button class="sub-tab-btn active" onclick="switchSubTab('mcko_class')">МЦКО по
+                                классам</button>
                             <button class="sub-tab-btn" onclick="switchSubTab('mcko_teacher')">МЦКО учителя</button>
                         </div>
                         <div class="sub-tabs" id="olympiadsSubTabs" style="display:none;">
@@ -272,7 +301,7 @@
                             <button class="sub-tab-btn active" onclick="switchSubTab('oge')">ОГЭ</button>
                             <button class="sub-tab-btn" onclick="switchSubTab('ege')">ЕГЭ</button>
                         </div>
-                
+
                         <div class="tab-content" id="tabContent"></div>
                         <div id="tab-orientir" class="tab-content" style="display:none;">
                             <div class="table-responsive">
@@ -291,7 +320,7 @@
                                 </table>
                             </div>
                         </div>
-                        
+
                         <div id="tab-ipr" class="tab-content" style="display:none;">
                             <div class="table-responsive">
                                 <table class="table">
@@ -533,16 +562,16 @@
     </div>
 
     <script>
-        
+
         function miniBar(value, maxRef) {
-                const v = Number(value) || 0;
-                const max = Math.max(maxRef || 10, 1);
-                const pct = Math.min(100, Math.round((v / max) * 100));
-                return `<div class="mini-bar-wrap">
+            const v = Number(value) || 0;
+            const max = Math.max(maxRef || 10, 1);
+            const pct = Math.min(100, Math.round((v / max) * 100));
+            return `<div class="mini-bar-wrap">
     <span class="n">${v}</span>
     <div class="mini-bar"><span style="width:${pct}%"></span></div>
   </div>`;
-            }
+        }
         // ==========================================
         // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
         // ==========================================
@@ -803,11 +832,7 @@
             }
 
             // Обновляем статистику
-            const mckoClassCount = currentTeacherData.diagnostics?.length || 0;
-            const mckoTeacherCount = currentTeacherData.mcko_teacher_diagnostics?.length || 0;
-            document.getElementById('statCourses').textContent = currentTeacherData.courses?.length || 0;
-            document.getElementById('statDiagnostics').textContent = mckoClassCount + mckoTeacherCount;
-            document.getElementById('statOlympiads').textContent = currentTeacherData.olympiads?.length || 0;
+            updateProfileSummary(currentTeacherData);
         }
 
         // ==========================================
@@ -1084,18 +1109,18 @@
         }
 
         function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
-            let teachersState = {
-                page: 1,
-                limit: 20,
-                totalPages: 1,
-                total: 0
-            };
+        let teachersState = {
+            page: 1,
+            limit: 20,
+            totalPages: 1,
+            total: 0
+        };
 
         function renderTeachers(teachers, searchQuery = '') {
             const tbody = document.getElementById('teachersTableBody');
@@ -1208,6 +1233,33 @@
             controls.innerHTML = html;
         }
 
+
+        function emptyStateHtml(title, hint) {
+            return `<div class="empty-state">
+                <div class="empty-state-icon"><i class="fas fa-inbox"></i></div>
+                <div class="empty-state-title">${title}</div>
+                <div class="empty-state-hint">${hint || ''}</div>
+            </div>`;
+        }
+
+        function updateProfileSummary(teacher) {
+            if (!teacher) return;
+            const mcko = (teacher.diagnostics?.length || 0) + (teacher.mcko_teacher_diagnostics?.length || 0);
+            const exams = (teacher.exam_results_oge?.length || 0) + (teacher.exam_results_ege?.length || 0);
+            const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+            set('statCourses', teacher.courses?.length || 0);
+            set('statDiagnostics', mcko);
+            set('statExams', exams);
+            set('statOlympiads', teacher.olympiads?.length || 0);
+            set('statOther', teacher.other_documents?.length || 0);
+            set('statOrientir', teacher.orientir?.length || 0);
+            set('statIpr', teacher.ipr?.length || 0);
+            const active = typeof currentMainTab !== 'undefined' ? currentMainTab : 'courses';
+            document.querySelectorAll('.summary-chip').forEach(ch => {
+                ch.classList.toggle('is-active', ch.getAttribute('data-tab') === active);
+            });
+        }
+
         async function openProfile(id) {
             currentTeacherId = id;
             try {
@@ -1225,12 +1277,8 @@
                     btnEdit.style.display = user.role === 'admin' ? 'inline-block' : 'none';
                 }
 
-                // Обновляем статистику
-                const mckoClassCount = teacher.diagnostics?.length || 0;
-                const mckoTeacherCount = teacher.mcko_teacher_diagnostics?.length || 0;
-                document.getElementById('statCourses').textContent = teacher.courses?.length || 0;
-                document.getElementById('statDiagnostics').textContent = mckoClassCount + mckoTeacherCount;
-                document.getElementById('statOlympiads').textContent = teacher.olympiads?.length || 0;
+                // Обновляем сводку (чипы)
+                updateProfileSummary(teacher);
 
                 // Сбрасываем табы
                 currentMainTab = 'courses';
@@ -1252,11 +1300,11 @@
         }
 
         function closeModal() {
-                document.getElementById('profileModal').classList.remove('is-open');
-                document.getElementById('teachersSection')?.classList.remove('profile-open');
-                currentTeacherId = null;
-                hideAllSubTabs();
-            }
+            document.getElementById('profileModal').classList.remove('is-open');
+            document.getElementById('teachersSection')?.classList.remove('profile-open');
+            currentTeacherId = null;
+            hideAllSubTabs();
+        }
 
         function hideAllSubTabs() {
             document.getElementById('diagnosticsSubTabs').style.display = 'none';
@@ -1274,9 +1322,15 @@
             currentMainTab = tabName;
             currentSubTab = null;
 
-            // Обновляем активную кнопку
+            // Активная вкладка + чип сводки
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            const tabOrder = ['courses', 'diagnostics', 'exams', 'olympiads', 'other', 'orientir', 'ipr'];
+            const idx = tabOrder.indexOf(tabName);
+            const tabBtns = document.querySelectorAll('#mainTabs .tab-btn');
+            if (idx >= 0 && tabBtns[idx]) tabBtns[idx].classList.add('active');
+            document.querySelectorAll('.summary-chip').forEach(ch => {
+                ch.classList.toggle('is-active', ch.getAttribute('data-tab') === tabName);
+            });
 
             // Показываем/скрываем подтабы
             hideAllSubTabs();
@@ -1329,16 +1383,16 @@
                     fillIprTab();
                     break;
             }
-            
+
         }
         function fillOrientirTab() {
-                const tbody = document.getElementById('orientirTableBody');
-                const rows = currentTeacherData.orientir || [];
-                if (!rows.length) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#666;padding:24px;">Нет ориентиров урока</td></tr>';
-                    return;
-                }
-                tbody.innerHTML = rows.map(r => `
+            const tbody = document.getElementById('orientirTableBody');
+            const rows = currentTeacherData.orientir || [];
+            if (!rows.length) {
+                tbody.innerHTML = '<tr><td colspan="6">' + emptyStateHtml('Нет ориентиров урока', 'Создайте запись в разделе «Ориентир урока»') + '</td></tr>';
+                return;
+            }
+            tbody.innerHTML = rows.map(r => `
         <tr>
             <td>${r.visit_date ? String(r.visit_date).slice(0, 10) : '—'}</td>
             <td>${r.predmet || '—'}</td>
@@ -1348,16 +1402,16 @@
             <td><a class="btn btn-sm btn-secondary" href="orientir-view.html?id=${r.id}" target="_blank">Открыть</a></td>
         </tr>
     `).join('');
-            }
+        }
 
-            function fillIprTab() {
-                const tbody = document.getElementById('iprTableBody');
-                const rows = currentTeacherData.ipr || [];
-                if (!rows.length) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;padding:24px;">Нет планов ИПР</td></tr>';
-                    return;
-                }
-                tbody.innerHTML = rows.map(r => `
+        function fillIprTab() {
+            const tbody = document.getElementById('iprTableBody');
+            const rows = currentTeacherData.ipr || [];
+            if (!rows.length) {
+                tbody.innerHTML = '<tr><td colspan="5">' + emptyStateHtml('Нет планов ИПР', 'Создайте запись в разделе «ИПР»') + '</td></tr>';
+                return;
+            }
+            tbody.innerHTML = rows.map(r => `
         <tr>
             <td>${r.period || '—'}</td>
             <td>${r.subject || '—'}</td>
@@ -1366,7 +1420,7 @@
             <td><a class="btn btn-sm btn-secondary" href="ipr.html?edit=${r.id}" target="_blank">Открыть</a></td>
         </tr>
     `).join('');
-            }
+        }
         function switchSubTab(subTabName) {
             currentSubTab = subTabName;
 
@@ -1400,7 +1454,7 @@
 
             if (data.length === 0) {
                 document.getElementById('tabContent').innerHTML =
-                    '<p style="text-align:center; color:#666;">Нет данных о диагностиках по классам</p>';
+                    emptyStateHtml('Нет диагностик по классам', 'Загрузите файл МЦКО на главной');
                 return;
             }
 
@@ -1448,7 +1502,7 @@
             const data = currentTeacherData.mcko_teacher_diagnostics || [];
 
             if (data.length === 0) {
-                document.getElementById('tabContent').innerHTML = '<p style="text-align:center; color:#666;">Нет данных о личных диагностиках</p>';
+                document.getElementById('tabContent').innerHTML = emptyStateHtml('Нет личных диагностик', 'Загрузите файл МЦКО учителя на главной');
                 return;
             }
 
@@ -1496,7 +1550,7 @@
             const data = (currentTeacherData.olympiads || []).filter(o => o.olympiad_type === 'ВсОШ');
             const showActions = user.role === 'admin';
 
-            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о ВсОШ</p>' : `
+            const html = data.length === 0 ? emptyStateHtml('Нет данных о ВсОШ', 'Результаты появятся после загрузки олимпиад') : `
         <table class="table">
             <thead>
                 <tr>
@@ -1538,7 +1592,7 @@
             const data = (currentTeacherData.olympiads || []).filter(o => o.olympiad_type === 'МОШ');
             const showActions = user.role === 'admin';
 
-            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о МОШ</p>' : `
+            const html = data.length === 0 ? emptyStateHtml('Нет данных о МОШ', 'Результаты появятся после загрузки олимпиад') : `
         <table class="table">
             <thead>
                 <tr>
@@ -1580,7 +1634,7 @@
             const data = (currentTeacherData.exam_results_oge || []);
             const showActions = user.role === 'admin';
 
-            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных об ОГЭ</p>' : `
+            const html = data.length === 0 ? emptyStateHtml('Нет данных об ОГЭ', 'Загрузите результаты ОГЭ на главной') : `
         <table class="table">
             <thead>
                 <tr>
@@ -1624,7 +1678,7 @@
             const data = (currentTeacherData.exam_results_ege || []);
             const showActions = user.role === 'admin';
 
-            const html = data.length === 0 ? '<p style="text-align:center; color:#666;">Нет данных о ЕГЭ</p>' : `
+            const html = data.length === 0 ? emptyStateHtml('Нет данных о ЕГЭ', 'Загрузите результаты ЕГЭ на главной') : `
         <table class="table">
             <thead>
                 <tr>
@@ -1684,7 +1738,7 @@
             const showActions = user.role === 'admin';
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#666;">Нет данных</p>';
+                container.innerHTML = emptyStateHtml('Нет данных', 'В этом разделе пока пусто');
                 return;
             }
 

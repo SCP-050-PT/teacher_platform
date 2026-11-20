@@ -21,7 +21,7 @@
                     <span class="platform-name">Профиль педагога</span>
                 </div>
             </a>
-        
+
             <nav class="main-nav">
                 <a href="index.html" class="nav-link" data-nav="index">
                     <i class="fas fa-home"></i> Главная
@@ -39,7 +39,7 @@
                     <i class="fas fa-list"></i> Список ИПР
                 </a>
             </nav>
-        
+
             <div class="user-menu" id="userMenu">
                 <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
                     <span class="user-avatar" id="userAvatar">A</span>
@@ -63,6 +63,7 @@
                 </div>
             </div>
         </header>
+
         <main class="main-content">
             <div class="wrap" id="form">
                 <div class="toolbar">
@@ -74,7 +75,16 @@
                 <div class="card">
                     <h2>Сведения о педагоге</h2>
                     <div class="grid">
-                        <div class="field"><label>ФИО</label><input id="fio" placeholder="Иванова Мария Петровна"></div>
+                        <div class="field" style="position:relative">
+                            <label>Учитель</label>
+                            <input type="hidden" id="teacherId" value="">
+                            <input id="fio" placeholder="Начните вводить ФИО…" autocomplete="off">
+                            <div id="teacherDropdown"
+                                style="display:none;position:absolute;left:0;right:0;top:100%;z-index:50;background:#fff;border:1px solid #e2e8f0;border-radius:10px;max-height:240px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+                            </div>
+                            <small style="color:#64748b;font-size:11px">Выберите из списка — запись попадёт в
+                                карточку</small>
+                        </div>
                         <div class="field"><label>Должность</label><input id="pos" placeholder="Учитель"></div>
                         <div class="field"><label>Организация</label><input id="org" value="ГБОУ Школа №777"></div>
                         <div class="field"><label>Категория</label>
@@ -98,6 +108,7 @@
             <div class="wrap" id="result"></div>
         </main>
     </div>
+
     <script>
         const SECTION_DEFS = [
             { id: "edu", title: "Повышение квалификации", icon: "🎓", item: ["Название", "Срок", "Результат"], presets: ["Курсы по ФГОС", "Цифровые технологии", "Работа с ОВЗ"] },
@@ -112,7 +123,88 @@
         ];
         let state = {};
         let editId = null;
+        let teachersCache = [];
+        let selectedTeacherId = null;
         SECTION_DEFS.forEach(s => state[s.id] = []);
+
+        function authHeaders() {
+            const token = localStorage.getItem("token");
+            const h = { "Content-Type": "application/json" };
+            if (token) h["Authorization"] = "Bearer " + token;
+            return h;
+        }
+
+        async function loadTeachers() {
+            try {
+                let res = await fetch("/api/teachers/short", { headers: authHeaders() });
+                if (res.ok) {
+                    teachersCache = await res.json();
+                } else {
+                    res = await fetch("/api/teachers?limit=500", { headers: authHeaders() });
+                    const j = await res.json();
+                    teachersCache = (j.data || []).map(t => ({
+                        id: t.id,
+                        full_name: t.full_name,
+                        subjects: t.subjects || []
+                    }));
+                }
+            } catch (e) {
+                console.warn("teachers load", e);
+                teachersCache = [];
+            }
+        }
+
+        function filterTeachers(q) {
+            q = (q || "").toLowerCase().trim();
+            if (!q) return teachersCache.slice(0, 30);
+            return teachersCache.filter(t => {
+                const name = (t.full_name || "").toLowerCase();
+                const subj = (Array.isArray(t.subjects) ? t.subjects.join(" ") : "").toLowerCase();
+                return name.includes(q) || subj.includes(q);
+            }).slice(0, 40);
+        }
+
+        function showTeacherDropdown(list) {
+            const box = document.getElementById("teacherDropdown");
+            if (!box) return;
+            if (!list.length) {
+                box.innerHTML = '<div style="padding:10px 12px;color:#64748b;font-size:13px">Никого не найдено</div>';
+                box.style.display = "block";
+                return;
+            }
+            box.innerHTML = list.map(t => {
+                const sub = Array.isArray(t.subjects) && t.subjects.length
+                    ? ` <span style="color:#94a3b8;font-size:12px">(${t.subjects.slice(0, 2).join(", ")})</span>`
+                    : "";
+                const name = (t.full_name || "").replace(/"/g, "&quot;");
+                return `<div class="td-item" data-id="${t.id}" data-name="${name}" style="padding:10px 12px;cursor:pointer;font-size:14px;border-bottom:1px solid #f1f5f9">${t.full_name || ""}${sub}</div>`;
+            }).join("");
+            box.style.display = "block";
+            box.querySelectorAll(".td-item").forEach(node => {
+                node.addEventListener("mousedown", e => {
+                    e.preventDefault();
+                    selectedTeacherId = parseInt(node.getAttribute("data-id"), 10);
+                    document.getElementById("teacherId").value = selectedTeacherId;
+                    document.getElementById("fio").value = node.getAttribute("data-name");
+                    box.style.display = "none";
+                });
+            });
+        }
+
+        function bindTeacherPicker() {
+            const inp = document.getElementById("fio");
+            if (!inp) return;
+            inp.addEventListener("focus", () => showTeacherDropdown(filterTeachers(inp.value)));
+            inp.addEventListener("input", () => {
+                selectedTeacherId = null;
+                document.getElementById("teacherId").value = "";
+                showTeacherDropdown(filterTeachers(inp.value));
+            });
+            inp.addEventListener("blur", () => setTimeout(() => {
+                const b = document.getElementById("teacherDropdown");
+                if (b) b.style.display = "none";
+            }, 180));
+        }
 
         function renderSections() {
             const host = document.getElementById("sections");
@@ -127,62 +219,73 @@
                 s.presets.forEach(p => addItem(s.id, p));
             });
         }
-        function toggleSection(id, on) { document.getElementById("items-" + id).style.display = on ? "" : "none"; }
+
+        function toggleSection(id, on) {
+            document.getElementById("items-" + id).style.display = on ? "" : "none";
+        }
+
         function addItem(sid, preset) {
-                const def = SECTION_DEFS.find(s => s.id === sid);
-                const box = document.getElementById("items-" + sid);
-                if (!preset) { preset = prompt("Мероприятие:"); if (!preset) return; }
-                const row = document.createElement("div");
-                row.className = "item";
-                row.innerHTML = `
+            const def = SECTION_DEFS.find(s => s.id === sid);
+            const box = document.getElementById("items-" + sid);
+            if (!preset) {
+                preset = prompt("Мероприятие:");
+                if (!preset) return;
+            }
+            const row = document.createElement("div");
+            row.className = "item";
+            row.innerHTML = `
     <input class="c1" value="${preset}" placeholder="${def.item[0]}">
-    <input class="c2" placeholder="${def.item[1] || 'Срок'}">
+    <input class="c2" placeholder="${def.item[1] || "Срок"}">
     <select class="status" style="width:130px;font-size:13px">
       <option value="">—</option>
       <option value="done">Выполнено</option>
       <option value="overdue">Не выполнено</option>
     </select>
     <button class="del" onclick="this.parentNode.remove()">×</button>`;
-                box.insertBefore(row, box.querySelector(".add"));
-            }
+            box.insertBefore(row, box.querySelector(".add"));
+        }
+
         function collect() {
-                state = {};
-                SECTION_DEFS.forEach(s => state[s.id] = []);
-                SECTION_DEFS.forEach(s => {
-                    const box = document.getElementById("items-" + s.id);
-                    if (box.style.display === "none") return;
-                    box.querySelectorAll(".item").forEach(row => {
-                        const vals = [
-                            row.querySelector(".c1").value,
-                            row.querySelector(".c2").value,
-                            row.querySelector(".status") ? row.querySelector(".status").value : ""
-                        ].map(v => (v || "").trim());
-                        if (vals[0] || vals[1]) state[s.id].push(vals);
-                    });
+            state = {};
+            SECTION_DEFS.forEach(s => state[s.id] = []);
+            SECTION_DEFS.forEach(s => {
+                const box = document.getElementById("items-" + s.id);
+                if (box.style.display === "none") return;
+                box.querySelectorAll(".item").forEach(row => {
+                    const vals = [
+                        row.querySelector(".c1").value,
+                        row.querySelector(".c2").value,
+                        row.querySelector(".status") ? row.querySelector(".status").value : ""
+                    ].map(v => (v || "").trim());
+                    if (vals[0] || vals[1]) state[s.id].push(vals);
                 });
-            }
+            });
+        }
+
         function generate() {
-                collect();
-                const data = id => document.getElementById(id).value.trim();
-                const statusLabel = v => v === "done" ? "Выполнено" : v === "overdue" ? "Не выполнено" : "—";
-                let rows = "";
-                SECTION_DEFS.forEach(s => {
-                    if (state[s.id].length) {
-                        rows += `<tr><td colspan="3" style="font-weight:bold;padding-top:12px">${s.icon} ${s.title}</td></tr>`;
-                        state[s.id].forEach(v => rows += `<tr><td>${v[0]}</td><td>${v[1]}</td><td>${statusLabel(v[2])}</td></tr>`);
-                    }
-                });
-                document.getElementById("result").innerHTML = `<div class="card"><h2>ИНДИВИДУАЛЬНЫЙ ПЛАН РАЗВИТИЯ</h2>
+            collect();
+            const data = id => document.getElementById(id).value.trim();
+            const statusLabel = v => v === "done" ? "Выполнено" : v === "overdue" ? "Не выполнено" : "—";
+            let rows = "";
+            SECTION_DEFS.forEach(s => {
+                if (state[s.id].length) {
+                    rows += `<tr><td colspan="3" style="font-weight:bold;padding-top:12px">${s.icon} ${s.title}</td></tr>`;
+                    state[s.id].forEach(v => rows += `<tr><td>${v[0]}</td><td>${v[1]}</td><td>${statusLabel(v[2])}</td></tr>`);
+                }
+            });
+            document.getElementById("result").innerHTML = `<div class="card"><h2>ИНДИВИДУАЛЬНЫЙ ПЛАН РАЗВИТИЯ</h2>
     <p><b>ФИО:</b> ${data("fio")}</p><p><b>Должность:</b> ${data("pos")}</p><p><b>Предмет:</b> ${data("subject")}</p>
     <p><b>Период:</b> ${data("period")}</p>
     <table style="width:100%;border-collapse:collapse;margin-top:10px">
       <tr><th>Мероприятие</th><th>Срок</th><th>Статус</th></tr>${rows}
     </table></div>`;
-                document.getElementById("result").style.display = "block";
-            }
+            document.getElementById("result").style.display = "block";
+        }
+
         async function saveToServer() {
             collect();
             const payload = {
+                teacher_id: selectedTeacherId || document.getElementById("teacherId").value || null,
                 fio: document.getElementById("fio").value,
                 position: document.getElementById("pos").value,
                 organization: document.getElementById("org").value,
@@ -194,13 +297,29 @@
             };
             const url = editId ? "/api/ipr/" + editId : "/api/ipr";
             const method = editId ? "PUT" : "POST";
-            const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-            const json = await res.json();
-            alert(json.success ? (editId ? "Изменения сохранены" : "Сохранено (ID: " + json.id + ")") : "Ошибка");
-            if (json.id) editId = json.id;
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                alert(json.success ? (editId ? "Изменения сохранены" : "Сохранено (ID: " + json.id + ")") : "Ошибка");
+                if (json.id) editId = json.id;
+            } catch (e) {
+                alert("Ошибка сети");
+            }
         }
-        function printDoc() { generate(); window.print(); }
-        function resetAll() { if (confirm("Очистить?")) location.href = "ipr.html"; }
+
+        function printDoc() {
+            generate();
+            window.print();
+        }
+
+        function resetAll() {
+            if (confirm("Очистить?")) location.href = "ipr.html";
+        }
+
         async function loadForEdit() {
             const id = new URLSearchParams(location.search).get("edit");
             if (!id) return;
@@ -208,6 +327,8 @@
             const d = await res.json();
             if (!d.id) return;
             editId = d.id;
+            selectedTeacherId = d.teacher_id || null;
+            document.getElementById("teacherId").value = selectedTeacherId || "";
             document.getElementById("fio").value = d.fio || "";
             document.getElementById("pos").value = d.position || "";
             document.getElementById("org").value = d.organization || "";
@@ -223,7 +344,6 @@
                     (d.data[sid] || []).forEach(vals => {
                         const row = document.createElement("div");
                         row.className = "item";
-                        // поддержка старых записей (4 элемента) и новых (3)
                         const status = vals[3] !== undefined ? vals[3] : (vals[2] || "");
                         const dateVal = vals[3] !== undefined ? vals[1] : vals[1];
                         row.innerHTML = `
@@ -240,8 +360,16 @@
                 });
             }
         }
-        function logout() { localStorage.removeItem("token"); localStorage.removeItem("user"); location.href = "login.html"; }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            location.href = "login.html";
+        }
+
         renderSections();
+        bindTeacherPicker();
+        loadTeachers();
         loadForEdit();
     </script>
     <script src="../assets/js/auth-ui.js"></script>

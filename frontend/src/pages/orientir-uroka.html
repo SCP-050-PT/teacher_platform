@@ -82,7 +82,15 @@
                 <div class="fieldgrid">
                     <label>Предмет <input id="fPredmet" type="text" placeholder="Математика"></label>
                     <label>Класс <input id="fClass" type="text" placeholder="7 «А»"></label>
-                    <label>ФИО учителя <input id="fFio" type="text" placeholder="Фамилия Имя Отчество"></label>
+                    <label class="teacher-pick-wrap" style="position:relative">
+                        Учитель
+                        <input type="hidden" id="fTeacherId" value="">
+                        <input id="fFio" type="text" placeholder="Начните вводить ФИО…" autocomplete="off">
+                        <div id="teacherDropdown"
+                            style="display:none;position:absolute;left:0;right:0;top:100%;z-index:50;background:#fff;border:1px solid #e2e8f0;border-radius:10px;max-height:240px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)">
+                        </div>
+                        <small style="color:#64748b;font-size:11px">Выберите из списка — запись попадёт в карточку</small>
+                    </label>
                     <label>Дата посещения <input id="fDate" type="date"></label>
                     <label style="grid-column:1/-1">Цель посещения <input id="fGoal" type="text"
                             placeholder="Контроль, аттестация, методическая помощь…"></label>
@@ -194,18 +202,108 @@
                 var tbtn = e.target.closest("[data-tbtn]");
                 if (tbtn) { state.type = tbtn.getAttribute("data-tipe"); save(); render(); return; }
             });
+                        var teachersCache = [];
+            var selectedTeacherId = null;
 
+            function authHeaders() {
+                var token = localStorage.getItem("token");
+                var h = { "Content-Type": "application/json" };
+                if (token) h["Authorization"] = "Bearer " + token;
+                return h;
+            }
+
+            async function loadTeachers() {
+                try {
+                    var res = await fetch("/api/teachers/short", { headers: authHeaders() });
+                    if (!res.ok) {
+                        res = await fetch("/api/teachers?limit=500", { headers: authHeaders() });
+                        var j = await res.json();
+                        teachersCache = (j.data || j || []).map(function (t) {
+                            return { id: t.id, full_name: t.full_name, subjects: t.subjects || [] };
+                        });
+                    } else {
+                        teachersCache = await res.json();
+                    }
+                } catch (e) { console.warn("teachers load", e); teachersCache = []; }
+            }
+
+            function filterTeachers(q) {
+                q = (q || "").toLowerCase().trim();
+                if (!q) return teachersCache.slice(0, 30);
+                return teachersCache.filter(function (t) {
+                    var name = (t.full_name || "").toLowerCase();
+                    var subj = (Array.isArray(t.subjects) ? t.subjects.join(" ") : "").toLowerCase();
+                    return name.indexOf(q) >= 0 || subj.indexOf(q) >= 0;
+                }).slice(0, 40);
+            }
+
+            function showTeacherDropdown(list) {
+                var box = el("teacherDropdown");
+                if (!box) return;
+                if (!list.length) {
+                    box.innerHTML = '<div style="padding:10px 12px;color:#64748b;font-size:13px">Никого не найдено</div>';
+                    box.style.display = "block";
+                    return;
+                }
+                box.innerHTML = list.map(function (t) {
+                    var sub = Array.isArray(t.subjects) && t.subjects.length
+                        ? ' <span style="color:#94a3b8;font-size:12px">(' + esc(t.subjects.slice(0, 2).join(", ")) + ')</span>'
+                        : "";
+                    return '<div class="td-item" data-id="' + t.id + '" data-name="' + esc(t.full_name) + '" style="padding:10px 12px;cursor:pointer;font-size:14px;border-bottom:1px solid #f1f5f9">' + esc(t.full_name) + sub + '</div>';
+                }).join("");
+                box.style.display = "block";
+                box.querySelectorAll(".td-item").forEach(function (node) {
+                    node.addEventListener("mousedown", function (e) {
+                        e.preventDefault();
+                        selectedTeacherId = parseInt(node.getAttribute("data-id"), 10);
+                        el("fTeacherId").value = selectedTeacherId;
+                        el("fFio").value = node.getAttribute("data-name");
+                        state.fields.fio = el("fFio").value;
+                        save();
+                        box.style.display = "none";
+                    });
+                });
+            }
+
+            function bindTeacherPicker() {
+                var inp = el("fFio");
+                if (!inp) return;
+                inp.addEventListener("focus", function () { showTeacherDropdown(filterTeachers(inp.value)); });
+                inp.addEventListener("input", function () {
+                    selectedTeacherId = null;
+                    el("fTeacherId").value = "";
+                    state.fields.fio = inp.value;
+                    save();
+                    showTeacherDropdown(filterTeachers(inp.value));
+                });
+                inp.addEventListener("blur", function () {
+                    setTimeout(function () {
+                        var b = el("teacherDropdown");
+                        if (b) b.style.display = "none";
+                    }, 180);
+                });
+            }
             function bindFields() {
                 var map = { fPredmet: "predmet", fClass: "class", fFio: "fio", fDate: "date", fGoal: "goal" };
                 Object.keys(map).forEach(function (id) { var inp = el(id); if (inp) { inp.value = state.fields[map[id]] || ""; inp.addEventListener("input", function () { state.fields[map[id]] = inp.value; save(); }); } });
                 el("recs").value = state.recs || ""; el("recs").addEventListener("input", function () { state.recs = el("recs").value; save(); });
             }
 
-            el("btnReset").addEventListener("click", function () { if (!confirm("Очистить все оценки?")) return; state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" }; save(); bindFields(); render(); toast("Форма очищена"); });
+            el("btnReset").addEventListener("click", function () {
+                if (!confirm("Очистить все оценки?")) return;
+                state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" };
+                selectedTeacherId = null;
+                if (el("fTeacherId")) el("fTeacherId").value = "";
+                save();
+                bindFields();
+                render();
+                toast("Форма очищена");
+            });
             el("btnPrint").addEventListener("click", function () { window.print(); });
             el("btnSave").addEventListener("click", async function () {
                 save();
                 const payload = {
+                    teacher_id: selectedTeacherId || (el("fTeacherId") && el("fTeacherId").value) || null,
                     predmet: state.fields.predmet,
                     class_name: state.fields.class,
                     fio: state.fields.fio,
@@ -232,6 +330,8 @@
                             state = { type: "A", crit: {}, stages: {}, excluded: {}, exclSections: {}, fields: { predmet: "", class: "", fio: "", date: "", goal: "" }, recs: "" };
                             bindFields();
                             render();
+                            selectedTeacherId = null;
+                            if (el("fTeacherId")) el("fTeacherId").value = "";
                         }
                     } else toast('Ошибка: ' + (json.error || 'неизвестно'));
                 } catch (e) {
@@ -260,6 +360,8 @@
                             date: d.visit_date ? d.visit_date.slice(0, 10) : '',
                             goal: d.goal || ''
                         };
+                        selectedTeacherId = d.teacher_id || null;
+                        if (el("fTeacherId")) el("fTeacherId").value = selectedTeacherId || "";
                         state.recs = d.recommendations || '';
                         if (d.data) {
                             state.crit = d.data.crit || {};
@@ -280,6 +382,8 @@
                 load();
             }
             bindFields();
+            bindTeacherPicker();
+            loadTeachers();
             render();
             loadForEdit();
 
