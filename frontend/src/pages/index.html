@@ -31,6 +31,9 @@
                         <a href="index.html" class="nav-link" data-nav="index">
                             <i class="fas fa-home"></i> Главная
                         </a>
+                        <a href="upload.html" class="nav-link admin-only" data-nav="upload" style="display:none;">
+                            <i class="fas fa-cloud-upload-alt"></i> Загрузка
+                        </a>
                         <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
                             <i class="fas fa-clipboard-check"></i> Ориентир урока
                         </a>
@@ -94,105 +97,45 @@
                                         <div class="stat-number" id="totalOlympiads">0</div>
                                         <div class="stat-label">Олимпиад</div>
                                     </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalOrientir">0</div>
+                                        <div class="stat-label">Ориентиров</div>
+                                    </div>
+                                    <div class="stat-item-modern">
+                                        <div class="stat-number" id="totalIpr">0</div>
+                                        <div class="stat-label">ИПР</div>
+                                    </div>
                                 </div>
                             </div>
                         
-                            <div class="card upload-card admin-only" id="uploadCard" style="display: none;">
-                    <h3><i class="fas fa-cloud-upload-alt"></i> Загрузка данных</h3>
-
-                    <!-- Выбор учебного года -->
-                    <div class="form-group"
-                        style="margin-bottom: 15px; background: #f8f9fa; padding: 12px; border-radius: 8px;">
-                        <label for="academicYear" style="display: block; margin-bottom: 5px; font-weight: 600;">
-                            <i class="fas fa-calendar-alt"></i> Учебный год:
-                        </label>
-                        <select id="academicYear"
-                            style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
-                            <option value="2023/2024">2023/2024</option>
-                            <option value="2024/2025">2024/2025</option>
-                            <option value="2025/2026" selected>2025/2026</option>
-                            <option value="2026/2027">2026/2027</option>
-                        </select>
-                    </div>
-
-                    <!-- Тип файла -->
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="fileType" style="display: block; margin-bottom: 5px; font-weight: 600;">
-                            <i class="fas fa-file-excel"></i> Тип файла:
-                        </label>
-                        <select id="fileType"
-                            style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
-                            <option value="auto" selected>Автоопределение</option>
-                            <option value="mcko_class">МЦКО (по классам)</option>
-                            <option value="mcko_teacher">МЦКО (личная диагностика)</option>
-                            <option value="vsoh">Олимпиады ВсОШ</option>
-                            <option value="olympiad">Олимпиады МОШ</option>
-                            <option value="exam">ГИА (ОГЭ/ЕГЭ)</option>
-                            <option value="courses">Курсы повышения квалификации</option>
-                            <option value="other">Иное (мероприятия)</option>
-                        </select>
-                    </div>
-
-                    <!-- Drag & Drop зона -->
-                    <div class="upload-area" id="dropZone"
-                        style="border: 2px dashed #ccc; padding: 30px; text-align: center; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
-                        <i class="fas fa-cloud-upload-alt upload-icon"
-                            style="font-size: 48px; color: #667eea; margin-bottom: 10px;"></i>
-                        <p style="margin: 0; color: #666;">Перетащите файл сюда или нажмите для выбора</p>
-                        <span class="upload-hint" style="font-size: 12px; color: #999;">Поддерживаются: .xlsx, .xls
-                            (макс. 10MB)</span>
-                        <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
-                    </div>
-
-                    <!-- КНОПКА ЗАГРУЗКИ -->
-                    <button id="uploadBtn" class="btn btn-primary"
-                        style="width: 100%; margin-top: 15px; padding: 12px; font-size: 16px;" disabled>
-                        <i class="fas fa-upload"></i> Загрузить файл
-                    </button>
-
-                    <!-- Статус загрузки -->
-                    <div id="uploadStatus" style="margin-top: 15px; font-size: 14px;"></div>
-                </div>
-            </div>
-
                         <!-- Charts Section -->
                         <div class="card charts-section-card">
                             <div class="section-head">
-                                <h3><i class="fas fa-chart-pie"></i> Аналитика и статистика</h3>
+                                <h3><i class="fas fa-chart-pie"></i> Аналитика</h3>
                                 <span class="section-meta" id="analyticsYearLabel">Учебный год: текущий</span>
                             </div>
-                            <div class="charts-grid charts-grid--modern">
-                        
-                                <div class="chart-card">
-                                    <h4>ОГЭ по предметам</h4>
-                                    <canvas id="ogeChart"></canvas>
+                            <div class="analytics-tabs">
+                                <button type="button" class="analytics-tab is-active" data-chart="exams">ОГЭ / ЕГЭ</button>
+                                <button type="button" class="analytics-tab" data-chart="olymp">Олимпиады</button>
+                                <button type="button" class="analytics-tab" data-chart="mcko">МЦКО</button>
+                            </div>
+                            <div class="analytics-panel is-active" data-panel="exams">
+                                <div class="analytics-split">
+                                    <div><h4>ОГЭ</h4><canvas id="ogeChart"></canvas></div>
+                                    <div><h4>ЕГЭ</h4><canvas id="egeChart"></canvas></div>
                                 </div>
-                        
-                                <div class="chart-card">
-                                    <h4>ЕГЭ по предметам</h4>
-                                    <canvas id="egeChart"></canvas>
+                            </div>
+                            <div class="analytics-panel" data-panel="olymp">
+                                <div class="analytics-split">
+                                    <div><h4>ВсОШ</h4><canvas id="vsohChart"></canvas></div>
+                                    <div><h4>МОШ</h4><canvas id="moshChart"></canvas></div>
                                 </div>
-                        
-                                <div class="chart-card">
-                                    <h4>ВсОШ по предметам</h4>
-                                    <canvas id="vsohChart"></canvas>
+                            </div>
+                            <div class="analytics-panel" data-panel="mcko">
+                                <div class="analytics-split">
+                                    <div><h4>По классам</h4><canvas id="mckoClassChart"></canvas></div>
+                                    <div><h4>Учителя</h4><canvas id="mckoTeacherChart"></canvas></div>
                                 </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МОШ по предметам</h4>
-                                    <canvas id="moshChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МЦКО по классам</h4>
-                                    <canvas id="mckoClassChart"></canvas>
-                                </div>
-                        
-                                <div class="chart-card">
-                                    <h4>МЦКО учителя</h4>
-                                    <canvas id="mckoTeacherChart"></canvas>
-                                </div>
-                        
                             </div>
                         </div>
 
@@ -201,9 +144,14 @@
                 <div class="page-header"
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3><i class="fas fa-users"></i> Список учителей</h3>
-                    <button class="btn btn-primary admin-only" onclick="openAddTeacherModal()" style="display: none;">
-                        <i class="fas fa-plus"></i> Добавить учителя
-                    </button>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <a href="upload.html" class="btn btn-secondary admin-only" style="display:none;">
+                            <i class="fas fa-cloud-upload-alt"></i> Загрузка
+                        </a>
+                        <button class="btn btn-primary admin-only" onclick="openAddTeacherModal()" style="display: none;">
+                            <i class="fas fa-plus"></i> Добавить учителя
+                        </button>
+                    </div>
                 </div>
                 <!-- Панель профиля учителя (вместо модалки) -->
                 <div class="teacher-profile-panel" id="profileModal">
@@ -446,53 +394,6 @@
                     <button class="btn btn-secondary" onclick="closeEditTeacherModal()">Отмена</button>
                     <button class="btn btn-primary" onclick="saveTeacherEdit()">
                         <i class="fas fa-save"></i> Сохранить
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Preview Modal -->
-    <div id="previewModal" class="modal">
-        <div class="modal-dialog" style="max-width: 700px; width: 90%;">
-            <div class="modal-content preview-modal">
-                <div class="modal-header">
-                    <h3>📊 Предварительный анализ файла</h3>
-                    <button class="btn-close" onclick="closePreview()">&times;</button>
-                </div>
-
-                <div class="preview-stats"
-                    style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; background: #f8f9fa;">
-                    <div class="stat-card"
-                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #3b82f6;">
-                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewTotal">0</div>
-                        <div style="font-size: 12px; color: #64748b;">Всего записей</div>
-                    </div>
-                    <div class="stat-card"
-                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #22c55e;">
-                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewNew">0</div>
-                        <div style="font-size: 12px; color: #64748b;">Новых учителей</div>
-                    </div>
-                    <div class="stat-card"
-                        style="text-align: center; padding: 15px; background: white; border-radius: 8px; border-top: 4px solid #f59e0b;">
-                        <div style="font-size: 24px; font-weight: bold; color: #1e293b;" id="previewDup">0</div>
-                        <div style="font-size: 12px; color: #64748b;">Дубликатов</div>
-                    </div>
-                </div>
-
-                <div style="padding: 20px; max-height: 400px; overflow-y: auto;">
-                    <h4 style="margin-bottom: 15px;">Детали:</h4>
-                    <ul id="previewList"
-                        style="list-style: none; padding: 0; margin: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-                    </ul>
-                </div>
-
-                <div class="modal-footer">
-                    <button onclick="confirmImport()" class="btn btn-primary">
-                        <i class="fas fa-check"></i> Подтвердить импорт
-                    </button>
-                    <button onclick="closePreview()" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Отмена
                     </button>
                 </div>
             </div>
@@ -809,229 +710,21 @@
         }
 
         // ==========================================
-        // ПРЕВЬЮ ИМПОРТА
-        // ==========================================
-        async function handleFileUpload() {
-            console.log('handleFileUpload вызван, selectedFile:', selectedFile);
-
-            if (!selectedFile) {
-                showToast('Выберите файл', 'error');
-                return;
-            }
-
-            const fileType = document.getElementById('fileType').value;
-            const academicYear = document.getElementById('academicYear').value;
-
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            formData.append('fileType', fileType);
-            formData.append('academicYear', academicYear);
-
-            const uploadBtn = document.getElementById('uploadBtn');
-            uploadBtn.disabled = true;
-            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Анализ...';
-
-            try {
-                console.log('Отправка запроса на /api/upload/preview-import...');
-                const response = await fetch('/api/upload/preview-import', {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    body: formData
-                });
-
-                const data = await response.json();
-                console.log('Ответ получен:', data);
-
-                if (response.ok) {
-                    showPreviewModal(data);
-                } else {
-                    showToast(data.error, 'error');
-                }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                showToast('Ошибка: ' + error.message, 'error');
-            } finally {
-                uploadBtn.disabled = false;
-                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Загрузить файл';
-            }
-        }
-
-        function showPreviewModal(data) {
-            console.log('showPreviewModal вызван с данными:', data);
-
-            currentPreviewId = data.previewId;
-
-            document.getElementById('previewTotal').textContent = data.totalRecords || 0;
-            document.getElementById('previewNew').textContent = (data.newTeachers || []).length;
-            document.getElementById('previewDup').textContent = (data.duplicates || []).length;
-
-            const list = document.getElementById('previewList');
-            list.innerHTML = '';
-
-            const records = data.records || [];
-
-            if (records.length > 0) {
-                records.forEach(record => {
-                    const li = document.createElement('li');
-                    li.className = record.isNew ? 'new-item' : (record.isDuplicate ? 'dup-item' : '');
-                    li.style.cssText = 'padding: 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;';
-                    if (record.isNew) li.style.background = '#f0fdf4';
-                    if (record.isDuplicate) li.style.background = '#fffbeb';
-
-                    li.innerHTML = `
-                <span style="font-weight: 500;">${record.fio || 'Неизвестно'}</span>
-                <span style="color: #64748b; font-size: 0.9em;">${record.subject || '-'}</span>
-                ${record.isNew ? '<span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">Новый</span>' : ''}
-                ${record.isDuplicate ? '<span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">Дубликат</span>' : ''}
-            `;
-                    list.appendChild(li);
-                });
-            } else {
-                list.innerHTML = '<li style="text-align:center; color:#999; padding: 20px;">Нет данных для отображения</li>';
-            }
-
-            const modal = document.getElementById('previewModal');
-            modal.classList.add('active');
-            console.log('Модалка открыта');
-        }
-
-        function closePreview() {
-            document.getElementById('previewModal').classList.remove('active');
-            currentPreviewId = null;
-        }
-
-        async function confirmImport() {
-            if (!currentPreviewId) return;
-
-            const btn = document.querySelector('#previewModal .btn-primary');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Импорт...';
-
-            try {
-                const response = await fetch('/api/upload/confirm-import', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ previewId: currentPreviewId })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showToast(data.message, 'success', 6000);
-                    closePreview();
-
-                    selectedFile = null;
-                    document.getElementById('fileInput').value = '';
-                    document.getElementById('dropZone').querySelector('p').textContent = 'Перетащите файл сюда или нажмите для выбора';
-                    document.getElementById('dropZone').style.borderColor = '#ccc';
-                    document.getElementById('uploadBtn').disabled = true;
-
-                    loadStats();
-                    loadTeachers();
-                    loadAnalytics();
-                } else {
-                    showToast(data.error, 'error');
-                }
-            } catch (error) {
-                showToast('Ошибка импорта: ' + error.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-check"></i> Подтвердить импорт';
-            }
-        }
-
-        // ==========================================
-        // ЗАГРУЗКА ФАЙЛОВ
-        // ==========================================
-        if (user.role === 'admin') {
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const uploadStatus = document.getElementById('uploadStatus');
-
-            dropZone.addEventListener('click', () => fileInput.click());
-
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.style.borderColor = '#667eea';
-                dropZone.style.background = '#f0f4ff';
-            });
-
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.style.borderColor = '#ccc';
-                dropZone.style.background = 'transparent';
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.style.borderColor = '#ccc';
-                dropZone.style.background = 'transparent';
-                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) handleFile(e.target.files[0]);
-            });
-
-            uploadBtn.addEventListener('click', () => {
-                console.log('Кнопка загрузки нажата');
-                handleFileUpload();
-            });
-
-            function handleFile(file) {
-                console.log('handleFile вызван с файлом:', file.name);
-
-                if (file.size > 10 * 1024 * 1024) {
-                    showStatus('Файл слишком большой (макс. 10MB)', 'error');
-                    selectedFile = null;
-                    uploadBtn.disabled = true;
-                    return;
-                }
-
-                if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                    showStatus('Поддерживаются только Excel файлы (.xlsx, .xls)', 'error');
-                    selectedFile = null;
-                    uploadBtn.disabled = true;
-                    return;
-                }
-
-                selectedFile = file;
-                console.log('selectedFile установлен:', selectedFile.name);
-
-                dropZone.querySelector('p').textContent = `Выбран: ${file.name}`;
-                dropZone.style.borderColor = '#48bb78';
-                uploadBtn.disabled = false;
-                showStatus('Нажмите "Загрузить файл" для импорта', 'info');
-            }
-
-            function showStatus(message, type = '') {
-                uploadStatus.textContent = message;
-                uploadStatus.className = '';
-                if (type === 'error') {
-                    uploadStatus.style.cssText = 'color: #e53e3e; background: #fed7d7; padding: 10px; border-radius: 6px;';
-                } else if (type === 'success') {
-                    uploadStatus.style.cssText = 'color: #22543d; background: #c6f6d5; padding: 10px; border-radius: 6px;';
-                } else if (type === 'info') {
-                    uploadStatus.style.cssText = 'color: #2b6cb0; background: #bee3f8; padding: 10px; border-radius: 6px;';
-                } else {
-                    uploadStatus.style.cssText = 'color: #666; background: transparent; padding: 0;';
-                }
-            }
-        }
-
-        document.getElementById('previewModal').addEventListener('click', function (e) {
-            if (e.target === this) closePreview();
-        });
-
-        // ==========================================
         // ОСТАЛЬНЫЕ ФУНКЦИИ
         // ==========================================
         window.addEventListener('beforeunload', () => {
             Object.values(charts).forEach(chart => {
                 if (chart) chart.destroy();
+            });
+        });
+
+        document.querySelectorAll('.analytics-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.analytics-tab').forEach(b => b.classList.remove('is-active'));
+                document.querySelectorAll('.analytics-panel').forEach(p => p.classList.remove('is-active'));
+                btn.classList.add('is-active');
+                const panel = document.querySelector('.analytics-panel[data-panel="' + btn.dataset.chart + '"]');
+                if (panel) panel.classList.add('is-active');
             });
         });
 
@@ -1042,6 +735,8 @@
                 document.getElementById('totalCourses').textContent = stats.total_courses || 0;
                 document.getElementById('totalDiagnostics').textContent = stats.total_diagnostics || 0;
                 document.getElementById('totalOlympiads').textContent = stats.total_olympiads || 0;
+                document.getElementById('totalOrientir').textContent = stats.total_orientir || 0;
+                document.getElementById('totalIpr').textContent = stats.total_ipr || 0;
             } catch (err) {
                 console.error('Ошибка загрузки статистики:', err);
             }
@@ -1090,7 +785,7 @@
 
             let teachersState = {
                 page: 1,
-                limit: 20,
+                limit: 50,
                 totalPages: 1,
                 total: 0
             };
@@ -1986,27 +1681,26 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     plugins: {
-                        title: {
-                            display: true,
-                            font: { size: 16 }
-                        },
                         legend: {
                             position: 'bottom',
-                            labels: { usePointStyle: true }
+                            labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 } }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: { stepSize: 5 },
-                            grid: { color: 'rgba(0,0,0,0.1)' }
+                            ticks: { stepSize: 5, font: { size: 11 } },
+                            grid: { color: 'rgba(0,0,0,0.06)' }
                         },
                         x: {
-                            grid: { display: false }
+                            grid: { display: false },
+                            ticks: { maxRotation: 40, minRotation: 0, autoSkip: false, font: { size: 10 } }
                         }
-                    }
+                    },
+                    datasets: { bar: { categoryPercentage: 0.75, barPercentage: 0.85 } }
                 }
             };
 
@@ -2065,24 +1759,26 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
+                    devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { usePointStyle: true, padding: 15 }
+                            labels: { usePointStyle: true, padding: 10, boxWidth: 8, font: { size: 11 } }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' },
-                            ticks: { stepSize: 1 }
+                            grid: { color: 'rgba(0,0,0,0.06)' },
+                            ticks: { stepSize: 1, font: { size: 11 } }
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { font: { size: 11 } }
+                            ticks: { maxRotation: 40, minRotation: 0, autoSkip: false, font: { size: 10 } }
                         }
-                    }
+                    },
+                    datasets: { bar: { categoryPercentage: 0.75, barPercentage: 0.85 } }
                 }
             };
 
@@ -2364,31 +2060,6 @@
             }, duration);
         }
 
-        function generateAcademicYears() {
-            const select = document.getElementById('academicYear');
-            const currentYear = new Date().getFullYear();
-            const currentMonth = new Date().getMonth();
-
-            const currentAcademicYear = currentMonth >= 8 ?
-                `${currentYear}/${currentYear + 1}` :
-                `${currentYear - 1}/${currentYear}`;
-
-            const years = [];
-            for (let i = 2022; i <= currentYear + 2; i++) {
-                years.push(`${i}/${i + 1}`);
-            }
-
-            select.innerHTML = years.map(year => {
-                let label = year;
-                if (year === currentAcademicYear) label += ' (текущий)';
-                else if (year > currentAcademicYear) label += ' (будущий)';
-                else label += ' (архив)';
-
-                return `<option value="${year}" ${year === currentAcademicYear ? 'selected' : ''}>${label}</option>`;
-            }).join('');
-        }
-
-
         async function confirmDeleteTeacher(id, name) {
             if (user.role !== 'admin') return;
             if (!confirm('Удалить учителя «' + name + '» (ID ' + id + ')?\nВсе связанные данные будут удалены.')) return;
@@ -2465,7 +2136,6 @@
 
         // Инициализация
         loadStats();
-        generateAcademicYears();
         document.addEventListener('DOMContentLoaded', () => {
             loadAnalytics();
             loadTeachers();

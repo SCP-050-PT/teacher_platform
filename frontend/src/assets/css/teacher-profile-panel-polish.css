@@ -634,3 +634,93 @@
 .teachers-table td.table-empty {
     padding: 0 !important;
 }
+
+/* После выноса загрузки — одна колонка, список под графиками */
+.dashboard-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 20px;
+}
+.dashboard-grid > .stats-card,
+.dashboard-grid > .stats-card--modern,
+.dashboard-grid > .charts-section-card,
+.dashboard-grid > .teachers-section {
+    width: 100% !important;
+    max-width: none !important;
+    grid-column: auto !important;
+}
+.teachers-section {
+    width: 100%;
+}
+
+/* 6 KPI */
+.stats-grid--modern {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+@media (max-width: 1100px) {
+    .stats-grid--modern {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+@media (max-width: 640px) {
+    .stats-grid--modern {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Analytics tabs */
+.analytics-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 4px 0 14px;
+    flex-wrap: wrap;
+}
+.analytics-tab {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.analytics-tab.is-active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: #fff;
+}
+.analytics-panel {
+    display: none;
+    min-height: 280px;
+}
+.analytics-panel.is-active {
+    display: block;
+}
+.analytics-panel canvas {
+    max-height: 320px !important;
+}
+.analytics-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.analytics-split h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+}
+@media (max-width: 800px) {
+    .analytics-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+.analytics-panel canvas,
+.analytics-split canvas {
+    height: 280px !important;
+    max-height: 280px !important;
+    width: 100% !important;
+}

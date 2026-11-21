@@ -9,7 +9,9 @@ class StatsController {
                     (SELECT COUNT(*) FROM teachers) as total_teachers,
                     (SELECT COUNT(*) FROM courses) as total_courses,
                     (SELECT COUNT(*) FROM diagnostics) as total_diagnostics,
-                    (SELECT COUNT(*) FROM olympiads) as total_olympiads
+                    (SELECT COUNT(*) FROM olympiads) as total_olympiads,
+                    (SELECT COUNT(*) FROM orientir_uroka) as total_orientir,
+                    (SELECT COUNT(*) FROM ipr_plans) as total_ipr
             `);
             res.json(result.rows[0]);
         } catch (error) {

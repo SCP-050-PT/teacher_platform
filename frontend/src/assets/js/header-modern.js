@@ -53,6 +53,11 @@
     if (adminLink) {
       adminLink.style.display = user.role === 'admin' ? 'flex' : 'none';
     }
+    document.querySelectorAll('.admin-only').forEach((el) => {
+      if (user.role === 'admin') {
+        el.style.display = el.tagName === 'A' ? 'inline-flex' : '';
+      }
+    });
   }
 
   function setupDropdown() {

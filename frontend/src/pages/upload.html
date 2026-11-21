@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка данных | Профиль педагога</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/header-modern.css">
+    <link rel="stylesheet" href="../assets/css/upload.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../assets/images/Logo_main_RGB.png">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header header-modern">
+            <a href="index.html" class="logo">
+                <img src="../assets/images/Logo_main_RGB.png" alt="Школа №777">
+                <div class="logo-text-block">
+                    <span class="school-name">Школа №777</span>
+                    <span class="platform-name">Профиль педагога</span>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link" data-nav="index">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="upload.html" class="nav-link active" data-nav="upload">
+                    <i class="fas fa-cloud-upload-alt"></i> Загрузка
+                </a>
+                <a href="orientir-uroka.html" class="nav-link" data-nav="orientir">
+                    <i class="fas fa-clipboard-check"></i> Ориентир урока
+                </a>
+                <a href="orientir-list.html" class="nav-link" data-nav="orientir-list">
+                    <i class="fas fa-list"></i> Список ОУ
+                </a>
+                <a href="ipr.html" class="nav-link" data-nav="ipr">
+                    <i class="fas fa-file-alt"></i> ИПР
+                </a>
+                <a href="ipr-list.html" class="nav-link" data-nav="ipr-list">
+                    <i class="fas fa-list"></i> Список ИПР
+                </a>
+            </nav>
+
+            <div class="user-menu" id="userMenu">
+                <button type="button" class="user-chip" id="userChip" aria-haspopup="true" aria-expanded="false">
+                    <span class="user-avatar" id="userAvatar">A</span>
+                    <span class="user-meta">
+                        <span class="user-name" id="userName">Пользователь</span>
+                        <span class="user-role" id="userRole">—</span>
+                    </span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </button>
+                <div class="user-dropdown" id="userDropdown" role="menu">
+                    <a href="admin-panel.html" class="admin-only" id="navAdmin" style="display: none;">
+                        <i class="fas fa-cog"></i> Админ-панель
+                    </a>
+                    <a href="settings.html">
+                        <i class="fas fa-user-cog"></i> Настройки
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="upload-page">
+                <div class="page-head">
+                    <div>
+                        <h1>Загрузка данных</h1>
+                        <p class="lead">Excel → проверка → подтверждение. Предпросмотр на этой странице.</p>
+                    </div>
+                    <a href="index.html" class="btn-ghost"><i class="fas fa-arrow-left"></i> На главную</a>
+                </div>
+
+                <div class="upload-card" id="uploadFormCard">
+                    <div class="upload-form-row">
+                        <div>
+                            <label for="academicYear"><i class="fas fa-calendar-alt"></i> Учебный год</label>
+                            <select id="academicYear"></select>
+                        </div>
+                        <div>
+                            <label for="fileType"><i class="fas fa-file-excel"></i> Тип файла</label>
+                            <select id="fileType">
+                                <option value="auto" selected>Автоопределение</option>
+                                <option value="mcko_class">МЦКО (по классам)</option>
+                                <option value="mcko_teacher">МЦКО (личная диагностика)</option>
+                                <option value="vsoh">Олимпиады ВсОШ</option>
+                                <option value="olympiad">Олимпиады МОШ</option>
+                                <option value="exam">ГИА (ОГЭ/ЕГЭ)</option>
+                                <option value="courses">Курсы повышения квалификации</option>
+                                <option value="other">Иное (мероприятия)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p id="dropText">Перетащите файл сюда или нажмите для выбора</p>
+                        <span class="hint">.xlsx, .xls · до 10 МБ</span>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+                    </div>
+
+                    <div class="upload-actions">
+                        <button type="button" class="btn-upload" id="uploadBtn" disabled>
+                            <i class="fas fa-search"></i> Проверить файл
+                        </button>
+                        <button type="button" class="btn-ghost" id="clearFileBtn" style="display:none;">
+                            <i class="fas fa-times"></i> Сбросить файл
+                        </button>
+                    </div>
+                    <div class="upload-status" id="uploadStatus"></div>
+                </div>
+
+                <div class="upload-card preview-block" id="previewBlock">
+                    <div class="preview-stats">
+                        <div class="preview-stat">
+                            <div class="num" id="previewTotal">0</div>
+                            <div class="lbl">Всего записей</div>
+                        </div>
+                        <div class="preview-stat is-new">
+                            <div class="num" id="previewNew">0</div>
+                            <div class="lbl">Новых учителей</div>
+                        </div>
+                        <div class="preview-stat is-dup">
+                            <div class="num" id="previewDup">0</div>
+                            <div class="lbl">Дубликатов</div>
+                        </div>
+                    </div>
+
+                    <div class="preview-toolbar">
+                        <h3>Что будет импортировано</h3>
+                        <select id="previewFilter">
+                            <option value="all">Все строки</option>
+                            <option value="new">Только новые</option>
+                            <option value="dup">Только дубликаты</option>
+                        </select>
+                    </div>
+
+                    <div class="preview-table-wrap">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>ФИО</th>
+                                    <th>Предмет</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-footer">
+                        <button type="button" class="btn-confirm" id="confirmBtn" onclick="confirmImport()">
+                            <i class="fas fa-check"></i> Подтвердить импорт
+                        </button>
+                        <button type="button" class="btn-ghost" onclick="resetPreview()">
+                            <i class="fas fa-times"></i> Отменить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) location.href = 'login.html';
+
+        let user = {};
+        try { user = JSON.parse(localStorage.getItem('user') || '{}'); } catch (e) { }
+
+        if (user.role !== 'admin') {
+            alert('Загрузка доступна только администратору');
+            location.href = 'index.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            location.href = 'login.html';
+        }
+
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info} toast-icon"></i><div class="toast-content">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hiding'); setTimeout(() => toast.remove(), 300); }, duration);
+        }
+
+        function generateAcademicYears() {
+            const select = document.getElementById('academicYear');
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth();
+            const currentAcademicYear = currentMonth >= 8
+                ? `${currentYear}/${currentYear + 1}`
+                : `${currentYear - 1}/${currentYear}`;
+            const years = [];
+            for (let i = 2022; i <= currentYear + 2; i++) years.push(`${i}/${i + 1}`);
+            select.innerHTML = years.map(year => {
+                let label = year;
+                if (year === currentAcademicYear) label += ' (текущий)';
+                else if (year > currentAcademicYear) label += ' (будущий)';
+                else label += ' (архив)';
+                return `<option value="${year}" ${year === currentAcademicYear ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+        }
+
+        let selectedFile = null;
+        let currentPreviewId = null;
+        let previewRecords = [];
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const dropText = document.getElementById('dropText');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('is-drag'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('is-drag'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('is-drag');
+            if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) setFile(e.target.files[0]);
+        });
+        clearFileBtn.addEventListener('click', clearFile);
+        uploadBtn.addEventListener('click', analyzeFile);
+        document.getElementById('previewFilter').addEventListener('change', renderPreviewRows);
+
+        function setStatus(message, type) {
+            uploadStatus.textContent = message || '';
+            uploadStatus.className = 'upload-status' + (type ? ' is-' + type : '');
+        }
+
+        function setFile(file) {
+            if (file.size > 10 * 1024 * 1024) {
+                setStatus('Файл больше 10 МБ', 'error');
+                return;
+            }
+            if (!/\.(xlsx|xls)$/i.test(file.name)) {
+                setStatus('Нужен Excel (.xlsx или .xls)', 'error');
+                return;
+            }
+            selectedFile = file;
+            dropZone.classList.add('is-file');
+            dropText.textContent = file.name;
+            uploadBtn.disabled = false;
+            clearFileBtn.style.display = 'inline-flex';
+            setStatus('Файл выбран. Нажмите «Проверить файл».', 'info');
+            resetPreview();
+        }
+
+        function clearFile() {
+            selectedFile = null;
+            fileInput.value = '';
+            dropZone.classList.remove('is-file');
+            dropText.textContent = 'Перетащите файл сюда или нажмите для выбора';
+            uploadBtn.disabled = true;
+            clearFileBtn.style.display = 'none';
+            setStatus('');
+            resetPreview();
+        }
+
+        async function analyzeFile() {
+            if (!selectedFile) return;
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Анализ...';
+            setStatus('');
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('fileType', document.getElementById('fileType').value);
+            formData.append('academicYear', document.getElementById('academicYear').value);
+
+            try {
+                const response = await fetch('/api/upload/preview-import', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка анализа');
+                showPreview(data);
+                setStatus('Проверка готова. Подтвердите импорт ниже.', 'ok');
+            } catch (err) {
+                setStatus(err.message || 'Ошибка', 'error');
+                showToast(err.message || 'Ошибка', 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="fas fa-search"></i> Проверить файл';
+            }
+        }
+
+        function showPreview(data) {
+            currentPreviewId = data.previewId;
+            previewRecords = data.records || [];
+            document.getElementById('previewTotal').textContent = data.totalRecords || previewRecords.length;
+            document.getElementById('previewNew').textContent = (data.newTeachers || []).length;
+            document.getElementById('previewDup').textContent = (data.duplicates || []).length;
+            document.getElementById('previewFilter').value = 'all';
+            renderPreviewRows();
+            document.getElementById('previewBlock').classList.add('is-open');
+            document.getElementById('previewBlock').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderPreviewRows() {
+            const filter = document.getElementById('previewFilter').value;
+            const body = document.getElementById('previewBody');
+            const rows = previewRecords.filter(r => {
+                if (filter === 'new') return r.isNew;
+                if (filter === 'dup') return r.isDuplicate;
+                return true;
+            });
+            if (!rows.length) {
+                body.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:28px;">Нет строк</td></tr>';
+                return;
+            }
+            body.innerHTML = rows.map(r => {
+                const cls = r.isNew ? 'is-new' : (r.isDuplicate ? 'is-dup' : '');
+                const badge = r.isNew
+                    ? '<span class="badge badge-new">Новый</span>'
+                    : (r.isDuplicate ? '<span class="badge badge-dup">Дубликат</span>' : '<span class="badge badge-ok">Есть</span>');
+                const fio = escapeHtml(r.fio || 'Неизвестно');
+                const subject = escapeHtml(r.subject || '—');
+                return `<tr class="${cls}"><td>${fio}</td><td>${subject}</td><td>${badge}</td></tr>`;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            const d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
+        }
+
+        function resetPreview() {
+            currentPreviewId = null;
+            previewRecords = [];
+            document.getElementById('previewBlock').classList.remove('is-open');
+            document.getElementById('previewBody').innerHTML = '';
+        }
+
+        async function confirmImport() {
+            if (!currentPreviewId) return;
+            const btn = document.getElementById('confirmBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Импорт...';
+            try {
+                const response = await fetch('/api/upload/confirm-import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ previewId: currentPreviewId })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Ошибка импорта');
+                showToast(data.message || 'Импорт выполнен', 'success', 5000);
+                clearFile();
+                resetPreview();
+            } catch (err) {
+                showToast(err.message || 'Ошибка', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Подтвердить импорт';
+            }
+        }
+
+        generateAcademicYears();
+    </script>
+    <script src="../assets/js/header-modern.js"></script>
+</body>
+
+</html>
